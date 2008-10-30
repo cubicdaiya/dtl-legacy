@@ -1,14 +1,34 @@
 
 #include "../dtl.hpp"
+#include "common.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <cstdio>
+#include <cstdlib>
 #include <cassert>
 
 int main(int argc, char *argv[]){
+  
+  if (argc < 3) {
+    perror("few arguments");
+    return(EXIT_FAILURE);
+  }
+
   std::string A(argv[1]);
   std::string B(argv[2]);
+
+  if (!fileExists(A)) {
+    perror("file A is not exist.");
+    return(EXIT_FAILURE);
+  }
+
+  if (!fileExists(B)) {
+    perror("file B is not exist.");
+    return(EXIT_FAILURE);
+  }
+
   typedef std::string elem;
   std::ifstream Aifs(A.c_str());
   std::ifstream Bifs(B.c_str());

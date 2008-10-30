@@ -1,10 +1,11 @@
 
+#include "../dtl.hpp"
+#include "common.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#include "../dtl.hpp"
 
 #include <cstdio>
 #include <time.h>
@@ -196,11 +197,22 @@ int main(int argc, char *argv[])
 {
   if (argc < 3) {
     perror("few argument.");
-    exit(-1);
+    return(EXIT_FAILURE);
   }
   
   std::string s1(argv[1]);
   std::string s2(argv[2]);
+
+  if (!fileExists(s1)) {
+    perror("file A is not exist.");
+    return(EXIT_FAILURE);
+  }
+
+  if (!fileExists(s2)) {
+    perror("file B is not exist.");
+    return(EXIT_FAILURE);
+  }
+
   unifiedDiff(s1, s2);
   return 0;
 }

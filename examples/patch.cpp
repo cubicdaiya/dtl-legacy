@@ -2,9 +2,17 @@
 #include "../dtl.hpp"
 #include <iostream>
 #include <vector>
+#include <cstdio>
+#include <cstdlib>
 #include <cassert>
 
 int main(int argc, char *argv[]){
+
+  if (argc < 3) {
+    perror("few arguments");
+    return(EXIT_FAILURE);
+  }
+
   std::string A(argv[1]);
   std::string B(argv[2]);
   typedef char elem;
