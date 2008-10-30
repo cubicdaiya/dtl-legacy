@@ -1,0 +1,16 @@
+
+2008-10-31 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* rename ChangLog to ChangeLog
+	
+        * modified README
+
+	* output OK message on patch and fpatch
+
+	* 0.02 released.
+
+	
+2008-10-30 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+        * 0.01 released.
+
