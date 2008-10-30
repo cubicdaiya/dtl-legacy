@@ -7,6 +7,7 @@ bool fileExists (std::string fs) {
   if ((fp = fopen(fs.c_str(), "r")) == NULL) {
     ret = false;
   }
+  fclose(fp);
   return ret;
 }
 
