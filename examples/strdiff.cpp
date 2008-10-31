@@ -1,13 +1,15 @@
 
+#include "../dtl.hpp"
 #include <iostream>
 #include <vector>
-#include "../dtl.hpp"
+#include <cstdio>
+#include <cstdlib>
 
 int main(int argc, char *argv[]){
 
   if (argc < 3) {
     perror("few argument.");
-    exit(-1);
+    return(EXIT_FAILURE);
   }
   
   std::string A(argv[1]);
@@ -49,13 +51,6 @@ int main(int argc, char *argv[]){
       break;
     }
   }
-  /*
-  std::cout << "onlyAdd   :" << ses.isOnlyAdd()  << std::endl;
-  std::cout << "onlyDelete:" << ses.isOnlyDelete()  << std::endl;
-  std::cout << "onlyCopy  :" << ses.isOnlyCopy()  << std::endl;
-  std::cout << "onlyOne   :" << ses.isOnlyOneOperation()  << std::endl;
-  std::cout << "isChange  :" << ses.isChange()  << std::endl;
-  */
 
   return 0;
 }
