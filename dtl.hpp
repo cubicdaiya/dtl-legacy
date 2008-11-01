@@ -1,5 +1,5 @@
 /*
-  dtl -- Diff Template Library
+  dtl-0.02 -- Diff Template Library
   Copyright(C) 2008-  Tatsuhiko Kubo <cubicdaiya@gmail.com>
 */
 
@@ -13,14 +13,14 @@
 #include <iostream>
 
 namespace dtl {
-  
+
   /**
    * type of edit for SES
    */
   typedef int editType;
-  const editType SES_DELETE = -1;
-  const editType SES_COMMON = 0;
-  const editType SES_ADD    = 1;
+  const   editType SES_DELETE = -1;
+  const   editType SES_COMMON = 0;
+  const   editType SES_ADD    = 1;
 
   /**
    * mark of SES
@@ -33,8 +33,8 @@ namespace dtl {
    * info for Unified Format
    */
   typedef struct eleminfo {
-    int beforeIdx;
-    int afterIdx;
+    int      beforeIdx;
+    int      afterIdx;
     editType type;
   } elemInfo;
 
@@ -75,7 +75,7 @@ namespace dtl {
   class Lcs : public Sequence<elem>
   {
   public :
-    Lcs () {}
+    Lcs ()  {}
     ~Lcs () {}
   };
 
@@ -88,9 +88,9 @@ namespace dtl {
   public :
     
     Ses () {
-      onlyAdd = true;
+      onlyAdd    = true;
       onlyDelete = true;
-      onlyCopy = true;
+      onlyCopy   = true;
     }
     
     ~Ses () {}
@@ -119,8 +119,8 @@ namespace dtl {
     void addSequence (elem e, int beforeIdx, int afterIdx, editType type) {
       elemInfo info;
       info.beforeIdx = beforeIdx;
-      info.afterIdx = afterIdx;
-      info.type = type;
+      info.afterIdx  = afterIdx;
+      info.type      = type;
       sesElem pe(e, info);
       sequence.push_back(pe);
       switch (type) {
@@ -154,7 +154,7 @@ namespace dtl {
   {
   public :
     typedef std::vector<int> editPath;
-    typedef std::vector<P> editPathCordinates;
+    typedef std::vector<P>   editPathCordinates;
   private :
     sequence A;
     sequence B;
