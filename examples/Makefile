@@ -1,10 +1,10 @@
 
 
 CPP = g++
-STRDIFF_OBJS = strdiff.o
+STRDIFF_OBJS = strdiff.o common.o
 UNIDIFF_OBJS = unidiff.o common.o
 INTDIFF_OBJS = intdiff.o
-PATCH_OBJS = patch.o
+PATCH_OBJS = patch.o common.o
 FPATCH_OBJS = fpatch.o common.o
 
 .cpp.o:
@@ -31,7 +31,7 @@ clean:
 	${RM} *.o *~ strdiff unidiff intdiff patch fpatch
 
 intdiff.o: intdiff.cpp ../dtl.hpp
-patch.o: patch.cpp ../dtl.hpp
-strdiff.o: strdiff.cpp ../dtl.hpp
+patch.o: patch.cpp common.cpp ../dtl.hpp
+strdiff.o: strdiff.cpp common.cpp ../dtl.hpp
 unidiff.o: unidiff.cpp common.cpp ../dtl.hpp
 fpatch.o: fpatch.cpp common.cpp ../dtl.hpp

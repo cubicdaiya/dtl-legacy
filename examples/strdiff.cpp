@@ -1,13 +1,13 @@
 
 #include "../dtl.hpp"
+#include "common.hpp"
 #include <iostream>
 #include <vector>
-#include <cstdio>
 #include <cstdlib>
 
 int main(int argc, char *argv[]){
 
-  if (argc < 3) {
+  if (isFewArg(argc)) {
     perror("few argument.");
     return(EXIT_FAILURE);
   }

@@ -7,7 +7,6 @@
 #include <vector>
 #include <algorithm>
 
-#include <cstdio>
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -195,7 +194,7 @@ void unifiedDiff (std::string fp1, std::string fp2)
 
 int main(int argc, char *argv[])
 {
-  if (argc < 3) {
+  if (isFewArg(argc)) {
     perror("few argument.");
     return(EXIT_FAILURE);
   }
