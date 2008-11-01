@@ -11,7 +11,7 @@ bool fileExists (std::string fs) {
   return ret;
 }
 
-bool isFewArg (int argc, int limit) {
+bool isFewArgs (int argc, int limit) {
   bool ret = false;
   if (argc < limit) {
     ret = true;

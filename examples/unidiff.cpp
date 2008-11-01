@@ -194,7 +194,7 @@ void unifiedDiff (std::string fp1, std::string fp2)
 
 int main(int argc, char *argv[])
 {
-  if (isFewArg(argc)) {
+  if (isFewArgs(argc)) {
     perror("few argument.");
     return(EXIT_FAILURE);
   }

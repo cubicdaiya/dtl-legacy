@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[]) {
 
-  if (isFewArg(argc)) {
+  if (isFewArgs(argc)) {
     perror("few arguments");
     return(EXIT_FAILURE);
   }

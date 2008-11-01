@@ -6,6 +6,6 @@
 #include <string>
 
 bool fileExists (std::string fs);
-bool isFewArg (int argc, int limit = 3);
+bool isFewArgs (int argc, int limit = 3);
 
 #endif
