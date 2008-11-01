@@ -213,7 +213,7 @@ namespace dtl {
       return reverse;
     }
 
-    sequence patch (sequence seq, Ses<elem> ses) {
+    sequence patch (sequence seq, Ses<elem>& ses) {
       std::vector< std::pair<elem, elemInfo> > sesSeq = ses.getSequence();
       std::list<elem> seqLst(seq.begin(), seq.end());
       std::list< std::pair<elem, elemInfo> > sesLst(sesSeq.begin(), sesSeq.end());
@@ -253,7 +253,12 @@ namespace dtl {
 	}
 	fp[delta+offset] = snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset]);
       } while (fp[delta+offset] != N && pathCordinates.size() < MAX_CORDINATES_SITE);
-      editDistance = delta + 2 * p;
+
+      if (pathCordinates.size() < MAX_CORDINATES_SITE) {
+	editDistance = delta + 2 * p;
+      } else {
+	editDistance = -1;
+      }
       int r = path[delta+offset];
       P cordinate;
       editPathCordinates epc(0);
@@ -283,10 +288,10 @@ namespace dtl {
       while (x < M && y < N && A[x] == B[y]) {
 	++x;++y;
       }
+
       path[k+offset] = pathCordinates.size();
       P p;
       p.x = x;p.y = y;p.k = r;
-
       pathCordinates.push_back(p);      
       return y;
     }
