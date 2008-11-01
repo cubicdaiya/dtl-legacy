@@ -254,11 +254,8 @@ namespace dtl {
 	fp[delta+offset] = snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset]);
       } while (fp[delta+offset] != N && pathCordinates.size() < MAX_CORDINATES_SITE);
 
-      if (pathCordinates.size() < MAX_CORDINATES_SITE) {
-	editDistance = delta + 2 * p;
-      } else {
-	editDistance = -1;
-      }
+      editDistance = delta + 2 * p;
+
       int r = path[delta+offset];
       P cordinate;
       editPathCordinates epc(0);
@@ -351,13 +348,15 @@ namespace dtl {
       }
     }
     
-    void recordOddSequence (int idx, int length, typename sequence::const_iterator i, const editType et) {
+    void recordOddSequence (int idx, int length, typename sequence::const_iterator it, const editType et) {
       while(idx < length){
-	ses.addSequence(*i, idx, 0, et);
-	++i;
+	ses.addSequence(*it, idx, 0, et);
+	++it;
 	++idx;
+	++editDistance;
       }
-      ses.addSequence(*i, idx, 0, et);
+      ses.addSequence(*it, idx, 0, et);
+      ++editDistance;
     }
   };
 }

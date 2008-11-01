@@ -1,4 +1,8 @@
 
+2008-11-01 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* add erorr check for sample programs
+	
 2008-10-31 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* rename ChangLog to ChangeLog
