@@ -150,6 +150,25 @@ namespace dtl {
   };
 
   template <typename elem, typename sequence>
+  class Diff3
+  {
+  public :
+    Diff3 (sequence& A, sequence& B, sequence& C) {
+
+    }
+
+    void merge () {
+
+    }
+
+    ~Diff3 () { }
+  private :
+    void compose () {
+
+    }
+  };
+
+  template <typename elem, typename sequence>
   class Diff
   {
   public :
