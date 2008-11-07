@@ -1,4 +1,8 @@
 
+2008-11-00 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* change argument type in function fileExists(common.hpp, common.cpp)
+	
 2008-11-06 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* add erorr check for sample programs
