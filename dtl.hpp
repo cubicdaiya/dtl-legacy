@@ -54,13 +54,9 @@ namespace dtl {
   {
   public :
     typedef std::vector<elem> _Sequence;
-    Sequence () {
-      
-    }
-    virtual ~Sequence () {
-      
-    }
-    
+    Sequence () {}
+    virtual ~Sequence () {}
+
     _Sequence getSequence () {
       return sequence;
     }
@@ -171,10 +167,17 @@ namespace dtl {
     editPathCordinates pathCordinates;
     bool reverse;
   public :
-    Diff(sequence& A, sequence& B, sequence& C) {
+    Diff(sequence& A, sequence& B, sequence& C) { // diff3
       M = std::distance(A.begin(), A.end());
       N = std::distance(B.begin(), B.end());
       N = std::distance(C.begin(), C.end());
+
+      // diff M and N
+      
+      // diff M and O
+      
+      // diff N and O
+      
     }
     Diff(sequence& A, sequence& B) {
       M = std::distance(A.begin(), A.end());
@@ -365,7 +368,7 @@ namespace dtl {
       ++editDistance;
     }
 
-    void merge () {
+    void merge (Ses<elem> ses1, Ses<elem> ses2, Ses<elem> ses3) {
       
     }
   };
