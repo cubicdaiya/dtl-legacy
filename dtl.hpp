@@ -158,6 +158,7 @@ namespace dtl {
   private :
     sequence A;
     sequence B;
+    sequence C; // for diff3
     int M;
     int N;
     int delta;
@@ -171,7 +172,9 @@ namespace dtl {
     bool reverse;
   public :
     Diff(sequence& A, sequence& B, sequence& C) {
-      
+      M = std::distance(A.begin(), A.end());
+      N = std::distance(B.begin(), B.end());
+      N = std::distance(C.begin(), C.end());
     }
     Diff(sequence& A, sequence& B) {
       M = std::distance(A.begin(), A.end());
@@ -360,6 +363,10 @@ namespace dtl {
       }
       ses.addSequence(*it, idx, 0, et);
       ++editDistance;
+    }
+
+    void merge () {
+      
     }
   };
 }
