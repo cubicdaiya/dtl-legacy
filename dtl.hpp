@@ -149,31 +149,12 @@ namespace dtl {
     bool onlyCopy;
   };
 
-  template <typename elem, typename sequence>
-  class Diff3
-  {
-  public :
-    Diff3 (sequence& A, sequence& B, sequence& C) {
-
-    }
-
-    void merge () {
-
-    }
-
-    ~Diff3 () { }
-  private :
-    void compose () {
-
-    }
-  };
-
+  typedef std::vector<int> editPath;
+  typedef std::vector<P>   editPathCordinates;
+  
   template <typename elem, typename sequence>
   class Diff
   {
-  public :
-    typedef std::vector<int> editPath;
-    typedef std::vector<P>   editPathCordinates;
   private :
     sequence A;
     sequence B;
@@ -189,6 +170,9 @@ namespace dtl {
     editPathCordinates pathCordinates;
     bool reverse;
   public :
+    Diff(sequence& A, sequence& B, sequence& C) {
+      
+    }
     Diff(sequence& A, sequence& B) {
       M = std::distance(A.begin(), A.end());
       N = std::distance(B.begin(), B.end());
@@ -211,7 +195,7 @@ namespace dtl {
       path = editPath(size);
       std::fill(path.begin(), path.end(), -1);
     }
-    
+
     ~Diff() {
       delete[] this->fp;
     }
