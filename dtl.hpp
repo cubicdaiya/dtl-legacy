@@ -1,5 +1,5 @@
 /*
-  dtl-0.03 -- Diff Template Library
+  dtl-0.04 -- Diff Template Library
   Copyright(C) 2008-  Tatsuhiko Kubo <cubicdaiya@gmail.com>
 */
 
