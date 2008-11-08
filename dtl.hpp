@@ -366,7 +366,7 @@ namespace dtl {
       ++editDistance;
     }
 
-    void merge (Ses<elem> ses1, Ses<elem> ses2, Ses<elem> ses3) {
+    void merge (Ses<elem> ses1, Ses<elem> ses2) {
       
     }
   };
