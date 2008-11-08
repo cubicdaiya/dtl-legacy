@@ -176,8 +176,6 @@ namespace dtl {
       
       // diff M and O
       
-      // diff N and O
-      
     }
     Diff(sequence& A, sequence& B) {
       M = std::distance(A.begin(), A.end());
