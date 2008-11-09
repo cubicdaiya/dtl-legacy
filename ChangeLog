@@ -1,5 +1,9 @@
 
-2008-11-00 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+2008-11-10 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* advance accuracy of diff
+
+	* fixed serious memory bug for patch
 
 	* change argument type in function fileExists(common.hpp, common.cpp)
 	
