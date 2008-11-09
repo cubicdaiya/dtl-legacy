@@ -225,8 +225,7 @@ namespace dtl {
 	  seqLst.insert(lstIt, sesIt->first);
 	  break;
 	case SES_DELETE :
-	  seqLst.erase(lstIt);
-	  ++lstIt;
+	  lstIt = seqLst.erase(lstIt);
 	  break;
 	case SES_COMMON :
 	  ++lstIt;
@@ -243,6 +242,7 @@ namespace dtl {
       // O(NP) Algorithm
       int p = -1;
       int k;
+    ONP:
       do {
 	++p;
 	for (k=-p;k<=delta-1;++k) {
@@ -254,11 +254,11 @@ namespace dtl {
 	fp[delta+offset] = snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset]);
       } while (fp[delta+offset] != N && pathCordinates.size() < MAX_CORDINATES_SITE);
 
-      editDistance = delta + 2 * p;
-
+      editDistance += delta + 2 * p;
       int r = path[delta+offset];
       P cordinate;
       editPathCordinates epc(0);
+
       while(r != -1){
 	cordinate.x = pathCordinates[r].x;
 	cordinate.y = pathCordinates[r].y;
@@ -267,7 +267,12 @@ namespace dtl {
       }
 
       // recordSequence Longest Common Subsequence & Shortest Edit Script
-      recordSequence(epc);
+      if (!recordSequence(epc)) {
+	pathCordinates.resize(0);
+	epc.resize(0);
+	p = -1;
+	goto ONP;
+      }
     }
     
   private :
@@ -293,7 +298,7 @@ namespace dtl {
       return y;
     }
 
-    void recordSequence (editPathCordinates& v) {
+    bool recordSequence (editPathCordinates& v) {
       typename sequence::const_iterator x(A.begin());
       typename sequence::const_iterator y(B.begin());
       int x_idx, y_idx;   // line number for Unified Format
@@ -337,15 +342,22 @@ namespace dtl {
       if (x_idx > M && y_idx > N) {
 	// all recording success
       } else {
-	// recoding on the way
-	if (!isReverse()) {
-	  recordOddSequence(x_idx, M, x, SES_DELETE);
-	  recordOddSequence(y_idx, N, y, SES_ADD);
-	} else {
-	  recordOddSequence(x_idx, M, x, SES_ADD);
-	  recordOddSequence(y_idx, N, y, SES_DELETE);
-	}
+	sequence A_(A.begin() + x_idx - 1, A.end());
+	sequence B_(B.begin() + y_idx - 1, B.end());
+	A = A_;
+	B = B_;
+	M = std::distance(A.begin(), A.end());
+	N = std::distance(B.begin(), B.end());
+	delta = N - M;
+	offset = M + 1;
+	int size = M + N + 3;
+	delete[] fp;
+	fp = new int[size];
+	std::fill(&fp[0], &fp[size], -1);
+	std::fill(path.begin(), path.end(), -1);
+	return false;
       }
+      return true;
     }
     
     void recordOddSequence (int idx, int length, typename sequence::const_iterator it, const editType et) {
