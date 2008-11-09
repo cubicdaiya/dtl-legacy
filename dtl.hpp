@@ -226,7 +226,6 @@ namespace dtl {
 	  break;
 	case SES_DELETE :
 	  lstIt = seqLst.erase(lstIt);
-	  //++lstIt;
 	  break;
 	case SES_COMMON :
 	  ++lstIt;
