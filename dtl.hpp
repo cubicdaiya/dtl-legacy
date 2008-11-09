@@ -225,8 +225,8 @@ namespace dtl {
 	  seqLst.insert(lstIt, sesIt->first);
 	  break;
 	case SES_DELETE :
-	  seqLst.erase(lstIt);
-	  ++lstIt;
+	  lstIt = seqLst.erase(lstIt);
+	  //++lstIt;
 	  break;
 	case SES_COMMON :
 	  ++lstIt;
