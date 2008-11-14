@@ -1,11 +1,15 @@
 
+2008-11-00 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* fixed bug. function check whether file exists(common.cpp)
+
 2008-11-10 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
-	* advance accuracy of diff
+	* Improved accuracy of diff
 
 	* fixed serious memory bug for patch
 
-	* change argument type in function fileExists(common.hpp, common.cpp)
+	* change type of argument in function fileExists(common.hpp, common.cpp)
 	
 	* 0.04 released.
 	
