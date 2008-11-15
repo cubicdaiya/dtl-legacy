@@ -22,7 +22,7 @@ int main(int argc, char *argv[]){
   d.compose();
   // editDistance
   std::cout << "editDistance:" << d.getEditDistance() << std::endl;
-  // Long Common Subsequence
+  // Longest Common Subsequence
   dtl::Lcs<int> lcs = d.getLcs();
   std::vector<int> lcs_v = lcs.getSequence();
   std::vector<int>::iterator vit;
