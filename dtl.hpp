@@ -147,14 +147,13 @@ namespace dtl {
 
   typedef std::vector<int> editPath;
   typedef std::vector<P>   editPathCordinates;
-  
+
   template <typename elem, typename sequence>
   class Diff
   {
   private :
     sequence A;
     sequence B;
-    sequence C; // for diff3
     int M;
     int N;
     int delta;
@@ -167,16 +166,7 @@ namespace dtl {
     editPathCordinates pathCordinates;
     bool reverse;
   public :
-    Diff(sequence& A, sequence& B, sequence& C) { // diff3
-      M = std::distance(A.begin(), A.end());
-      N = std::distance(B.begin(), B.end());
-      N = std::distance(C.begin(), C.end());
-
-      // diff M and N
-      
-      // diff M and O
-      
-    }
+    Diff () {}
     Diff(sequence& A, sequence& B) {
       M = std::distance(A.begin(), A.end());
       N = std::distance(B.begin(), B.end());
@@ -378,8 +368,56 @@ namespace dtl {
       ++editDistance;
     }
 
-    void merge (Ses<elem> ses1, Ses<elem> ses2) {
+  };
+
+  /* 
+   * diff3
+   */
+  template <typename elem, typename sequence>
+  class Diff3
+  {
+  private:
+    Diff<elem, sequence> diff_ab;
+    Diff<elem, sequence> diff_bc;
+    sequence A;
+    sequence B;
+    sequence C;
+    int M;
+    int N;
+    int O;
+  public :
+    Diff3 () {}
+    Diff3 (sequence& A, sequence& B, sequence& C) { // diff3
+      this->A = A;
+      this->B = B;
+      this->C = C;
+      this->M = std::distance(A.begin(), A.end());
+      this->N = std::distance(B.begin(), B.end());
+      this->O = std::distance(C.begin(), C.end());
+      diff_ab = Diff<elem, sequence>(A, B);
+      diff_bc = Diff<elem, sequence>(B, C);
+    } 
+    ~Diff3 () {}
+
+    Diff<elem, sequence>& getDiffab () {
+      return diff_ab;
+    }
+
+    Diff<elem, sequence>& getDiffbc () {
+      return diff_bc;
+    }
+
+    // merge changes B to C to A
+    bool merge () {
       
+      
+      
+      return true;
+    }
+
+    void compose () {
+      diff_ab.compose();
+      diff_bc.compose();
     }
   };
 }

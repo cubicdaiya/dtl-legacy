@@ -32,7 +32,7 @@ fpatch : $(FPATCH_OBJS)
 	$(CPP) -o $@ $(FPATCH_OBJS)
 
 clean:
-	${RM} *.o *~ strdiff unidiff intdiff patch fpatch
+	${RM} *.o *~ strdiff strdiff3 unidiff intdiff patch fpatch
 
 intdiff.o: intdiff.cpp ../dtl.hpp
 patch.o: patch.cpp common.cpp ../dtl.hpp
