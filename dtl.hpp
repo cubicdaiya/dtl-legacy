@@ -166,7 +166,6 @@ namespace dtl {
     editPathCordinates pathCordinates;
     bool reverse;
   public :
-    Diff () {}
     Diff(sequence& A, sequence& B) {
       M = std::distance(A.begin(), A.end());
       N = std::distance(B.begin(), B.end());
@@ -377,8 +376,8 @@ namespace dtl {
   class Diff3
   {
   private:
-    Diff<elem, sequence> diff_ab;
-    Diff<elem, sequence> diff_bc;
+    Diff<elem, sequence> *diff_ab;
+    Diff<elem, sequence> *diff_bc;
     sequence A;
     sequence B;
     sequence C;
@@ -394,10 +393,13 @@ namespace dtl {
       this->M = std::distance(A.begin(), A.end());
       this->N = std::distance(B.begin(), B.end());
       this->O = std::distance(C.begin(), C.end());
-      diff_ab = Diff<elem, sequence>(A, B);
-      diff_bc = Diff<elem, sequence>(B, C);
+      this->diff_ab = new Diff<elem, sequence>(A, B);
+      this->diff_bc = new Diff<elem, sequence>(B, C);
     } 
-    ~Diff3 () {}
+    ~Diff3 () {
+      delete this->diff_ab;
+      delete this->diff_bc;
+    }
 
     Diff<elem, sequence>& getDiffab () {
       return diff_ab;
@@ -416,8 +418,8 @@ namespace dtl {
     }
 
     void compose () {
-      diff_ab.compose();
-      diff_bc.compose();
+      diff_ab->compose();
+      diff_bc->compose();
     }
   };
 }
