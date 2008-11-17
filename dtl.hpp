@@ -47,7 +47,7 @@ namespace dtl {
     int k;
   } P;
 
-  const unsigned int MAX_CORDINATES_SITE = 2000000;
+  const unsigned int MAX_CORDINATES_SIZE = 2000000;
   
   template <typename elem>
   class Sequence
@@ -234,7 +234,12 @@ namespace dtl {
       return patchedSeq;
     }
     
-    void compose() {
+    void compose(bool huge = false) {
+
+      if (huge) {
+	pathCordinates.reserve(MAX_CORDINATES_SIZE + 50000);
+      }
+
       // O(NP) Algorithm
       int p = -1;
       int k;
@@ -248,7 +253,7 @@ namespace dtl {
 	  fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
 	}
 	fp[delta+offset] = snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset]);
-      } while (fp[delta+offset] != N && pathCordinates.size() < MAX_CORDINATES_SITE);
+      } while (fp[delta+offset] != N && pathCordinates.size() < MAX_CORDINATES_SIZE);
 
       editDistance += delta + 2 * p;
       int r = path[delta+offset];
@@ -376,7 +381,7 @@ namespace dtl {
   class Diff3
   {
   private:
-    Diff<elem, sequence> *diff_ab;
+    Diff<elem, sequence> *diff_ba;
     Diff<elem, sequence> *diff_bc;
     sequence A;
     sequence B;
@@ -393,16 +398,16 @@ namespace dtl {
       this->M = std::distance(A.begin(), A.end());
       this->N = std::distance(B.begin(), B.end());
       this->O = std::distance(C.begin(), C.end());
-      this->diff_ab = new Diff<elem, sequence>(A, B);
+      this->diff_ba = new Diff<elem, sequence>(B, A);
       this->diff_bc = new Diff<elem, sequence>(B, C);
     } 
     ~Diff3 () {
-      delete this->diff_ab;
+      delete this->diff_ba;
       delete this->diff_bc;
     }
 
-    Diff<elem, sequence>& getDiffab () {
-      return diff_ab;
+    Diff<elem, sequence>& getDiffba () {
+      return diff_ba;
     }
 
     Diff<elem, sequence>& getDiffbc () {
@@ -411,14 +416,69 @@ namespace dtl {
 
     // merge changes B to C to A
     bool merge () {
+      Lcs<elem> lcs_ba = diff_ba->getLcs();
+      Lcs<elem> lcs_bc = diff_bc->getLcs();
+      std::vector<elem> lcs_vba = lcs_ba.getSequence();
+      std::vector<elem> lcs_vbc = lcs_bc.getSequence();
+      std::string lcs_sba(lcs_vba.begin(), lcs_vba.end());
+      std::string lcs_sbc(lcs_vbc.begin(), lcs_vbc.end());
+
+      Ses<elem> ses_ba = diff_ba->getSes();
+      Ses<elem> ses_bc = diff_bc->getSes();
+      typedef std::vector< std::pair<elem, elemInfo> > ses_v;
+      ses_v sv_ba = ses_ba.getSequence();
+      ses_v sv_bc = ses_bc.getSequence();
+      typename ses_v::iterator it_ba;
+      typename ses_v::iterator it_bc;
+
+      std::cout << "A:" << A << std::endl;
+      std::cout << "B:" << B << std::endl;
+      std::cout << "C:" << C << std::endl;
+      std::cout << std::endl;
       
+      std::cout << "B->A" << std::endl ;
+      //std::cout << lcs_sba << std::endl;
+      std::cout << std::endl;
+      for (it_ba=sv_ba.begin();it_ba!=sv_ba.end();++it_ba) {
+	std::cout << it_ba->first 
+		  << " "
+		  << it_ba->second.type 
+		  << std::endl;
+      }
+      std::cout << std::endl;
+      std::cout << "B->C" << std::endl;
+      //std::cout << lcs_sbc << std::endl;
+      std::cout << std::endl;
+      for (it_bc=sv_bc.begin();it_bc!=sv_bc.end();++it_bc) {
+	std::cout << it_bc->first 
+		  << " "
+		  << it_bc->second.type 
+		  << std::endl;
+      }
       
+      if (diff_ba->getEditDistance() == 0) {
+	if (diff_bc->getEditDistance() == 0) {
+	  // A == B == C
+	  return true;
+	}
+	// B == A
+	sequence S = diff_bc->patch(B, ses_bc);
+	std::cout << ";;" << S << std::endl;
+      } else {
+	if (diff_bc->getEditDistance() == 0) {
+	  // B == C
+	  return true;
+	} else {
+	  // changes B to A and B to C
+	  
+	}
+      }
       
       return true;
     }
 
     void compose () {
-      diff_ab->compose();
+      diff_ba->compose();
       diff_bc->compose();
     }
   };

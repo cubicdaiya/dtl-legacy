@@ -59,7 +59,7 @@ void unifiedDiff (std::string fp1, std::string fp2)
   }
 
   dtl::Diff<elem, std::vector<elem> > diff(ALines, BLines);
-  diff.compose();
+  diff.compose(true);
 
   // Short Edit Script
   typedef std::pair<elem, dtl::elemInfo> sesElem;
