@@ -342,28 +342,38 @@ namespace dtl {
       int a, b, c, d;         // @@ -a,b +c,d @@
       a = b = c = d = 0;
       unihunk hunk;
-      
+      std::vector<sesElem> adds;
+      std::vector<sesElem> deletes;
+
       for (it=ses_v.begin();it!=ses_v.end();++it, ++l_cnt) {
 	e = it->first;
 	einfo = it->second;
 	switch (einfo.type) {
 	case SES_ADD :
 	  middle = 0;
-	  change.push_back(*it);
+	  adds.push_back(*it);
 	  if (!isMiddle)       isMiddle = true;
 	  if (isMiddle)        ++d;
-	  if (l_cnt >= length) isAfter = true;
+	  if (l_cnt >= length) {
+	    joinSesVec(change, deletes);
+	    joinSesVec(change, adds);
+	    isAfter = true;
+	  }
 	  break;
 	case SES_DELETE :
 	  middle = 0;
-	  change.push_back(*it);
+	  deletes.push_back(*it);
 	  if (!isMiddle)       isMiddle = true;
 	  if (isMiddle)        ++b;
-	  if (l_cnt >= length) isAfter = true;
+	  if (l_cnt >= length) {
+	    joinSesVec(change, deletes);
+	    joinSesVec(change, adds);
+	    isAfter = true;
+	  }
 	  break;
 	case SES_COMMON :
 	  ++b;++d;
-	  if (common[1].size() == 0 && change.size() == 0) {
+	  if (common[1].empty() && adds.empty() && deletes.empty() && change.empty()) {
 	    if (common[0].size() < CONTEXT_SIZE) {
 	      if (a == 0 && c == 0) {
 		a = einfo.beforeIdx;
@@ -380,10 +390,15 @@ namespace dtl {
 	  }
 	  if (isMiddle && !isAfter) {
 	    ++middle;
+	    typename std::vector<sesElem>::iterator vit;
+	    joinSesVec(change, deletes);
+	    joinSesVec(change, adds);
 	    change.push_back(*it);
 	    if (middle >= SEPARATE_SIZE || l_cnt >= length) {
 	      isAfter = true;
 	    }
+	    adds.clear();
+	    deletes.clear();
 	  }
 	  break;
 	default :
@@ -391,7 +406,7 @@ namespace dtl {
 	  break;
 	}
 	// print unified format
-	if (isAfter && change.size() > 0) {
+	if (isAfter && !change.empty()) {
 	  typename std::vector<sesElem>::iterator cit = it;
 	  int cnt = 0;
 	  for (int i=0;i<SEPARATE_SIZE;++i, ++cit) {
@@ -428,6 +443,8 @@ namespace dtl {
 	  isAfter = false;
 	  common[0].clear();
 	  common[1].clear();
+	  adds.clear();
+	  deletes.clear();
 	  change.clear();
 	  a = b = c = d = middle = 0;
 	}
@@ -526,6 +543,15 @@ namespace dtl {
       }
       ses.addSequence(*it, idx, 0, et);
       ++editDistance;
+    }
+
+    void joinSesVec (std::vector<sesElem>& s1, std::vector<sesElem>& s2) {
+      typename std::vector<sesElem>::iterator vit;
+      if (!s2.empty()) {
+	for (vit=s2.begin();vit!=s2.end();++vit) {
+	  s1.push_back(*vit);
+	}
+      }      
     }
 
   };
