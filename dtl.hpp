@@ -38,6 +38,9 @@ namespace dtl {
     editType type;
   } elemInfo;
 
+  #define SEPARATE_SIZE (3)
+  #define CONTEXT_SIZE (3)
+
   /**
    * cordinate for registering route
    */
@@ -165,6 +168,18 @@ namespace dtl {
     editPath path;
     editPathCordinates pathCordinates;
     bool reverse;
+
+    /**
+     * Unified Format Hunk
+     */
+    typedef std::pair<elem, elemInfo> sesElem;
+    typedef struct unihunk {
+      int a, b, c, d;                 // @@ -a,b +c,d @@
+      std::vector<sesElem> common[2]; // anteroposterior commons on changes
+      std::vector<sesElem> change;    // changes
+    } uniHunk;
+    std::vector<uniHunk> uniHunks;
+
   public :
     Diff(sequence& A, sequence& B) {
       M = std::distance(A.begin(), A.end());
@@ -275,9 +290,150 @@ namespace dtl {
 	goto ONP;
       }
     }
-    
-  private :
 
+    void printUnifiedFormat () {
+      typename std::vector<uniHunk>::iterator uit;
+      for (uit=uniHunks.begin();uit!=uniHunks.end();++uit) {
+	// header
+	std::cout << "@@" 
+		  << " -" << uit->a << "," << uit->b 
+		  << " +" << uit->c << "," << uit->d 
+		  << " @@" << std::endl;
+
+	// header commons
+	typename std::vector<sesElem>::iterator vit;
+	for (vit=uit->common[0].begin();vit!=uit->common[0].end();++vit) {
+	  std::cout << SES_MARK_COMMON << vit->first << std::endl;
+	}
+	// changes
+	for (vit=uit->change.begin();vit!=uit->change.end();++vit) {
+	  switch (vit->second.type) {
+	  case SES_ADD:
+	    std::cout << SES_MARK_ADD    << vit->first << std::endl;
+	    break;
+	  case SES_DELETE:
+	    std::cout << SES_MARK_DELETE << vit->first << std::endl;
+	    break;
+	  case SES_COMMON:
+	    std::cout << SES_MARK_COMMON << vit->first << std::endl;
+	    break;
+	  }
+	}
+	// footer commons
+	for (vit=uit->common[1].begin();vit!=uit->common[1].end();++vit) {
+	  std::cout << " " << vit->first << std::endl;
+	}
+      }
+    }
+    
+    void composeUnifiedHunks () {
+      std::vector<sesElem> common[2];
+      std::vector<sesElem> change;
+      std::vector<sesElem> ses_v = ses.getSequence();
+      typename std::vector<sesElem>::iterator it;
+      it = ses_v.begin();
+      int l_cnt = 1;
+      int length = std::distance(ses_v.begin(), ses_v.end());
+      int middle = 0;
+      bool isMiddle, isAfter;
+      isMiddle = isAfter = false;
+      elem e;
+      elemInfo einfo;
+      int a, b, c, d;         // @@ -a,b +c,d @@
+      a = b = c = d = 0;
+      unihunk hunk;
+      
+      for (it=ses_v.begin();it!=ses_v.end();++it, ++l_cnt) {
+	e = it->first;
+	einfo = it->second;
+	switch (einfo.type) {
+	case SES_ADD :
+	  middle = 0;
+	  change.push_back(*it);
+	  if (!isMiddle)       isMiddle = true;
+	  if (isMiddle)        ++d;
+	  if (l_cnt >= length) isAfter = true;
+	  break;
+	case SES_DELETE :
+	  middle = 0;
+	  change.push_back(*it);
+	  if (!isMiddle)       isMiddle = true;
+	  if (isMiddle)        ++b;
+	  if (l_cnt >= length) isAfter = true;
+	  break;
+	case SES_COMMON :
+	  ++b;++d;
+	  if (common[1].size() == 0 && change.size() == 0) {
+	    if (common[0].size() < CONTEXT_SIZE) {
+	      if (a == 0 && c == 0) {
+		a = einfo.beforeIdx;
+		c = einfo.afterIdx;
+	      }
+	      common[0].push_back(*it);
+	    } else {
+	      std::rotate(common[0].begin(), common[0].begin() + 1, common[0].end());
+	      common[0].pop_back();
+	      common[0].push_back(*it);
+	      ++a;++c;
+	      --b;--d;
+	    }
+	  }
+	  if (isMiddle && !isAfter) {
+	    ++middle;
+	    change.push_back(*it);
+	    if (middle >= SEPARATE_SIZE || l_cnt >= length) {
+	      isAfter = true;
+	    }
+	  }
+	  break;
+	default :
+	  // no through
+	  break;
+	}
+	// print unified format
+	if (isAfter && change.size() > 0) {
+	  typename std::vector<sesElem>::iterator cit = it;
+	  int cnt = 0;
+	  for (int i=0;i<SEPARATE_SIZE;++i, ++cit) {
+	    if (cit->second.type == SES_COMMON) {
+	      ++cnt;
+	    }
+	  }
+	  if (cnt < SEPARATE_SIZE && l_cnt < length) {
+	    middle = 0;
+	    isAfter = false;
+	    continue;
+	  }
+	  if (common[0].size() >= SEPARATE_SIZE) {
+	    int c0size = common[0].size();
+	    std::rotate(common[0].begin(), 
+			common[0].begin() + c0size - SEPARATE_SIZE, 
+			common[0].end());
+	    for (int i=0;i<c0size-SEPARATE_SIZE;++i) {
+	      common[0].pop_back();
+	    }
+	    a += c0size - SEPARATE_SIZE;
+	    c += c0size - SEPARATE_SIZE;
+	  }
+	  if (a == 0) ++a;
+	  if (c == 0) ++c;
+	  if (isReverse()) std::swap(a, c);
+	  hunk.a = a;hunk.b = b;hunk.c = c;hunk.d = d;
+	  hunk.common[0] = common[0];
+	  typename std::vector<sesElem>::iterator vit;
+	  hunk.change = change;
+	  hunk.common[1] = common[1];
+	  uniHunks.push_back(hunk);
+	  isMiddle = false;
+	  isAfter = false;
+	  common[0].clear();
+	  common[1].clear();
+	  change.clear();
+	  a = b = c = d = middle = 0;
+	}
+      }
+    }
+  private :
     int snake(int k, int above, int below) {
       int r;
       if (above > below) {
@@ -360,7 +516,7 @@ namespace dtl {
       }
       return true;
     }
-    
+
     void recordOddSequence (int idx, int length, typename sequence::const_iterator it, const editType et) {
       while(idx < length){
 	ses.addSequence(*it, idx, 0, et);
