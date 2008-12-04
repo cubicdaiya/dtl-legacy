@@ -17,14 +17,19 @@ int main(int argc, char *argv[]){
 
   std::string A(argv[1]);
   std::string B(argv[2]);
+  bool isFileExist = true;
 
   if (!fileExists(A)) {
-    perror("file A is not exist.");
-    return(EXIT_FAILURE);
+    perror(A.c_str());
+    isFileExist = false;
   }
 
   if (!fileExists(B)) {
-    perror("file B is not exist.");
+    perror(B.c_str());
+    isFileExist = false;
+  }
+
+  if (!isFileExist) {
     return(EXIT_FAILURE);
   }
 
