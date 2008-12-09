@@ -124,6 +124,26 @@ $ ./unidiff a.txt b.txt
  c
 $
 
+* strdiff3
+
+$ cd dtl/examples
+$ make strdiff3
+$ ./strdiff3 qabc abc abcdef
+result:qabcdef
+$
+
+* intdiff3
+
+$ cd dtl/examples
+$ make intdiff3
+$ ./intdiff3
+a:1 2 3 4 5 6 7 3 9 10
+b:1 2 3 4 5 6 7 8 9 10
+c:1 2 3 9 5 6 7 8 9 10
+s:1 2 3 9 5 6 7 3 9 10
+intdiff3 OK
+$
+
 * patch, fpatch
 
 patch and fpatch are the test programs for patching with difference data.
