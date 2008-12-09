@@ -55,8 +55,9 @@ int main(int argc, char *argv[]){
   std::vector<elem> s1 = ALines;
   std::vector<elem> s2 = d.patch(s1, ses);
 
+  // fpatch 
   assert(BLines == s2);
-  std::cout << "OK" << std::endl;
-
+  std::cout << "fpatch OK" << std::endl;
+  
   return 0;
 }

@@ -20,11 +20,11 @@ int main(int argc, char *argv[]){
 
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
-
   if (!diff3.merge()) {
-    perror("conflict.");
-    return(EXIT_FAILURE);
+    fprintf(stderr, "conflict.\n");
+    exit(-1);
   }
+  std::cout << "result:" << diff3.getMergedSequence() << std::endl;
   
   return 0;
 }

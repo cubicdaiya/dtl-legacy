@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
   std::cout << "before:" << s1 << std::endl;
   std::cout << "after:" << s2 << std::endl;
   assert(B == s2);
-  std::cout << "OK" << std::endl;
+  std::cout << "patch OK" << std::endl;
 
   return 0;
 }

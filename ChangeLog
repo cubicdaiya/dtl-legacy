@@ -1,7 +1,17 @@
 
-2008-11-00 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+2008-12-09 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* added sample of diff3 (strdiff3, intdiff3)
+	
+	* added diff3 
+	
+	* + -> - to - -> + with Unified Diff Format 
+	
+	* dtl Import Unified Diff Format Data Structure from unidiff.cpp.
 
 	* fixed bug. function check whether file exists(common.cpp)
+	
+	* 0.05 released.
 
 2008-11-10 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
@@ -9,7 +19,7 @@
 
 	* fixed serious memory bug for patch
 
-	* change type of argument in function fileExists(common.hpp, common.cpp)
+	* changed type of argument in function fileExists(common.hpp, common.cpp)
 	
 	* 0.04 released.
 	
@@ -21,7 +31,7 @@
 	
 2008-10-31 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
-	* rename ChangLog to ChangeLog
+	* renamed ChangLog to ChangeLog
 	
         * modified README
 
