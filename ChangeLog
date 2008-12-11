@@ -7,6 +7,8 @@
 	
 	* + -> - to - -> + with Unified Diff Format 
 	
+	* added function uniPatch. this function can patch with Unified Diff Format Data Structure
+
 	* dtl Import Unified Diff Format Data Structure from unidiff.cpp.
 
 	* fixed bug. function check whether file exists(common.cpp)

@@ -58,6 +58,19 @@ int main(int argc, char *argv[]){
   // fpatch 
   assert(BLines == s2);
   std::cout << "fpatch OK" << std::endl;
+
+  d.composeUnifiedHunks();
+  std::vector<elem> s3 = d.uniPatch(s1);
+
+  dtl::Diff<elem, std::vector<elem> > d2(s3, BLines);
+  d2.compose();
+
+  d2.composeUnifiedHunks();
+  d2.printUnifiedFormat();
+
+  // unipatch 
+  assert(BLines == s3);
+  std::cout << "unipatch OK" << std::endl;
   
   return 0;
 }

@@ -8,7 +8,6 @@
 
 #include <vector>
 #include <list>
-#include <map>
 #include <string>
 #include <algorithm>
 #include <iostream>
@@ -169,6 +168,7 @@ namespace dtl {
     editPath path;
     editPathCordinates pathCordinates;
     bool reverse;
+    bool huge;
 
     /**
      * Unified Format Hunk
@@ -182,7 +182,6 @@ namespace dtl {
     } uniHunk;
     std::vector<uniHunk> uniHunks;
 
-    //std::map<int, bool>  change_idx;    // change index
     std::vector<int> change_idxes;
 
   public :
@@ -210,6 +209,7 @@ namespace dtl {
       change_idxes.reserve(N);
       change_idxes.resize(N);
       std::fill(change_idxes.begin(), change_idxes.end(), SES_COMMON);
+      huge = false;
     }
 
     ~Diff() {
@@ -236,7 +236,19 @@ namespace dtl {
       return reverse;
     }
 
-    sequence uniPatch (sequence seq) {
+    bool isHuge () {
+      return huge;
+    }
+
+    void onHuge () {
+      this->huge = true;
+    }
+
+    void offHuge () {
+      this->huge = false;
+    }
+    /*
+    sequence uniPatch3 (sequence seq) {
       std::list<elem> seqLst(seq.begin(), seq.end());
       std::vector<sesElem> shunk;
       typename std::vector<uniHunk>::iterator it;
@@ -283,6 +295,60 @@ namespace dtl {
       sequence patchedSeq(seqLst.begin(), seqLst.end());
       return patchedSeq;
     }
+    */
+    
+    sequence uniPatch (sequence seq) {
+      std::list<elem> seqLst(seq.begin(), seq.end());
+      std::vector<sesElem> shunk;
+      typename std::vector<uniHunk>::iterator it;
+      typename std::list<elem>::iterator lstIt = seqLst.begin();
+      typename std::list<elem>::iterator lstIt_t = seqLst.begin();;
+      typename std::vector<sesElem>::iterator vsesIt;
+      typename sequence::iterator cit = seq.begin();
+      int inc_dec_total = 0;
+      int seq_lnum = 1;
+      int longer_seq_lnum = 1;
+      int loop = 0;
+      for (it=uniHunks.begin();it!=uniHunks.end();++it, ++loop) {
+	joinSesVec(shunk, it->common[0]);
+	joinSesVec(shunk, it->change);
+	joinSesVec(shunk, it->common[1]);
+	it->a += inc_dec_total;
+	if (loop != 0) ++lstIt_t;
+	lstIt = lstIt_t;
+	while (seq_lnum++ < it->a && longer_seq_lnum++ < N) {
+	  ++cit;
+	  if (lstIt != seqLst.end()) ++lstIt;
+	}
+	lstIt_t = lstIt;
+	inc_dec_total += it->inc_dec_count;
+	vsesIt = shunk.begin();
+	while (vsesIt!=shunk.end()) {
+	  switch (vsesIt->second.type) {
+	  case SES_ADD :
+	    seqLst.insert(lstIt, vsesIt->first);
+	    break;
+	  case SES_DELETE :
+	    if (lstIt != seqLst.end()) {
+	      lstIt = seqLst.erase(lstIt);
+	    }
+	    break;
+	  case SES_COMMON :
+	    if (lstIt != seqLst.end()) {
+	      ++lstIt;
+	    }
+	    break;
+	  default :
+	    break;
+	  }
+	  ++vsesIt;
+	}
+	shunk.clear();
+      }
+      
+      sequence patchedSeq(seqLst.begin(), seqLst.end());
+      return patchedSeq;
+    }
     
     sequence patch (sequence seq, Ses<elem>& ses) {
       std::vector<sesElem> sesSeq = ses.getSequence();
@@ -310,10 +376,8 @@ namespace dtl {
     }
     
     void compose(bool huge = false) {
-
-      if (huge) {
-	pathCordinates.reserve(MAX_CORDINATES_SIZE + 50000);
-      }
+      if (huge)	onHuge();
+      if (isHuge()) pathCordinates.reserve(MAX_CORDINATES_SIZE + 50000);
 
       // O(NP) Algorithm
       int p = -1;
@@ -691,11 +755,12 @@ namespace dtl {
       if (diff_ba->getEditDistance() == 0) {
 	if (diff_bc->getEditDistance() == 0) {
 	  // A == B == C
-	  S = A;
+	  S = B;
 	  return true;
 	}
 	// B == A
 	S = C;
+	return true;
       } else {
 	if (diff_bc->getEditDistance() == 0) {
 	  // B == C
