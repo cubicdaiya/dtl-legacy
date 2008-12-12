@@ -17,14 +17,19 @@ int main(int argc, char *argv[]){
 
   std::string A(argv[1]);
   std::string B(argv[2]);
+  bool isFileExist = true;
 
   if (!fileExists(A)) {
-    perror("file A is not exist.");
-    return(EXIT_FAILURE);
+    perror(A.c_str());
+    isFileExist = false;
   }
 
   if (!fileExists(B)) {
-    perror("file B is not exist.");
+    perror(B.c_str());
+    isFileExist = false;
+  }
+
+  if (!isFileExist) {
     return(EXIT_FAILURE);
   }
 
@@ -50,8 +55,22 @@ int main(int argc, char *argv[]){
   std::vector<elem> s1 = ALines;
   std::vector<elem> s2 = d.patch(s1, ses);
 
+  // fpatch 
   assert(BLines == s2);
-  std::cout << "OK" << std::endl;
+  std::cout << "fpatch OK" << std::endl;
 
+  d.composeUnifiedHunks();
+  std::vector<elem> s3 = d.uniPatch(s1);
+
+  dtl::Diff<elem, std::vector<elem> > d2(s3, BLines);
+  d2.compose();
+
+  d2.composeUnifiedHunks();
+  d2.printUnifiedFormat();
+
+  // unipatch 
+  assert(BLines == s3);
+  std::cout << "unipatch OK" << std::endl;
+  
   return 0;
 }

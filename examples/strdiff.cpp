@@ -22,7 +22,7 @@ int main(int argc, char *argv[]){
   // editDistance
   std::cout << "editDistance:" << d.getEditDistance() << std::endl;
 
-  // Long Common Subsequence
+  // Longest Common Subsequence
   dtl::Lcs<elem> lcs = d.getLcs();
   std::vector<elem> lcs_v = lcs.getSequence();
   std::vector<elem>::iterator vit;
@@ -39,13 +39,13 @@ int main(int argc, char *argv[]){
   for (it=ses_v.begin();it!=ses_v.end();++it) {
     switch (it->second.type) {
     case dtl::SES_ADD :
-      std::cout << "A " << it->first << std::endl;
+      std::cout << dtl::SES_MARK_ADD    << " " << it->first << std::endl;
       break;
     case dtl::SES_DELETE :
-      std::cout << "D " << it->first << std::endl;
+      std::cout << dtl::SES_MARK_DELETE << " " << it->first << std::endl;
       break;
     case dtl::SES_COMMON :
-      std::cout << "C " << it->first << std::endl;
+      std::cout << dtl::SES_MARK_COMMON << " " << it->first << std::endl;
       break;
     default :
       break;

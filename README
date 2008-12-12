@@ -20,20 +20,20 @@ $ ./strdiff acbdeacbed acebdabbabed
 editDistance:6
 LCS:acbdabed
 SES
-C a
-C c
-A e
-C b
-C d
-D e
-C a
-D c
-C b
-A b
-A a
-A b
-C e
-C d
+  a
+  c
++ e
+  b
+  d
+- e
+  a
+- c
+  b
++ b
++ a
++ b
+  e
+  d
 $
 
 * intdiff
@@ -43,25 +43,25 @@ intdiff can calculate a diffrence between two int arrays sequences.
 $ cd dtl/examples
 $ make intdiff
 $ ./intdiff # There are datas in intdiff.cpp
-1 2 3 4 5 6 7 8 9 10
-3 5 1 4 5 1 7 9 6 10
+1 2 3 4 5 6 7 8 9 10 
+3 5 1 4 5 1 7 9 6 10 
 editDistance:8
-LCS: 3 4 5 7 9 10
+LCS: 3 4 5 7 9 10 
 SES
-D 1
-D 2
-C 3
-A 5
-A 1
-C 4
-C 5
-D 6
-A 1
-C 7
-D 8
-C 9
-A 6
-C 10
+- 1
+- 2
+  3
++ 5
++ 1
+  4
+  5
+- 6
++ 1
+  7
+- 8
+  9
++ 6
+  10
 $
 
 * unidiff
@@ -122,6 +122,26 @@ $ ./unidiff a.txt b.txt
  a
  b
  c
+$
+
+* strdiff3
+
+$ cd dtl/examples
+$ make strdiff3
+$ ./strdiff3 qabc abc abcdef
+result:qabcdef
+$
+
+* intdiff3
+
+$ cd dtl/examples
+$ make intdiff3
+$ ./intdiff3
+a:1 2 3 4 5 6 7 3 9 10
+b:1 2 3 4 5 6 7 8 9 10
+c:1 2 3 9 5 6 7 8 9 10
+s:1 2 3 9 5 6 7 3 9 10
+intdiff3 OK
 $
 
 * patch, fpatch
