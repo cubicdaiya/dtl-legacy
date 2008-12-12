@@ -232,6 +232,10 @@ namespace dtl {
       return change_idxes;
     }
 
+    std::vector<uniHunk> getUniHunks () {
+      return uniHunks;
+    }
+
     bool isReverse () {
       return reverse;
     }
