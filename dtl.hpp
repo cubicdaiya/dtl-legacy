@@ -251,55 +251,6 @@ namespace dtl {
     void offHuge () {
       this->huge = false;
     }
-    /*
-    sequence uniPatch3 (sequence seq) {
-      std::list<elem> seqLst(seq.begin(), seq.end());
-      std::vector<sesElem> shunk;
-      typename std::vector<uniHunk>::iterator it;
-      typename std::list<elem>::iterator lstIt = seqLst.begin();
-      typename std::vector<sesElem>::iterator vsesIt;
-      typename sequence::iterator cit = seq.begin();
-      int inc_dec_total = 0;
-      int seq_lnum = 1;
-      for (it=uniHunks.begin();it!=uniHunks.end();++it) {
-	joinSesVec(shunk, it->common[0]);
-	joinSesVec(shunk, it->change);
-	joinSesVec(shunk, it->common[1]);
-	it->a += inc_dec_total;
-	while (seq_lnum++ < it->a && cit != seq.end()) {
-	  ++cit;
-	  ++lstIt;
-	}
-	inc_dec_total += it->inc_dec_count;
-	vsesIt = shunk.begin();
-	while (vsesIt!=shunk.end()) {
-	  switch (vsesIt->second.type) {
-	  case SES_ADD :
-	    seqLst.insert(lstIt, vsesIt->first);
-	    break;
-	  case SES_DELETE :
-	    if (lstIt != seqLst.end()) {
-	      lstIt = seqLst.erase(lstIt);
-	    }
-	    break;
-	  case SES_COMMON :
-	    if (lstIt != seqLst.end()) {
-	      ++lstIt;
-	    }
-	    break;
-	  default :
-	    break;
-	  }
-	  ++cit;
-	  ++vsesIt;
-	}
-	shunk.clear();
-      }
-      
-      sequence patchedSeq(seqLst.begin(), seqLst.end());
-      return patchedSeq;
-    }
-    */
     
     sequence uniPatch (sequence seq) {
       std::list<elem> seqLst(seq.begin(), seq.end());
