@@ -1,5 +1,5 @@
 /*
-  dtl-0.05 -- Diff Template Library
+  dtl-0.06 -- Diff Template Library
   Copyright(C) 2008-  Tatsuhiko Kubo <cubicdaiya@gmail.com>
 */
 
@@ -727,6 +727,7 @@ namespace dtl {
 	    conflict = true;
 	    return false;
 	  }
+	  // TODO
 	  S = diff_ba->uniPatch(C);
 	}
       }
