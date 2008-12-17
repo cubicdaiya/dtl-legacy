@@ -1,6 +1,7 @@
 /*
   dtl-0.06 -- Diff Template Library
   Copyright(C) 2008-  Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
 */
 
 #ifndef DTL_H
@@ -150,6 +151,14 @@ namespace dtl {
 
   typedef std::vector<int> editPath;
   typedef std::vector<P>   editPathCordinates;
+  
+  template <typename sesElem>
+  struct uniHunk {
+    int a, b, c, d;                   // @@ -a,b +c,d @@
+    std::vector<sesElem> common[2];   // anteroposterior commons on changes
+    std::vector<sesElem> change;      // changes
+    int inc_dec_count;                // count of increace and decrease
+  };
 
   template <typename elem, typename sequence>
   class Diff
@@ -174,14 +183,7 @@ namespace dtl {
      * Unified Format Hunk
      */
     typedef std::pair<elem, elemInfo> sesElem;
-    typedef struct unihunk {
-      int a, b, c, d;                   // @@ -a,b +c,d @@
-      std::vector<sesElem> common[2];   // anteroposterior commons on changes
-      std::vector<sesElem> change;      // changes
-      int inc_dec_count;                // count of increace and decrease
-    } uniHunk;
-    std::vector<uniHunk> uniHunks;
-
+    std::vector< uniHunk<sesElem> > uniHunks;
     std::vector<int> change_idxes;
 
   public :
@@ -232,7 +234,7 @@ namespace dtl {
       return change_idxes;
     }
 
-    std::vector<uniHunk> getUniHunks () {
+    std::vector< uniHunk<sesElem> > getUniHunks () {
       return uniHunks;
     }
 
@@ -255,7 +257,7 @@ namespace dtl {
     sequence uniPatch (sequence seq) {
       std::list<elem> seqLst(seq.begin(), seq.end());
       std::vector<sesElem> shunk;
-      typename std::vector<uniHunk>::iterator it;
+      typename std::vector< uniHunk<sesElem> >::iterator it;
       typename std::list<elem>::iterator lstIt = seqLst.begin();
       typename std::list<elem>::iterator lstIt_t = seqLst.begin();;
       typename std::vector<sesElem>::iterator vsesIt;
@@ -371,7 +373,7 @@ namespace dtl {
     }
 
     void printUnifiedFormat () {
-      typename std::vector<uniHunk>::iterator uit;
+      typename std::vector< uniHunk<sesElem> >::iterator uit;
       for (uit=uniHunks.begin();uit!=uniHunks.end();++uit) {
 	// header
 	std::cout << "@@" 
@@ -421,7 +423,7 @@ namespace dtl {
       int a, b, c, d;         // @@ -a,b +c,d @@
       int inc_dec_count = 0;
       a = b = c = d = 0;
-      unihunk hunk;
+      uniHunk<sesElem> hunk;
       std::vector<sesElem> adds;
       std::vector<sesElem> deletes;
 
@@ -517,7 +519,6 @@ namespace dtl {
 	  if (isReverse()) std::swap(a, c);
 	  hunk.a = a;hunk.b = b;hunk.c = c;hunk.d = d;
 	  hunk.common[0] = common[0];
-	  typename std::vector<sesElem>::iterator vit;
 	  hunk.change = change;
 	  hunk.common[1] = common[1];
 	  hunk.inc_dec_count = inc_dec_count;
