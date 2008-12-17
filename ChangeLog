@@ -1,4 +1,8 @@
 
+2008-12-00 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* added function getUniHunks
+	
 2008-12-12 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* added sample of diff3 (strdiff3, intdiff3)
