@@ -815,23 +815,7 @@ namespace dtl {
 
       typename std::vector< idxLcs<elem> >::iterator lcs_ba_it;
       typename std::vector< idxLcs<elem> >::iterator lcs_bc_it;
-      
-      std::cout << "ba:" << std::endl;
-      std::cout << "LCS_ba:" << lcs_ba_s << std::endl;
-      for (lcs_ba_it=lcsSequence_ba.begin();lcs_ba_it!=lcsSequence_ba.end();++lcs_ba_it) {
-	std::cout << "b_idx:" << lcs_ba_it->a_idx << ","
-		  << "a_idx:" << lcs_ba_it->b_idx << ","
-		  << "e:"     << lcs_ba_it->e     << std::endl;
-      }
-      
-      std::cout << "bc:" << std::endl; 
-      std::cout << "LCS_bc:" << lcs_bc_s << std::endl;
-      for (lcs_bc_it=lcsSequence_bc.begin();lcs_bc_it!=lcsSequence_bc.end();++lcs_bc_it) {
-	std::cout << "b_idx:" << lcs_bc_it->a_idx << ","
-		  << "c_idx:" << lcs_bc_it->b_idx << ","
-		  << "e:"     << lcs_bc_it->e     << std::endl;
-      }
-      
+
       lcs_ba_it = lcsSequence_ba.begin();
       lcs_bc_it = lcsSequence_bc.begin();
       std::vector<elem> seq;
@@ -844,10 +828,9 @@ namespace dtl {
       c_len = C.size();
       offset_ba = offset_bc = 0;
       while (!(a_idx >= a_len && b_idx >= b_len && c_idx >= c_len)) {
-	if (lcs_ba_it->b_idx == lcs_ba_it->a_idx) { // lcs between B and A
-	  if (lcs_bc_it->b_idx == lcs_bc_it->a_idx) { // lcs between B and C
+	if (lcs_ba_it->b_idx == lcs_ba_it->a_idx + offset_ba) { // lcs between B and A
+	  if (lcs_bc_it->b_idx == lcs_bc_it->a_idx + offset_bc) { // lcs between B and C
 	    if (lcs_ba_it->e == lcs_bc_it->e) {
-	      std::cout << "1:" << a_idx << ":" << A[a_idx] << ",e:" << lcs_ba_it->e << std::endl;
 	      if (lcs_ba_it != lcsSequence_ba.end()) {
 		seq.push_back(lcs_ba_it->e);
 	      } else if (c_idx < c_len - 1) {
@@ -856,8 +839,8 @@ namespace dtl {
 		seq.push_back(A[a_idx]);
 	      }
 	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
-	    } else { // conflict
-	      
+	    } else {
+	      // no through
 	    }
 	  } else {
 	    if (lcs_bc_it->b_idx <= lcs_bc_it->a_idx + offset_bc) {
@@ -869,7 +852,7 @@ namespace dtl {
 		} else if (a_idx < a_len - 1) {
 		  seq.push_back(A[a_idx]);
 		}
-		std::cout << "2:" << a_idx << ":" << A[a_idx] << std::endl;
+		//std::cout << "2:" << a_idx << ":" << A[a_idx] << std::endl;
 		++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
 	      }
 	    } else {
@@ -887,20 +870,20 @@ namespace dtl {
 	      } else if (a_idx < a_len - 1) {
 		seq.push_back(A[a_idx]);
 	      }
-	      std::cout << "3:" << c_idx << ":" << C[c_idx] << std::endl;
 	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
+	    } else {
+	      if (c_idx < c_len - 1) seq.push_back(C[c_idx]);
+	      ++c_idx;++b_idx;++offset_bc;
+	      
 	    }
 	  } else {
 	    if (a_idx < a_len - 1) seq.push_back(A[a_idx]);
-	    std::cout << "4:" << a_idx << ":" << A[a_idx] << std::endl;
 	    ++a_idx;++b_idx;++offset_ba;
 	  }
 	}
 	if (a_idx >= a_len && b_idx >= b_len) {
-	  std::cout << "5:" << c_idx << ":" << C[c_idx] << std::endl;
 	  seq.push_back(C[c_idx++]);
 	} else if (b_idx >= b_len && c_idx >= c_len) {
-	  std::cout << "6:" << a_idx << ":" << A[a_idx] << std::endl;
 	  seq.push_back(A[a_idx++]);
 	}
       }
