@@ -892,13 +892,6 @@ namespace dtl {
       return mergedSeq;
     }
 
-    bool isLcsElem () {
-      
-      
-      
-      return true;
-    }
-    
     bool isConflict_ () {
       return false;
       std::vector<int> ba_cidx  = diff_ba->getChangeIdx();

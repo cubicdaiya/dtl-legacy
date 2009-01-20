@@ -3,6 +3,8 @@
 
 	* add unserious diff. ver 0.03 has this feture.
 	
+	* fixed bug for merge
+	
 	* added function getUniHunks
 
 	* 0.06 released.
