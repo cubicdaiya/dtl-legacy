@@ -1,8 +1,7 @@
-/*
-  dtl-0.06 -- Diff Template Library
-  Copyright(C) 2008-  Tatsuhiko Kubo <cubicdaiya@gmail.com>
-
-*/
+/**
+ * dtl-0.06 -- Diff Template Library
+ * Copyright(C) 2008-2009  Tatsuhiko Kubo <cubicdaiya@gmail.com>
+ */
 
 #ifndef DTL_H
 #define DTL_H
@@ -51,8 +50,28 @@ namespace dtl {
     int k;
   } P;
 
+  /**
+   * limit of cordinate size
+   */
   const unsigned int MAX_CORDINATES_SIZE = 2000000;
   
+  typedef std::vector<int> editPath;
+  typedef std::vector<P>   editPathCordinates;
+  
+  /**
+   * Structure of Unified Format Hunk
+   */
+  template <typename sesElem>
+  struct uniHunk {
+    int a, b, c, d;                   // @@ -a,b +c,d @@
+    std::vector<sesElem> common[2];   // anteroposterior commons on changes
+    std::vector<sesElem> change;      // changes
+    int inc_dec_count;                // count of increace and decrease
+  };
+
+  /**
+   * sequence template class
+   */
   template <typename elem>
   class Sequence
   {
@@ -70,15 +89,40 @@ namespace dtl {
   protected :
     _Sequence sequence;
   };
+  
+  template <typename elem>
+  struct idxLcs {
+    elem e;
+    int a_idx, b_idx;
+  };
 
+  /**
+   * Longest Common Subsequence template calss
+   */
   template <typename elem>
   class Lcs : public Sequence<elem>
   {
+  private :
+    typedef std::vector< idxLcs<elem> > lcsSequence;
+    lcsSequence lcsSeq;
   public :
     Lcs ()  {}
     ~Lcs () {}
+    void addLcsSequence (elem e, int a_idx, int b_idx) {
+      idxLcs<elem> ie;
+      ie.e = e;
+      ie.a_idx = a_idx;
+      ie.b_idx = b_idx;
+      lcsSeq.push_back(ie);
+    }
+    lcsSequence getLcsSequence () {
+      return lcsSeq;
+    }
   };
 
+  /**
+   * Shortest Edit Script template calss
+   */
   template <typename elem>
   class Ses : public Sequence<elem>
   {
@@ -149,17 +193,9 @@ namespace dtl {
     bool onlyCopy;
   };
 
-  typedef std::vector<int> editPath;
-  typedef std::vector<P>   editPathCordinates;
-  
-  template <typename sesElem>
-  struct uniHunk {
-    int a, b, c, d;                   // @@ -a,b +c,d @@
-    std::vector<sesElem> common[2];   // anteroposterior commons on changes
-    std::vector<sesElem> change;      // changes
-    int inc_dec_count;                // count of increace and decrease
-  };
-
+  /**
+   * diff template class
+   */
   template <typename elem, typename sequence>
   class Diff
   {
@@ -178,14 +214,10 @@ namespace dtl {
     editPathCordinates pathCordinates;
     bool reverse;
     bool huge;
-
-    /**
-     * Unified Format Hunk
-     */
+    bool unserious;
     typedef std::pair<elem, elemInfo> sesElem;
     std::vector< uniHunk<sesElem> > uniHunks;
     std::vector<int> change_idxes;
-
   public :
     Diff(sequence& A, sequence& B) {
       M = std::distance(A.begin(), A.end());
@@ -212,6 +244,7 @@ namespace dtl {
       change_idxes.resize(N);
       std::fill(change_idxes.begin(), change_idxes.end(), SES_COMMON);
       huge = false;
+      unserious = false;
     }
 
     ~Diff() {
@@ -254,6 +287,21 @@ namespace dtl {
       this->huge = false;
     }
     
+    bool isUnserious () {
+      return unserious;
+    }
+
+    void onUnserious () {
+      this->unserious = true;
+    }
+
+    void offUnserious () {
+      this->unserious = false;
+    }
+    
+    /**
+     * patching with Unified Format Hunks
+     */
     sequence uniPatch (sequence seq) {
       std::list<elem> seqLst(seq.begin(), seq.end());
       std::vector<sesElem> shunk;
@@ -307,6 +355,9 @@ namespace dtl {
       return patchedSeq;
     }
     
+    /**
+     * patching with Shortest Edit Script
+     */
     sequence patch (sequence seq, Ses<elem>& ses) {
       std::vector<sesElem> sesSeq = ses.getSequence();
       std::list<elem> seqLst(seq.begin(), seq.end());
@@ -332,8 +383,12 @@ namespace dtl {
       return patchedSeq;
     }
     
-    void compose(bool huge = false) {
-      if (huge)	onHuge();
+    /**
+     * compose Longest Common Subsequence and Shortest Edit Script.
+     * The Algorithm of diff is O(NP).
+     */
+    void compose() {
+
       if (isHuge()) pathCordinates.reserve(MAX_CORDINATES_SIZE + 50000);
 
       // O(NP) Algorithm
@@ -363,7 +418,7 @@ namespace dtl {
 	r = pathCordinates[r].k;
       }
 
-      // recordSequence Longest Common Subsequence & Shortest Edit Script
+      // record Longest Common Subsequence & Shortest Edit Script
       if (!recordSequence(epc)) {
 	pathCordinates.resize(0);
 	epc.resize(0);
@@ -372,6 +427,9 @@ namespace dtl {
       }
     }
 
+    /**
+     * print difference between A and B with the format such as Unified Format.
+     */
     void printUnifiedFormat () {
       typename std::vector< uniHunk<sesElem> >::iterator uit;
       for (uit=uniHunks.begin();uit!=uniHunks.end();++uit) {
@@ -407,6 +465,9 @@ namespace dtl {
       }
     }
     
+    /**
+     * compose Unified Format Hunks from Shortest Edit Script
+     */
     void composeUnifiedHunks () {
       std::vector<sesElem> common[2];
       std::vector<sesElem> change;
@@ -489,7 +550,7 @@ namespace dtl {
 	  // no through
 	  break;
 	}
-	// print unified format
+	// compose unified format hunk
 	if (isAfter && !change.empty()) {
 	  typename std::vector<sesElem>::iterator cit = it;
 	  int cnt = 0;
@@ -590,6 +651,7 @@ namespace dtl {
 	    ++px_idx;
 	  } else {             // Common
 	    lcs.addSequence(*x);
+	    lcs.addLcsSequence(*x, x_idx, y_idx);
 	    ses.addSequence(*x, x_idx, y_idx, SES_COMMON);
 	    ++x;
 	    ++y;
@@ -600,10 +662,23 @@ namespace dtl {
 	  }
 	}
       }
-      
+
       if (x_idx > M && y_idx > N) {
 	// all recording success
       } else {
+	// unserious difference
+	if (isUnserious()) {
+	  if (!isReverse()) {
+	    recordOddSequence(x_idx, M, x, SES_DELETE);
+	    recordOddSequence(y_idx, N, y, SES_ADD);
+	  } else {
+	    recordOddSequence(x_idx, M, x, SES_ADD);
+	    recordOddSequence(y_idx, N, y, SES_DELETE);
+	  }
+	  return true;
+	}
+	
+	// decent difference
 	sequence A_(A.begin() + x_idx - 1, A.end());
 	sequence B_(B.begin() + y_idx - 1, B.end());
 	A = A_;
@@ -645,7 +720,7 @@ namespace dtl {
   };
 
   /* 
-   * diff3
+   * diff3 template
    */
   template <typename elem, typename sequence>
   class Diff3
@@ -656,20 +731,13 @@ namespace dtl {
     sequence A;
     sequence B;
     sequence C;
-    sequence S;
-    int M;
-    int N;
-    int O;
+    sequence S;                                     // merged sequence
     bool conflict;
   public :
-    Diff3 () {}
-    Diff3 (sequence& A, sequence& B, sequence& C) { // diff3
+    Diff3 (sequence& A, sequence& B, sequence& C) {
       this->A = A;
       this->B = B;
       this->C = C;
-      this->M = std::distance(A.begin(), A.end());
-      this->N = std::distance(B.begin(), B.end());
-      this->O = std::distance(C.begin(), C.end());
       this->diff_ba = new Diff<elem, sequence>(B, A);
       this->diff_bc = new Diff<elem, sequence>(B, C);
       conflict = false;
@@ -683,11 +751,11 @@ namespace dtl {
       return conflict;
     }
 
-    Diff<elem, sequence>& getDiffba () {
+    Diff<elem, sequence> getDiffba () {
       return diff_ba;
     }
 
-    Diff<elem, sequence>& getDiffbc () {
+    Diff<elem, sequence> getDiffbc () {
       return diff_bc;
     }
     
@@ -697,39 +765,24 @@ namespace dtl {
 
     // merge changes B and C to A
     bool merge () {
-      Ses<elem> ses_ba = diff_ba->getSes();
-      Ses<elem> ses_bc = diff_bc->getSes();
-      typedef std::vector< std::pair<elem, elemInfo> > ses_v;
-      ses_v sv_ba = ses_ba.getSequence();
-      ses_v sv_bc = ses_bc.getSequence();
-      typename ses_v::iterator it_ba;
-      typename ses_v::iterator it_bc;
-      
-      diff_ba->composeUnifiedHunks();
-      diff_bc->composeUnifiedHunks();
-
-      if (diff_ba->getEditDistance() == 0) {
-	if (diff_bc->getEditDistance() == 0) {
-	  // A == B == C
+      if (diff_ba->getEditDistance() == 0) {   // A == B
+	if (diff_bc->getEditDistance() == 0) { // A == B == C
 	  S = B;
 	  return true;
 	}
-	// B == A
 	S = C;
 	return true;
-      } else {
-	if (diff_bc->getEditDistance() == 0) {
-	  // B == C
-	  S = A;
+      } else {                                 // A != B
+	if (diff_bc->getEditDistance() == 0) { // B == C
+	  S = A;                              
 	  return true;
 	} else {
-	  // changes B to A and B to C
+	  // A != B != C
 	  if (isConflict_()) {
 	    conflict = true;
 	    return false;
 	  }
-	  // TODO
-	  S = diff_ba->uniPatch(C);
+	  S = merge_();
 	}
       }
       return true;
@@ -741,7 +794,130 @@ namespace dtl {
     }
     
   private :
+    sequence merge_ () {
+      Ses<elem> ses_ba = diff_ba->getSes();
+      Ses<elem> ses_bc = diff_bc->getSes();
+      typedef std::vector< std::pair<elem, elemInfo> > ses_v;
+      ses_v sv_ba = ses_ba.getSequence();
+      ses_v sv_bc = ses_bc.getSequence();
+      typename ses_v::iterator it_ba;
+      typename ses_v::iterator it_bc;
+
+      // LCS
+      Lcs<elem> lcs_ba = diff_ba->getLcs();
+      std::vector<elem> lcs_ba_v = lcs_ba.getSequence();
+      std::string lcs_ba_s(lcs_ba_v.begin(), lcs_ba_v.end());
+      std::vector< idxLcs<elem> > lcsSequence_ba = lcs_ba.getLcsSequence();
+      Lcs<elem> lcs_bc = diff_bc->getLcs();
+      std::vector<elem> lcs_bc_v = lcs_bc.getSequence();
+      std::string lcs_bc_s(lcs_bc_v.begin(), lcs_bc_v.end());
+      std::vector< idxLcs<elem> > lcsSequence_bc = lcs_bc.getLcsSequence();
+
+      typename std::vector< idxLcs<elem> >::iterator lcs_ba_it;
+      typename std::vector< idxLcs<elem> >::iterator lcs_bc_it;
+      
+      std::cout << "ba:" << std::endl;
+      std::cout << "LCS_ba:" << lcs_ba_s << std::endl;
+      for (lcs_ba_it=lcsSequence_ba.begin();lcs_ba_it!=lcsSequence_ba.end();++lcs_ba_it) {
+	std::cout << "b_idx:" << lcs_ba_it->a_idx << ","
+		  << "a_idx:" << lcs_ba_it->b_idx << ","
+		  << "e:"     << lcs_ba_it->e     << std::endl;
+      }
+      
+      std::cout << "bc:" << std::endl; 
+      std::cout << "LCS_bc:" << lcs_bc_s << std::endl;
+      for (lcs_bc_it=lcsSequence_bc.begin();lcs_bc_it!=lcsSequence_bc.end();++lcs_bc_it) {
+	std::cout << "b_idx:" << lcs_bc_it->a_idx << ","
+		  << "c_idx:" << lcs_bc_it->b_idx << ","
+		  << "e:"     << lcs_bc_it->e     << std::endl;
+      }
+      
+      lcs_ba_it = lcsSequence_ba.begin();
+      lcs_bc_it = lcsSequence_bc.begin();
+      std::vector<elem> seq;
+      int offset_ba, offset_bc;
+      int a_idx, b_idx, c_idx;
+      int a_len, b_len, c_len;
+      a_idx = b_idx = c_idx = 0;
+      a_len = A.size();
+      b_len = B.size();
+      c_len = C.size();
+      offset_ba = offset_bc = 0;
+      while (!(a_idx >= a_len && b_idx >= b_len && c_idx >= c_len)) {
+	if (lcs_ba_it->b_idx == lcs_ba_it->a_idx) { // lcs between B and A
+	  if (lcs_bc_it->b_idx == lcs_bc_it->a_idx) { // lcs between B and C
+	    if (lcs_ba_it->e == lcs_bc_it->e) {
+	      std::cout << "1:" << a_idx << ":" << A[a_idx] << ",e:" << lcs_ba_it->e << std::endl;
+	      if (lcs_ba_it != lcsSequence_ba.end()) {
+		seq.push_back(lcs_ba_it->e);
+	      } else if (c_idx < c_len - 1) {
+		seq.push_back(C[c_idx]);
+	      } else if (a_idx < a_len - 1) {
+		seq.push_back(A[a_idx]);
+	      }
+	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
+	    } else { // conflict
+	      
+	    }
+	  } else {
+	    if (lcs_bc_it->b_idx <= lcs_bc_it->a_idx + offset_bc) {
+	      if (lcs_ba_it->e == lcs_bc_it->e) {
+		if (lcs_ba_it != lcsSequence_ba.end()) {
+		  seq.push_back(lcs_ba_it->e);
+		} else if (c_idx < c_len - 1) {
+		  seq.push_back(C[c_idx]);
+		} else if (a_idx < a_len - 1) {
+		  seq.push_back(A[a_idx]);
+		}
+		std::cout << "2:" << a_idx << ":" << A[a_idx] << std::endl;
+		++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
+	      }
+	    } else {
+	      if (c_idx < c_len - 1) seq.push_back(C[c_idx]);
+	      ++c_idx;++b_idx;++offset_bc;
+	    }
+	  }
+	} else {
+	  if (lcs_ba_it->b_idx <= lcs_ba_it->a_idx + offset_ba) {
+	    if (lcs_ba_it->e == lcs_bc_it->e) {
+	      if (lcs_ba_it != lcsSequence_ba.end()) {
+		seq.push_back(lcs_bc_it->e);
+	      } else if (c_idx < c_len - 1) {
+		seq.push_back(C[c_idx]);
+	      } else if (a_idx < a_len - 1) {
+		seq.push_back(A[a_idx]);
+	      }
+	      std::cout << "3:" << c_idx << ":" << C[c_idx] << std::endl;
+	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
+	    }
+	  } else {
+	    if (a_idx < a_len - 1) seq.push_back(A[a_idx]);
+	    std::cout << "4:" << a_idx << ":" << A[a_idx] << std::endl;
+	    ++a_idx;++b_idx;++offset_ba;
+	  }
+	}
+	if (a_idx >= a_len && b_idx >= b_len) {
+	  std::cout << "5:" << c_idx << ":" << C[c_idx] << std::endl;
+	  seq.push_back(C[c_idx++]);
+	} else if (b_idx >= b_len && c_idx >= c_len) {
+	  std::cout << "6:" << a_idx << ":" << A[a_idx] << std::endl;
+	  seq.push_back(A[a_idx++]);
+	}
+      }
+      
+      sequence mergedSeq(seq.begin(), seq.end());
+      return mergedSeq;
+    }
+
+    bool isLcsElem () {
+      
+      
+      
+      return true;
+    }
+    
     bool isConflict_ () {
+      return false;
       std::vector<int> ba_cidx  = diff_ba->getChangeIdx();
       std::vector<int>::iterator ba_cit = ba_cidx.begin();
       std::vector<int> bc_cidx  = diff_bc->getChangeIdx();
@@ -773,4 +949,4 @@ namespace dtl {
   };
 }
 
-#endif
+#endif // DTL_H

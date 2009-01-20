@@ -1,7 +1,11 @@
 
-2008-12-00 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+2009-01-00 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
+	* add unserious diff. ver 0.03 has this feture.
+	
 	* added function getUniHunks
+
+	* 0.06 released.
 	
 2008-12-12 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 

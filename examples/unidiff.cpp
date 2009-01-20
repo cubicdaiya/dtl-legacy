@@ -57,9 +57,14 @@ void unifiedDiff (std::string fp1, std::string fp2)
   while(getline(Bifs, buf)){
     BLines.push_back(buf);
   }
-
+  
   dtl::Diff<elem, std::vector<elem> > diff(ALines, BLines);
-  diff.compose(true);
+  diff.onHuge();
+  //diff.onUnserious();
+  diff.compose();
+
+  // type unihunk definition test
+  dtl::uniHunk< std::pair<elem, dtl::elemInfo> > hunk;
 
   if (diff.getEditDistance() > 0) {
     showStats(fp1, fp2);             // show file info
