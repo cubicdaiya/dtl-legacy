@@ -7,7 +7,10 @@
 typedef char elem;
 typedef std::string sequence;
 
-void strdiff3_test (sequence A, sequence B, sequence C, sequence S) {
+void merge_test(sequence A, sequence B, sequence C, sequence S);
+void detect_conflict_test (sequence A, sequence B, sequence C);
+
+void merge_test (sequence A, sequence B, sequence C, sequence S) {
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   if (!diff3.merge()) {
@@ -21,32 +24,53 @@ void strdiff3_test (sequence A, sequence B, sequence C, sequence S) {
   }
 }
 
+void detect_conflict_test (sequence A, sequence B, sequence C) {
+  dtl::Diff3<elem, sequence> diff3(A, B, C);
+  diff3.compose();
+  if (!diff3.merge()) {
+    std::cout << "detect conflict successed : " << A << " " << B << " "  << C << std::endl;
+  } else {
+    std::cout << "detect conflict failed    : " << A << " " << B << " "  << C << std::endl;
+  }
+}
+
 int main(int argc, char *argv[]){
   
-  strdiff3_test("ab", "b", "bc", "abc");
-  strdiff3_test("bc", "b", "ab", "abc");
+  std::cout << "merge test" << std::endl << std::endl;
+  merge_test("ab", "b", "bc", "abc");
+  merge_test("bc", "b", "ab", "abc");
 
-  strdiff3_test("qqqabc", "abc", "abcdef", "qqqabcdef");
-  strdiff3_test("abcdef", "abc", "qqqabc", "qqqabcdef");
+  merge_test("qqqabc", "abc", "abcdef", "qqqabcdef");
+  merge_test("abcdef", "abc", "qqqabc", "qqqabcdef");
 
-  strdiff3_test("aiueo", "aeo", "aeKokaki", "aiueKokaki");
-  strdiff3_test("aeKokaki", "aeo", "aiueo", "aiueKokaki");
+  merge_test("aiueo", "aeo", "aeKokaki", "aiueKokaki");
+  merge_test("aeKokaki", "aeo", "aiueo", "aiueKokaki");
 
-  strdiff3_test("aaacccbbb", "aaabbb", "aaabbbqqq", "aaacccbbbqqq");
-  strdiff3_test("aaabbbqqq", "aaabbb", "aaacccbbb", "aaacccbbbqqq");
+  merge_test("aaacccbbb", "aaabbb", "aaabbbqqq", "aaacccbbbqqq");
+  merge_test("aaabbbqqq", "aaabbb", "aaacccbbb", "aaacccbbbqqq");
 
-  strdiff3_test("aeaacccbbb", "aaabbb", "aaabbbqqq",  "aeaacccbbbqqq");
-  strdiff3_test("aaabbbqqq",  "aaabbb", "aeaacccbbb", "aeaacccbbbqqq");
+  merge_test("aeaacccbbb", "aaabbb", "aaabbbqqq",  "aeaacccbbbqqq");
+  merge_test("aaabbbqqq",  "aaabbb", "aeaacccbbb", "aeaacccbbbqqq");
 
-  strdiff3_test("aeaacccbbb", "aaabbb", "aaabebbqqq",  "aeaacccbebbqqq");
-  strdiff3_test("aaabebbqqq",  "aaabbb", "aeaacccbbb", "aeaacccbebbqqq");
+  merge_test("aeaacccbbb", "aaabbb", "aaabebbqqq",  "aeaacccbebbqqq");
+  merge_test("aaabebbqqq",  "aaabbb", "aeaacccbbb", "aeaacccbebbqqq");
 
-  strdiff3_test("aaacccbbb",  "aaabbb", "aeaabbbqqq", "aeaacccbbbqqq");
-  strdiff3_test("aeaabbbqqq", "aaabbb", "aaacccbbb",  "aeaacccbbbqqq");
+  merge_test("aaacccbbb",  "aaabbb", "aeaabbbqqq", "aeaacccbbbqqq");
+  merge_test("aeaabbbqqq", "aaabbb", "aaacccbbb",  "aeaacccbbbqqq");
 
-  strdiff3_test("aaacccbbb",  "aaabbb", "aaabeebbeeqqq", "aaacccbeebbeeqqq");
-  strdiff3_test("aaabeebbeeqqq", "aaabbb", "aaacccbbb",  "aaacccbeebbeeqqq");
+  merge_test("aaacccbbb",  "aaabbb", "aaabeebbeeqqq", "aaacccbeebbeeqqq");
+  merge_test("aaabeebbeeqqq", "aaabbb", "aaacccbbb",  "aaacccbeebbeeqqq");
 
+  merge_test("1234567390", "1234567890", "1239567890", "1239567390");
+  merge_test("1239567390", "1234567890", "1234567390", "1239567390");
+  
+  std::cout << std::endl;
+
+  std::cout << "detect conflict test" << std::endl << std::endl;
+  detect_conflict_test("adc", "abc", "aec");
+  detect_conflict_test("aec", "abc", "adc");
+  
+  
   return 0;
 }
 

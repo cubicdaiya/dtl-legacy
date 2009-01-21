@@ -832,7 +832,7 @@ namespace dtl {
 	  if (lcs_bc_it->b_idx == lcs_bc_it->a_idx + offset_bc) { // lcs between B and C
 	    if (lcs_ba_it->e == lcs_bc_it->e) {
 	      if (lcs_ba_it != lcsSequence_ba.end()) {
-		seq.push_back(lcs_ba_it->e);
+		seq.push_back(A[a_idx]);
 	      } else if (c_idx < c_len - 1) {
 		seq.push_back(C[c_idx]);
 	      } else if (a_idx < a_len - 1) {
@@ -840,7 +840,14 @@ namespace dtl {
 	      }
 	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
 	    } else {
-	      // no through
+	      if (A[a_idx] == B[b_idx]) {
+		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
+	      } else if (B[b_idx] == C[c_idx]) {
+		if (a_idx <= a_len - 1) seq.push_back(A[a_idx]);
+	      } else {
+		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
+	      }
+	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
 	    }
 	  } else {
 	    if (lcs_bc_it->b_idx <= lcs_bc_it->a_idx + offset_bc) {
@@ -852,7 +859,6 @@ namespace dtl {
 		} else if (a_idx < a_len - 1) {
 		  seq.push_back(A[a_idx]);
 		}
-		//std::cout << "2:" << a_idx << ":" << A[a_idx] << std::endl;
 		++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
 	      }
 	    } else {
@@ -882,9 +888,9 @@ namespace dtl {
 	  }
 	}
 	if (a_idx >= a_len && b_idx >= b_len) {
-	  seq.push_back(C[c_idx++]);
+	  if (c_idx <= c_len - 1) seq.push_back(C[c_idx++]);
 	} else if (b_idx >= b_len && c_idx >= c_len) {
-	  seq.push_back(A[a_idx++]);
+	  if (a_idx <= a_len - 1) seq.push_back(A[a_idx++]);
 	}
       }
       
@@ -893,32 +899,10 @@ namespace dtl {
     }
 
     bool isConflict_ () {
-      return false;
-      std::vector<int> ba_cidx  = diff_ba->getChangeIdx();
-      std::vector<int>::iterator ba_cit = ba_cidx.begin();
-      std::vector<int> bc_cidx  = diff_bc->getChangeIdx();
-      std::vector<int>::iterator bc_cit = bc_cidx.begin();
-      while (ba_cit != ba_cidx.end() && bc_cit != bc_cidx.end()) {
-	if ((*ba_cit == SES_ADD    && *bc_cit == SES_ADD)    ||
-	    (*ba_cit == SES_DELETE && *bc_cit == SES_COMMON)) {
-	  return true;
-	}
-	++ba_cit;
-	++bc_cit;
-      }
       
-      if (ba_cit != ba_cidx.end()) {
-	int back = std::distance(ba_cit, ba_cidx.end());
-	--bc_cit;
-	while (back-- > 0) {
-	  if ((*ba_cit == SES_ADD    && *bc_cit == SES_ADD)    ||
-	      (*ba_cit == SES_DELETE && *bc_cit == SES_COMMON)) {
-	    return true;
-	  }
-	  ++ba_cit;
-	  --bc_cit;
-	}
-      }
+      
+      
+
       
       return false;
     }
