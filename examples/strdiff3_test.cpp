@@ -43,9 +43,6 @@ int main(int argc, char *argv[]){
   merge_test("qqqabc", "abc", "abcdef", "qqqabcdef");
   merge_test("abcdef", "abc", "qqqabc", "qqqabcdef");
 
-  merge_test("aiueo", "aeo", "aeKokaki", "aiueKokaki");
-  merge_test("aeKokaki", "aeo", "aiueo", "aiueKokaki");
-
   merge_test("aaacccbbb", "aaabbb", "aaabbbqqq", "aaacccbbbqqq");
   merge_test("aaabbbqqq", "aaabbb", "aaacccbbb", "aaacccbbbqqq");
 
@@ -61,9 +58,12 @@ int main(int argc, char *argv[]){
   merge_test("aaacccbbb",  "aaabbb", "aaabeebbeeqqq", "aaacccbeebbeeqqq");
   merge_test("aaabeebbeeqqq", "aaabbb", "aaacccbbb",  "aaacccbeebbeeqqq");
 
+  merge_test("aiueo", "aeo", "aeKokaki", "aiueKokaki");
+  merge_test("aeKokaki", "aeo", "aiueo", "aiueKokaki");
+
   merge_test("1234567390", "1234567890", "1239567890", "1239567390");
   merge_test("1239567890", "1234567890", "1234567390", "1239567390");
-  
+
   std::cout << std::endl;
   /*
   std::cout << "detect conflict test" << std::endl << std::endl;

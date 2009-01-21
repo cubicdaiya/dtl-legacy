@@ -795,14 +795,6 @@ namespace dtl {
     
   private :
     sequence merge_ () {
-      Ses<elem> ses_ba = diff_ba->getSes();
-      Ses<elem> ses_bc = diff_bc->getSes();
-      typedef std::vector< std::pair<elem, elemInfo> > ses_v;
-      ses_v sv_ba = ses_ba.getSequence();
-      ses_v sv_bc = ses_bc.getSequence();
-      typename ses_v::iterator it_ba;
-      typename ses_v::iterator it_bc;
-
       // LCS
       Lcs<elem> lcs_ba = diff_ba->getLcs();
       std::vector<elem> lcs_ba_v = lcs_ba.getSequence();
@@ -828,15 +820,15 @@ namespace dtl {
       c_len = C.size();
       offset_ba = offset_bc = 0;
       while (!(a_idx >= a_len && b_idx >= b_len && c_idx >= c_len)) {
-	if (lcs_ba_it->b_idx == lcs_ba_it->a_idx + offset_ba) { // lcs between B and A
-	  if (lcs_bc_it->b_idx == lcs_bc_it->a_idx + offset_bc) { // lcs between B and C
-	    if (lcs_ba_it->e == lcs_bc_it->e) {
-	      if (lcs_ba_it != lcsSequence_ba.end()) {
-		seq.push_back(A[a_idx]);
-	      } else if (c_idx < c_len - 1) {
-		seq.push_back(C[c_idx]);
-	      } else if (a_idx < a_len - 1) {
-		seq.push_back(A[a_idx]);
+	if (lcs_ba_it != lcsSequence_ba.end() && lcs_ba_it->b_idx == lcs_ba_it->a_idx + offset_ba) {
+	  if (lcs_bc_it != lcsSequence_bc.end() && lcs_bc_it->b_idx == lcs_bc_it->a_idx + offset_bc) {
+	    if (lcs_ba_it != lcsSequence_ba.end() && lcs_bc_it !=lcsSequence_bc.end() && lcs_ba_it->e == lcs_bc_it->e) {
+	      if (A[a_idx] == B[b_idx]) {
+		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
+	      } else if (B[b_idx] == C[c_idx]) {
+		if (a_idx <= a_len - 1) seq.push_back(A[a_idx]);
+	      } else {
+		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
 	      }
 	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
 	    } else {
@@ -850,47 +842,50 @@ namespace dtl {
 	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
 	    }
 	  } else {
-	    if (lcs_bc_it->b_idx <= lcs_bc_it->a_idx + offset_bc) {
-	      if (lcs_ba_it->e == lcs_bc_it->e) {
+	    if (lcs_bc_it != lcsSequence_bc.end() && lcs_bc_it->b_idx <= lcs_bc_it->a_idx + offset_bc) {
+	      if (lcs_ba_it != lcsSequence_ba.end() && lcs_bc_it != lcsSequence_bc.end() && lcs_ba_it->e == lcs_bc_it->e) {
 		if (lcs_ba_it != lcsSequence_ba.end()) {
 		  seq.push_back(lcs_ba_it->e);
-		} else if (c_idx < c_len - 1) {
+		} else if (c_idx <= c_len - 1) {
 		  seq.push_back(C[c_idx]);
-		} else if (a_idx < a_len - 1) {
+		} else if (a_idx <= a_len - 1) {
 		  seq.push_back(A[a_idx]);
 		}
 		++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
 	      }
 	    } else {
 	      if (c_idx < c_len - 1) seq.push_back(C[c_idx]);
-	      ++c_idx;++b_idx;++offset_bc;
+	      ++b_idx;++c_idx;++offset_bc;
 	    }
 	  }
 	} else {
-	  if (lcs_ba_it->b_idx <= lcs_ba_it->a_idx + offset_ba) {
-	    if (lcs_ba_it->e == lcs_bc_it->e) {
+	  if (lcs_ba_it != lcsSequence_ba.end() && lcs_ba_it->b_idx <= lcs_ba_it->a_idx + offset_ba) {
+	    if (lcs_ba_it != lcsSequence_ba.end() && lcs_bc_it != lcsSequence_bc.end() && lcs_ba_it->e == lcs_bc_it->e) {
 	      if (lcs_ba_it != lcsSequence_ba.end()) {
-		seq.push_back(lcs_bc_it->e);
-	      } else if (c_idx < c_len - 1) {
+		seq.push_back(lcs_ba_it->e);
+	      } else if (c_idx <= c_len - 1) {
 		seq.push_back(C[c_idx]);
-	      } else if (a_idx < a_len - 1) {
+	      } else if (a_idx <= a_len - 1) {
 		seq.push_back(A[a_idx]);
 	      }
 	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
 	    } else {
-	      if (c_idx < c_len - 1) seq.push_back(C[c_idx]);
-	      ++c_idx;++b_idx;++offset_bc;
-	      
+	      if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
+	      ++b_idx;++c_idx;++offset_bc;
 	    }
 	  } else {
-	    if (a_idx < a_len - 1) seq.push_back(A[a_idx]);
+	    if (a_idx <= a_len - 1) {
+	      seq.push_back(A[a_idx]);
+	    }
 	    ++a_idx;++b_idx;++offset_ba;
 	  }
 	}
 	if (a_idx >= a_len && b_idx >= b_len) {
-	  if (c_idx <= c_len - 1) seq.push_back(C[c_idx++]);
+	  if (c_idx <= c_len - 1 && a_len != b_len && b_len != c_len) seq.push_back(C[c_idx]);
+	  ++c_idx;
 	} else if (b_idx >= b_len && c_idx >= c_len) {
-	  if (a_idx <= a_len - 1) seq.push_back(A[a_idx++]);
+	  if (a_idx <= a_len - 1 && a_len != b_len && b_len != c_len) seq.push_back(A[a_idx]);
+	  ++a_idx;
 	}
       }
       
