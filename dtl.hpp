@@ -823,18 +823,18 @@ namespace dtl {
 	if (lcs_ba_it != lcsSequence_ba.end() && lcs_ba_it->b_idx == lcs_ba_it->a_idx + offset_ba) {
 	  if (lcs_bc_it != lcsSequence_bc.end() && lcs_bc_it->b_idx == lcs_bc_it->a_idx + offset_bc) {
 	    if (lcs_ba_it != lcsSequence_ba.end() && lcs_bc_it !=lcsSequence_bc.end() && lcs_ba_it->e == lcs_bc_it->e) {
-	      if (A[a_idx] == B[b_idx]) {
+	      if (a_idx <= a_len - 1 && b_idx <= b_len - 1 && A[a_idx] == B[b_idx]) {
 		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
-	      } else if (B[b_idx] == C[c_idx]) {
+	      } else if (b_idx <= b_len - 1 && c_idx <= c_len - 1 && B[b_idx] == C[c_idx]) {
 		if (a_idx <= a_len - 1) seq.push_back(A[a_idx]);
 	      } else {
 		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
 	      }
 	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
 	    } else {
-	      if (A[a_idx] == B[b_idx]) {
+	      if (a_idx <= a_len - 1 && b_idx <= b_len - 1 && A[a_idx] == B[b_idx]) {
 		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
-	      } else if (B[b_idx] == C[c_idx]) {
+	      } else if (b_idx <= b_len - 1 && c_idx <= c_len - 1 && B[b_idx] == C[c_idx]) {
 		if (a_idx <= a_len - 1) seq.push_back(A[a_idx]);
 	      } else {
 		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
