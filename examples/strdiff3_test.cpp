@@ -62,14 +62,14 @@ int main(int argc, char *argv[]){
   merge_test("aaabeebbeeqqq", "aaabbb", "aaacccbbb",  "aaacccbeebbeeqqq");
 
   merge_test("1234567390", "1234567890", "1239567890", "1239567390");
-  merge_test("1239567390", "1234567890", "1234567390", "1239567390");
+  merge_test("1239567890", "1234567890", "1234567390", "1239567390");
   
   std::cout << std::endl;
-
+  /*
   std::cout << "detect conflict test" << std::endl << std::endl;
   detect_conflict_test("adc", "abc", "aec");
   detect_conflict_test("aec", "abc", "adc");
-  
+  */
   
   return 0;
 }
