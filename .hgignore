@@ -1,0 +1,9 @@
+syntax: glob
+unidiff
+strdiff
+strdiff3
+intdiff
+intdiff3
+strdiff3_test
+patch
+fpatch
