@@ -66,7 +66,6 @@ int main(int argc, char *argv[]){
   d2.compose();
 
   d2.composeUnifiedHunks();
-  d2.printUnifiedFormat();
 
   // unipatch 
   assert(BLines == s3);
