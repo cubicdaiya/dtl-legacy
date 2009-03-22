@@ -11,7 +11,7 @@ PATCH_OBJS = patch.o common.o
 FPATCH_OBJS = fpatch.o common.o
 
 .cpp.o:
-	$(CPP) -g -c -Wall -O2 -Wextra -Wformat=2 -Wstrict-aliasing=2 -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion -Wfloat-equal -Wpointer-arith -Wswitch-enum $<
+	$(CPP) -c -Wall -O2 -Wextra -Wformat=2 -Wstrict-aliasing=2 -Wcast-qual -Wcast-align -Wwrite-strings -Wconversion -Wfloat-equal -Wpointer-arith -Wswitch-enum $<
 #	$(CPP) -c -Wall $<
 all : strdiff strdiff3 strdiff3_test unidiff intdiff intdiff3 patch fpatch
 
