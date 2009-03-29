@@ -115,7 +115,7 @@ namespace dtl {
       ie.b_idx = b_idx;
       lcsSeq.push_back(ie);
     }
-    lcsSequence getLcsSequence () {
+    lcsSequence getLcsSequence () const {
       return lcsSeq;
     }
   };
@@ -139,23 +139,23 @@ namespace dtl {
     
     ~Ses () {}
     
-    bool isOnlyAdd () {
+    bool isOnlyAdd () const {
       return onlyAdd;
     }
     
-    bool isOnlyDelete () {
+    bool isOnlyDelete () const {
       return onlyDelete;
     }
     
-    bool isOnlyCopy () {
+    bool isOnlyCopy () const {
       return onlyCopy;
     }
     
-    bool isOnlyOneOperation () {
+    bool isOnlyOneOperation () const {
       return isOnlyAdd() || isOnlyAdd() || isOnlyCopy();
     }
     
-    bool isChange () {
+    bool isChange () const {
       return !onlyCopy;
     }
     
@@ -183,7 +183,7 @@ namespace dtl {
       }
     }
     
-    sesSequence getSequence () {
+    sesSequence getSequence () const {
       return sequence;
     }
   private :
@@ -251,31 +251,31 @@ namespace dtl {
       delete[] this->fp;
     }
 
-    int getEditDistance () {
+    int getEditDistance () const {
       return editDistance;
     }
 
-    Lcs<elem> getLcs () {
+    Lcs<elem> getLcs () const {
       return lcs;
     }
 
-    Ses<elem> getSes () {
+    Ses<elem> getSes () const {
       return ses;
     }
 
-    std::vector<int> getChangeIdx () {
+    std::vector<int> getChangeIdx () const {
       return change_idxes;
     }
 
-    std::vector< uniHunk<sesElem> > getUniHunks () {
+    std::vector< uniHunk<sesElem> > getUniHunks () const {
       return uniHunks;
     }
 
-    bool isReverse () {
+    bool isReverse () const {
       return reverse;
     }
 
-    bool isHuge () {
+    bool isHuge () const {
       return huge;
     }
 
@@ -287,7 +287,7 @@ namespace dtl {
       this->huge = false;
     }
     
-    bool isUnserious () {
+    bool isUnserious () const {
       return unserious;
     }
 
@@ -358,7 +358,7 @@ namespace dtl {
     /**
      * patching with Shortest Edit Script
      */
-    sequence patch (sequence seq, Ses<elem>& ses) {
+    sequence patch (sequence seq, Ses<elem>& ses) const {
       std::vector<sesElem> sesSeq = ses.getSequence();
       std::list<elem> seqLst(seq.begin(), seq.end());
       std::list<sesElem> sesLst(sesSeq.begin(), sesSeq.end());
@@ -708,7 +708,7 @@ namespace dtl {
       ++editDistance;
     }
 
-    void joinSesVec (std::vector<sesElem>& s1, std::vector<sesElem>& s2) {
+    void joinSesVec (std::vector<sesElem>& s1, std::vector<sesElem>& s2) const {
       typename std::vector<sesElem>::iterator vit;
       if (!s2.empty()) {
 	for (vit=s2.begin();vit!=s2.end();++vit) {
