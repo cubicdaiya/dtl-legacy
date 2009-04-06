@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   if (!diff3.merge()) {
-    fprintf(stderr, "conflict.\n");
+    std::cerr << "conflict.\n" << std::endl;
     exit(-1);
   }
   std::cout << "result:" << diff3.getMergedSequence() << std::endl;
