@@ -3,7 +3,7 @@
 #include <vector>
 #include "../dtl.hpp"
 
-int main(int argc, char *argv[]){
+int main(int, char**){
   
   int a[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
   int b[10] = {3, 5, 1, 4, 5, 1, 7, 9, 6, 10};

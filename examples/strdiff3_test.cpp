@@ -34,7 +34,7 @@ void detect_conflict_test (sequence A, sequence B, sequence C) {
   }
 }
 
-int main(int argc, char *argv[]){
+int main(int, char**){
   
   std::cout << "merge test" << std::endl << std::endl;
   merge_test("ab", "b", "bc", "abc");
