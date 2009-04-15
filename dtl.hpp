@@ -726,26 +726,22 @@ namespace dtl {
   class Diff3
   {
   private:
-    Diff<elem, sequence> *diff_ba;
-    Diff<elem, sequence> *diff_bc;
+    Diff<elem, sequence> diff_ba;
+    Diff<elem, sequence> diff_bc;
     sequence A;
     sequence B;
     sequence C;
     sequence S;                                     // merged sequence
     bool conflict;
   public :
-    Diff3 (sequence& A, sequence& B, sequence& C) {
+    Diff3 (sequence& A, sequence& B, sequence& C) : diff_ba(B, A), diff_bc(B, C) {
       this->A = A;
       this->B = B;
       this->C = C;
-      this->diff_ba = new Diff<elem, sequence>(B, A);
-      this->diff_bc = new Diff<elem, sequence>(B, C);
       conflict = false;
     } 
-    ~Diff3 () {
-      delete this->diff_ba;
-      delete this->diff_bc;
-    }
+
+    ~Diff3 () {}
 
     bool isConflict () {
       return conflict;
@@ -765,15 +761,15 @@ namespace dtl {
 
     // merge changes B and C to A
     bool merge () {
-      if (diff_ba->getEditDistance() == 0) {   // A == B
-	if (diff_bc->getEditDistance() == 0) { // A == B == C
+      if (diff_ba.getEditDistance() == 0) {   // A == B
+	if (diff_bc.getEditDistance() == 0) { // A == B == C
 	  S = B;
 	  return true;
 	}
 	S = C;
 	return true;
       } else {                                 // A != B
-	if (diff_bc->getEditDistance() == 0) { // B == C
+	if (diff_bc.getEditDistance() == 0) { // B == C
 	  S = A;                              
 	  return true;
 	} else {
@@ -789,18 +785,18 @@ namespace dtl {
     }
 
     void compose () {
-      diff_ba->compose();
-      diff_bc->compose();
+      diff_ba.compose();
+      diff_bc.compose();
     }
     
   private :
     sequence merge_ () {
       // LCS
-      Lcs<elem> lcs_ba = diff_ba->getLcs();
+      Lcs<elem> lcs_ba = diff_ba.getLcs();
       std::vector<elem> lcs_ba_v = lcs_ba.getSequence();
       std::string lcs_ba_s(lcs_ba_v.begin(), lcs_ba_v.end());
       std::vector< idxLcs<elem> > lcsSequence_ba = lcs_ba.getLcsSequence();
-      Lcs<elem> lcs_bc = diff_bc->getLcs();
+      Lcs<elem> lcs_bc = diff_bc.getLcs();
       std::vector<elem> lcs_bc_v = lcs_bc.getSequence();
       std::string lcs_bc_s(lcs_bc_v.begin(), lcs_bc_v.end());
       std::vector< idxLcs<elem> > lcsSequence_bc = lcs_bc.getLcsSequence();
