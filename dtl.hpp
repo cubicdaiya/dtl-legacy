@@ -190,6 +190,7 @@ namespace dtl {
 
   /**
    * diff template class
+   * sequence must support random_access_iterator.
    */
   template <typename elem, typename sequence>
   class Diff
@@ -713,6 +714,7 @@ namespace dtl {
 
   /* 
    * diff3 template
+   * sequence must support random_access_iterator.
    */
   template <typename elem, typename sequence>
   class Diff3
@@ -726,12 +728,9 @@ namespace dtl {
     sequence S;                                     // merged sequence
     bool conflict;
   public :
-    Diff3 (sequence& A, sequence& B, sequence& C) {
-      this->A = A;
-      this->B = B;
-      this->C = C;
-      this->diff_ba = new Diff<elem, sequence>(B, A);
-      this->diff_bc = new Diff<elem, sequence>(B, C);
+    Diff3 (sequence& a, sequence& b, sequence& c) : A(a), B(b), C(c) {
+      diff_ba = new Diff<elem, sequence>(B, A);
+      diff_bc = new Diff<elem, sequence>(B, C);
       conflict = false;
     } 
 
