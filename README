@@ -126,6 +126,34 @@ $ ./unidiff a.txt b.txt
  c
 $
 
+* unistrdiff
+
+unistrdiff can calculate a diffrence between two string sequences.
+and output the difference between strings with unified format.
+
+$ cd dtl/examples
+$ make unistrdiff
+$ ./unistrdiff acbdeacbed acebdabbabed
+editDistance:6
+LCS:acbdabed
+@@ -1,10 +1,12 @@
+ a
+ c
++e
+ b
+ d
+-e
+ a
+-c
+ b
++b
++a
++b
+ e
+ d
+$
+
+
 * strdiff3
 
 $ cd dtl/examples
