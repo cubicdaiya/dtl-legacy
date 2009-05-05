@@ -11,23 +11,22 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#define SEPARATE_SIZE (3)
-#define CONTEXT_SIZE (3)
+using namespace std;
 
-void showStats (std::string fp1, std::string fp2) 
+void showStats (string fp1, string fp2) 
 {
   const int MAX_LENGTH = 255;
   time_t rawtime[2];
   struct tm *timeinfo[2];
   char time_format[] = "%Y-%m-%d %H:%M:%S %z";
   struct stat st[2];
-
+  
   if (stat(fp1.c_str(), &st[0]) == -1) {
-    perror("argv1");
+    cerr << "argv1 is invalid." << endl;
     exit(-1);
   }
   if (stat(fp2.c_str(), &st[1]) == -1) {
-    perror("argv2");
+    cerr << "argv2 is invalid" << endl;
     exit(-1);
   }
 
@@ -35,21 +34,21 @@ void showStats (std::string fp1, std::string fp2)
   rawtime[0] = st[0].st_mtime;
   timeinfo[0] = localtime(&rawtime[0]);
   strftime(buf[0], MAX_LENGTH, time_format, timeinfo[0]);
-  std::cout << "--- " << fp1 << '\t' << buf[0] << std::endl;
+  cout << "--- " << fp1 << '\t' << buf[0] << endl;
   rawtime[1] = st[1].st_mtime;
   timeinfo[1] = localtime(&rawtime[1]);
   strftime(buf[1], MAX_LENGTH, time_format, timeinfo[1]);
-  std::cout << "+++ " << fp2 << '\t' << buf[1] << std::endl;
+  cout << "+++ " << fp2 << '\t' << buf[1] << endl;
 }
 
-void unifiedDiff (std::string fp1, std::string fp2) 
+void unifiedDiff (string fp1, string fp2) 
 {
-  typedef std::string elem;
-  std::ifstream Aifs(fp1.c_str());
-  std::ifstream Bifs(fp2.c_str());
+  typedef string elem;
+  ifstream Aifs(fp1.c_str());
+  ifstream Bifs(fp2.c_str());
   elem buf;
-  std::vector<elem> ALines, BLines;
-  std::ostringstream ossLine, ossInfo;
+  vector<elem> ALines, BLines;
+  ostringstream ossLine, ossInfo;
 
   while(getline(Aifs, buf)){
     ALines.push_back(buf);
@@ -57,9 +56,14 @@ void unifiedDiff (std::string fp1, std::string fp2)
   while(getline(Bifs, buf)){
     BLines.push_back(buf);
   }
+  
+  dtl::Diff<elem, vector<elem> > diff(ALines, BLines);
+  diff.onHuge();
+  //diff.onUnserious();
+  diff.compose();
 
-  dtl::Diff<elem, std::vector<elem> > diff(ALines, BLines);
-  diff.compose(true);
+  // type unihunk definition test
+  dtl::uniHunk< pair<elem, dtl::elemInfo> > hunk;
 
   if (diff.getEditDistance() > 0) {
     showStats(fp1, fp2);             // show file info
@@ -73,26 +77,26 @@ void unifiedDiff (std::string fp1, std::string fp2)
 int main(int argc, char *argv[])
 {
   if (isFewArgs(argc)) {
-    perror("few argument.");
-    return(EXIT_FAILURE);
+    cerr << "few argument." << endl;
+    return -1;
   }
   
-  std::string s1(argv[1]);
-  std::string s2(argv[2]);
+  string s1(argv[1]);
+  string s2(argv[2]);
   bool isFileExist = true;
 
   if (!fileExists(s1)) {
-    perror(s1.c_str());
+    cerr << s1 << " is invalid." << endl;
     isFileExist = false;
   }
 
   if (!fileExists(s2)) {
-    perror(s2.c_str());
+    cerr << s2 << " is invalid." << endl;
     isFileExist = false;
   }
   
   if (!isFileExist) {
-    return(EXIT_FAILURE);
+    return -1;
   }
 
   unifiedDiff(s1, s2);

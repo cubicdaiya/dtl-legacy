@@ -5,7 +5,9 @@
 #include <cstdio>
 #include <string>
 
-bool fileExists (std::string& fs);
+using namespace std;
+
+bool fileExists (string& fs);
 bool isFewArgs (int argc, int limit = 3);
 
 #endif

@@ -6,32 +6,34 @@
 #include <cstdlib>
 #include <cassert>
 
-int main(int argc, char *argv[]){
+using namespace std;
+
+int main(int, char**) {
 
   int a[10]      = {1, 2, 3, 4, 5, 6, 7, 3, 9, 10};
   int b[10]      = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
   int c[10]      = {1, 2, 3, 9, 5, 6, 7, 8, 9, 10};
   int answer[10] = {1, 2, 3, 9, 5, 6, 7, 3, 9, 10};
 
-  std::cout << "a:";
+  cout << "a:";
   for (int i=0;i<10;++i) {
-    std::cout << a[i] << " ";
+    cout << a[i] << " ";
   }
-  std:: cout << std::endl;
-  std::cout << "b:";
+   cout << endl;
+  cout << "b:";
   for (int i=0;i<10;++i) {
-    std::cout << b[i] << " ";
+    cout << b[i] << " ";
   }
-  std:: cout << std::endl;
-  std::cout << "c:";
+   cout << endl;
+  cout << "c:";
   for (int i=0;i<10;++i) {
-    std::cout << c[i] << " ";
+    cout << c[i] << " ";
   }
-  std:: cout << std::endl;
+   cout << endl;
   
   
   typedef int elem;
-  typedef std::vector<int> sequence;
+  typedef vector<int> sequence;
   sequence A(&a[0], &a[10]);
   sequence B(&b[0], &b[10]);
   sequence C(&c[0], &c[10]);
@@ -44,14 +46,14 @@ int main(int argc, char *argv[]){
   }
   sequence s = diff3.getMergedSequence();
   sequence::iterator it;
-  std::cout << "s:";
+  cout << "s:";
   for (it=s.begin();it!=s.end();++it) {
-    std::cout << *it << " ";
+    cout << *it << " ";
   }
-  std:: cout << std::endl;
+   cout << endl;
   
   assert(s == Answer);
-  std::cout << "intdiff3 OK" << std::endl;
+  cout << "intdiff3 OK" << endl;
   
   return 0;
 }

@@ -3,8 +3,10 @@
 Summary
 ==================
 
-dtl is the diff library.
+dtl is the diff template library.
 dtl can calculate a difference between two sequences.
+
+Copyright(C) 2008-2009  Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 ==================
 examples
@@ -124,6 +126,34 @@ $ ./unidiff a.txt b.txt
  c
 $
 
+* unistrdiff
+
+unistrdiff can calculate a diffrence between two string sequences.
+and output the difference between strings with unified format.
+
+$ cd dtl/examples
+$ make unistrdiff
+$ ./unistrdiff acbdeacbed acebdabbabed
+editDistance:6
+LCS:acbdabed
+@@ -1,10 +1,12 @@
+ a
+ c
++e
+ b
+ d
+-e
+ a
+-c
+ b
++b
++a
++b
+ e
+ d
+$
+
+
 * strdiff3
 
 $ cd dtl/examples
@@ -147,4 +177,8 @@ $
 * patch, fpatch
 
 patch and fpatch are the test programs for patching with difference data.
+patch translates A to B with Shortest Edit Script A to B.
+fpatch translates A to B with Unified Format Data Structure Difference A and B.
+
+
 

@@ -1,7 +1,7 @@
 
 #include "common.hpp"
 
-bool fileExists (std::string& fs) {
+bool fileExists (string& fs) {
   FILE *fp;
   if ((fp = fopen(fs.c_str(), "r")) == NULL) {
     return false;
@@ -17,3 +17,4 @@ bool isFewArgs (int argc, int limit) {
   }
   return ret;
 }
+
