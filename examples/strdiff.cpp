@@ -3,49 +3,51 @@
 #include "common.hpp"
 #include <iostream>
 #include <vector>
-#include <cstdlib>
+
+using namespace std;
 
 int main(int argc, char *argv[]){
 
   if (isFewArgs(argc)) {
-    perror("few argument.");
+    cerr << "few argument" << endl;
     return(EXIT_FAILURE);
   }
   
-  std::string A(argv[1]);
-  std::string B(argv[2]);
+  string A(argv[1]);
+  string B(argv[2]);
   typedef char elem;
 
-  dtl::Diff<elem, std::string> d(A, B);
+  dtl::Diff<elem, string> d(A, B);
+  //d.onOnlyEditDistance();
   d.compose();
   
   // editDistance
-  std::cout << "editDistance:" << d.getEditDistance() << std::endl;
+  cout << "editDistance:" << d.getEditDistance() << endl;
 
   // Longest Common Subsequence
   dtl::Lcs<elem> lcs = d.getLcs();
-  std::vector<elem> lcs_v = lcs.getSequence();
-  std::vector<elem>::iterator vit;
-  std::string lcs_s(lcs_v.begin(), lcs_v.end());
-  std::cout << "LCS:" << lcs_s << std::endl;
+  vector<elem> lcs_v = lcs.getSequence();
+  vector<elem>::iterator vit;
+  string lcs_s(lcs_v.begin(), lcs_v.end());
+  cout << "LCS:" << lcs_s << endl;
 
   // Short Edit Script
-  std::cout << "SES" << std::endl;
+  cout << "SES" << endl;
   dtl::Ses<elem> ses = d.getSes();
-  std::vector< std::pair<elem, dtl::elemInfo> > ses_v = ses.getSequence();
-  std::vector< std::pair<elem, dtl::elemInfo> >::iterator it;
+  vector< pair<elem, dtl::elemInfo> > ses_v = ses.getSequence();
+  vector< pair<elem, dtl::elemInfo> >::iterator it;
 
   it = ses_v.begin();
   for (it=ses_v.begin();it!=ses_v.end();++it) {
     switch (it->second.type) {
     case dtl::SES_ADD :
-      std::cout << dtl::SES_MARK_ADD    << " " << it->first << std::endl;
+      cout << dtl::SES_MARK_ADD    << " " << it->first << endl;
       break;
     case dtl::SES_DELETE :
-      std::cout << dtl::SES_MARK_DELETE << " " << it->first << std::endl;
+      cout << dtl::SES_MARK_DELETE << " " << it->first << endl;
       break;
     case dtl::SES_COMMON :
-      std::cout << dtl::SES_MARK_COMMON << " " << it->first << std::endl;
+      cout << dtl::SES_MARK_COMMON << " " << it->first << endl;
       break;
     default :
       break;
