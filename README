@@ -177,4 +177,8 @@ $
 * patch, fpatch
 
 patch and fpatch are the test programs for patching with difference data.
+patch translates A to B with Shortest Edit Script A to B.
+fpatch translates A to B with Unified Format Data Structure Difference A and B.
+
+
 
