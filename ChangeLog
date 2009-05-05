@@ -3,8 +3,6 @@
 
 	* add flag for recording only editdistance
 	
-	* fixed diff3 bug
-	
 	* add sample of unidiff for string (unistrdiff)
 	
 	* add unserious diff. ver 0.03 has this feture.
