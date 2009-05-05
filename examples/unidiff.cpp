@@ -87,7 +87,6 @@ int main(int argc, char *argv[])
 
   if (!fileExists(s1)) {
     cerr << s1 << " is invalid." << endl;
-    perror(s1.c_str());
     isFileExist = false;
   }
 
