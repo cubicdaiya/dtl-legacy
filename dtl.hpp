@@ -852,7 +852,8 @@ namespace dtl {
 	  }
 	} else {
 	  if (lcs_ba_it != lcsSequence_ba.end() && lcs_ba_it->b_idx <= lcs_ba_it->a_idx + offset_ba) {
-	    if (lcs_ba_it != lcsSequence_ba.end() && lcs_bc_it != lcsSequence_bc.end() && lcs_ba_it->e == lcs_bc_it->e) {
+	    if (lcs_ba_it != lcsSequence_ba.end() && lcs_bc_it != lcsSequence_bc.end() 
+		&& lcs_ba_it->e == lcs_bc_it->e) {
 	      if (lcs_ba_it != lcsSequence_ba.end()) {
 		seq.push_back(lcs_ba_it->e);
 	      } else if (c_idx <= c_len - 1) {
