@@ -1,5 +1,6 @@
 syntax: glob
 unidiff
+unistrdiff
 strdiff
 strdiff3
 intdiff
