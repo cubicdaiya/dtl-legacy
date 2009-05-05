@@ -2,10 +2,12 @@
 #include "../dtl.hpp"
 #include <iostream>
 #include <vector>
-#include <cstdlib>
+#include <string>
+
+using namespace std;
 
 typedef char elem;
-typedef std::string sequence;
+typedef string sequence;
 
 void merge_test(sequence A, sequence B, sequence C, sequence S);
 void detect_conflict_test (sequence A, sequence B, sequence C);
@@ -18,9 +20,9 @@ void merge_test (sequence A, sequence B, sequence C, sequence S) {
     exit(-1);
   }
   if (S == diff3.getMergedSequence()) {
-    std::cout << "successed : " << A << " " << B << " "  << C << " " << S << " " << diff3.getMergedSequence() << std::endl;
+    cout << "successed : " << A << " " << B << " "  << C << " " << S << " " << diff3.getMergedSequence() << endl;
   } else { 
-    std::cout << "failed    : " << A << " " << B << " "  << C << " " << S << " " << diff3.getMergedSequence() << std::endl;
+    cout << "failed    : " << A << " " << B << " "  << C << " " << S << " " << diff3.getMergedSequence() << endl;
   }
 }
 
@@ -28,15 +30,19 @@ void detect_conflict_test (sequence A, sequence B, sequence C) {
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   if (!diff3.merge()) {
-    std::cout << "detect conflict successed : " << A << " " << B << " "  << C << std::endl;
+    cout << "detect conflict successed : " << A << " " << B << " "  << C << endl;
   } else {
-    std::cout << "detect conflict failed    : " << A << " " << B << " "  << C << std::endl;
+    cout << "detect conflict failed    : " << A << " " << B << " "  << C << endl;
   }
 }
 
 int main(int, char**){
   
-  std::cout << "merge test" << std::endl << std::endl;
+  cout << "merge test" << endl << endl;
+
+  merge_test("1234567390", "1234567890", "1239567890", "1239567390");
+  merge_test("1239567890", "1234567890", "1234567390", "1239567390");
+
   merge_test("ab", "b", "bc", "abc");
   merge_test("bc", "b", "ab", "abc");
 
@@ -61,9 +67,6 @@ int main(int, char**){
   merge_test("aiueo", "aeo", "aeKokaki", "aiueKokaki");
   merge_test("aeKokaki", "aeo", "aiueo", "aiueKokaki");
 
-  merge_test("1234567390", "1234567890", "1239567890", "1239567390");
-  merge_test("1239567890", "1234567890", "1234567390", "1239567390");
-
   merge_test("qabcdef", "abcdef", "ab",      "qab");
   merge_test("ab",      "abcdef", "qabcdef", "qab");
   
@@ -73,12 +76,12 @@ int main(int, char**){
   merge_test("acdef",   "abcdef", "abcdfaa",  "acdfaa");
   merge_test("abcdfaa", "abcdef", "acdef",   "acdfaa");
 
-  std::cout << std::endl;
-  /*
-  std::cout << "detect conflict test" << std::endl << std::endl;
+  cout << endl;
+
+  cout << "detect conflict test" << endl << endl;
   detect_conflict_test("adc", "abc", "aec");
   detect_conflict_test("aec", "abc", "adc");
-  */
+
   
   return 0;
 }
