@@ -10,7 +10,7 @@ int main(int argc, char *argv[]){
 
   if (isFewArgs(argc)) {
     cerr << "few argument" << endl;
-    return(EXIT_FAILURE);
+    return -1;
   }
   
   string A(argv[1]);
