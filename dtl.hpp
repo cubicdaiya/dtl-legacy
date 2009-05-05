@@ -211,6 +211,7 @@ namespace dtl {
     bool reverse;
     bool huge;
     bool unserious;
+    bool onlyEditDistance;
     typedef std::pair<elem, elemInfo> sesElem;
     std::vector< uniHunk<sesElem> > uniHunks;
     std::vector<int> change_idxes;
@@ -238,6 +239,7 @@ namespace dtl {
       std::fill(change_idxes.begin(), change_idxes.end(), SES_COMMON);
       huge = false;
       unserious = false;
+      onlyEditDistance = false;
     }
 
     ~Diff() {
@@ -290,6 +292,10 @@ namespace dtl {
 
     void offUnserious () {
       this->unserious = false;
+    }
+    
+    void onOnlyEditDistance () {
+      this->onlyEditDistance = true;
     }
     
     /**
@@ -403,6 +409,9 @@ namespace dtl {
       int r = path[delta+offset];
       P cordinate;
       editPathCordinates epc(0);
+      
+      // only recoding editdistance
+      if (onlyEditDistance) return;
 
       while(r != -1){
 	cordinate.x = pathCordinates[r].x;
