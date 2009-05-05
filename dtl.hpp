@@ -770,11 +770,10 @@ namespace dtl {
 	  return true;
 	} else {
 	  // A != B != C
-	  if (isConflict_()) {
-	    conflict = true;
+	  S = merge_();
+	  if (isConflict()) {
 	    return false;
 	  }
-	  S = merge_();
 	}
       }
       return true;
@@ -786,114 +785,104 @@ namespace dtl {
     }
     
   private :
+    
     sequence merge_ () {
-      // LCS
-      Lcs<elem> lcs_ba = diff_ba->getLcs();
-      std::vector<elem> lcs_ba_v = lcs_ba.getSequence();
-      std::string lcs_ba_s(lcs_ba_v.begin(), lcs_ba_v.end());
-      std::vector< idxLcs<elem> > lcsSequence_ba = lcs_ba.getLcsSequence();
-      Lcs<elem> lcs_bc = diff_bc->getLcs();
-      std::vector<elem> lcs_bc_v = lcs_bc.getSequence();
-      std::string lcs_bc_s(lcs_bc_v.begin(), lcs_bc_v.end());
-      std::vector< idxLcs<elem> > lcsSequence_bc = lcs_bc.getLcsSequence();
-
-      typename std::vector< idxLcs<elem> >::iterator lcs_ba_it;
-      typename std::vector< idxLcs<elem> >::iterator lcs_bc_it;
-
-      lcs_ba_it = lcsSequence_ba.begin();
-      lcs_bc_it = lcsSequence_bc.begin();
+      // SES
+      typedef std::pair< elem, elemInfo > sesElem;
       std::vector<elem> seq;
-      int offset_ba, offset_bc;
-      int a_idx, b_idx, c_idx;
-      int a_len, b_len, c_len;
-      a_idx = b_idx = c_idx = 0;
-      a_len = A.size();
-      b_len = B.size();
-      c_len = C.size();
-      offset_ba = offset_bc = 0;
-      while (!(a_idx >= a_len && b_idx >= b_len && c_idx >= c_len)) {
-	if (lcs_ba_it != lcsSequence_ba.end() && lcs_ba_it->b_idx == lcs_ba_it->a_idx + offset_ba) {
-	  if (lcs_bc_it != lcsSequence_bc.end() && lcs_bc_it->b_idx == lcs_bc_it->a_idx + offset_bc) {
-	    if (lcs_ba_it != lcsSequence_ba.end() && lcs_bc_it !=lcsSequence_bc.end() && lcs_ba_it->e == lcs_bc_it->e) {
-	      if (a_idx <= a_len - 1 && b_idx <= b_len - 1 && A[a_idx] == B[b_idx]) {
-		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
-	      } else if (b_idx <= b_len - 1 && c_idx <= c_len - 1 && B[b_idx] == C[c_idx]) {
-		if (a_idx <= a_len - 1) seq.push_back(A[a_idx]);
-	      } else {
-		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
-	      }
-	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
-	    } else {
-	      if (a_idx <= a_len - 1 && b_idx <= b_len - 1 && A[a_idx] == B[b_idx]) {
-		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
-	      } else if (b_idx <= b_len - 1 && c_idx <= c_len - 1 && B[b_idx] == C[c_idx]) {
-		if (a_idx <= a_len - 1) seq.push_back(A[a_idx]);
-	      } else {
-		if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
-	      }
-	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
-	    }
+      Ses<elem> ses_ba = diff_ba->getSes();
+      Ses<elem> ses_bc = diff_bc->getSes();
+      std::vector< sesElem > ses_ba_v = ses_ba.getSequence();
+      std::vector< sesElem > ses_bc_v = ses_bc.getSequence();
+      typename std::vector< sesElem >::iterator ba_it = ses_ba_v.begin();
+      typename std::vector< sesElem >::iterator bc_it = ses_bc_v.begin();
+      bool is_ba_end = false;
+      bool is_bc_end = false;
+      while (ba_it != ses_ba_v.end() || bc_it != ses_bc_v.end()) {
+	if (ba_it == ses_ba_v.end()) is_ba_end = true;
+	if (bc_it == ses_bc_v.end()) is_bc_end = true;
+	if (is_ba_end || is_bc_end) break;
+	while (true) {
+	  if (ba_it->first == bc_it->first 
+	      && ba_it->second.type == SES_COMMON 
+	      && bc_it->second.type == SES_COMMON) {
+	    // loop
 	  } else {
-	    if (lcs_bc_it != lcsSequence_bc.end() && lcs_bc_it->b_idx <= lcs_bc_it->a_idx + offset_bc) {
-	      if (lcs_ba_it != lcsSequence_ba.end() && lcs_bc_it != lcsSequence_bc.end() && lcs_ba_it->e == lcs_bc_it->e) {
-		if (lcs_ba_it != lcsSequence_ba.end()) {
-		  seq.push_back(lcs_ba_it->e);
-		} else if (c_idx <= c_len - 1) {
-		  seq.push_back(C[c_idx]);
-		} else if (a_idx <= a_len - 1) {
-		  seq.push_back(A[a_idx]);
-		}
-		++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
-	      }
-	    } else {
-	      if (c_idx < c_len - 1) seq.push_back(C[c_idx]);
-	      ++b_idx;++c_idx;++offset_bc;
-	    }
+	    break;
 	  }
-	} else {
-	  if (lcs_ba_it != lcsSequence_ba.end() && lcs_ba_it->b_idx <= lcs_ba_it->a_idx + offset_ba) {
-	    if (lcs_ba_it != lcsSequence_ba.end() && lcs_bc_it != lcsSequence_bc.end() 
-		&& lcs_ba_it->e == lcs_bc_it->e) {
-	      if (lcs_ba_it != lcsSequence_ba.end()) {
-		seq.push_back(lcs_ba_it->e);
-	      } else if (c_idx <= c_len - 1) {
-		seq.push_back(C[c_idx]);
-	      } else if (a_idx <= a_len - 1) {
-		seq.push_back(A[a_idx]);
-	      }
-	      ++a_idx;++b_idx;++c_idx;++lcs_ba_it;++lcs_bc_it;
-	    } else {
-	      if (c_idx <= c_len - 1) seq.push_back(C[c_idx]);
-	      ++b_idx;++c_idx;++offset_bc;
-	    }
+
+	  if (ba_it != ses_ba_v.end()) seq.push_back(ba_it->first);
+          else if (bc_it != ses_bc_v.end()) seq.push_back(bc_it->first);
+	  if (ba_it != ses_ba_v.end()) ++ba_it;
+          if (bc_it != ses_bc_v.end()) ++bc_it;
+	  //continue;
+        }
+	if (ba_it == ses_ba_v.end()) is_ba_end = true;
+	if (bc_it == ses_bc_v.end()) is_bc_end = true;
+	if (is_ba_end || is_bc_end) break;
+	if (ba_it->second.type == SES_COMMON && bc_it->second.type == SES_DELETE) {
+	  if (ba_it != ses_ba_v.end()) ++ba_it;
+          if (bc_it != ses_bc_v.end()) ++bc_it;
+
+	} else if (ba_it->second.type == SES_COMMON && bc_it->second.type == SES_ADD) {
+	  seq.push_back(bc_it->first);
+	  if (bc_it != ses_bc_v.end()) ++bc_it;
+	} else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_COMMON) {
+	  if (ba_it != ses_ba_v.end()) ++ba_it;
+          if (bc_it != ses_bc_v.end()) ++bc_it;
+	} else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_DELETE) {
+	  if (ba_it->first == bc_it->first) {
+	    if (ba_it != ses_ba_v.end()) ++ba_it;
+	    if (bc_it != ses_bc_v.end()) ++bc_it;
 	  } else {
-	    if (a_idx <= a_len - 1) {
-	      seq.push_back(A[a_idx]);
-	    }
-	    ++a_idx;++b_idx;++offset_ba;
+	    // conflict
+	    conflict = true;
+	    sequence mergedSeq(seq.begin(), seq.end());
+	    return mergedSeq;
 	  }
+	} else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_ADD) {
+	  // conflict        
+	  conflict = true;
+	  sequence mergedSeq(seq.begin(), seq.end());
+	  return mergedSeq;
+	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_COMMON) {
+	  seq.push_back(ba_it->first);
+	  if (ba_it != ses_ba_v.end()) ++ba_it;
+	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_DELETE) {
+	  // conflict        
+	  conflict = true;
+	  sequence mergedSeq(seq.begin(), seq.end());
+	  return mergedSeq;
+	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_ADD) {
+	  if (ba_it->first == bc_it->first) {
+	    seq.push_back(ba_it->first);
+	    if (ba_it != ses_ba_v.end()) ++ba_it;
+	    if (bc_it != ses_bc_v.end()) ++bc_it;
+	  } else {
+	    // conflict
+	    conflict = true;
+	    sequence mergedSeq(seq.begin(), seq.end());
+	    return mergedSeq;
+	  }
+	}        
+      }
+
+      if (is_ba_end) {
+	while (bc_it != ses_bc_v.end()) {
+	  if (bc_it->second.type == SES_ADD) seq.push_back(bc_it->first);
+	  ++bc_it;
 	}
-	if (a_idx >= a_len && b_idx >= b_len) {
-	  if (c_idx <= c_len - 1 && a_len != b_len && b_len != c_len) seq.push_back(C[c_idx]);
-	  ++c_idx;
-	} else if (b_idx >= b_len && c_idx >= c_len) {
-	  if (a_idx <= a_len - 1 && a_len != b_len && b_len != c_len) seq.push_back(A[a_idx]);
-	  ++a_idx;
+      } else if (is_bc_end) {
+	while (ba_it != ses_ba_v.end()) {
+	  if (ba_it->second.type == SES_ADD) seq.push_back(ba_it->first);
+	  ++ba_it;
 	}
       }
-      
+
       sequence mergedSeq(seq.begin(), seq.end());
       return mergedSeq;
     }
 
-    bool isConflict_ () {
-      
-      
-      
-
-      
-      return false;
-    }
   };
 }
 
