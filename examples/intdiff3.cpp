@@ -3,7 +3,6 @@
 #include "common.hpp"
 #include <iostream>
 #include <vector>
-#include <cstdlib>
 #include <cassert>
 
 using namespace std;
@@ -42,7 +41,8 @@ int main(int, char**) {
   diff3.compose();
   if (!diff3.merge()) {
     fprintf(stderr, "conflict.\n");
-    exit(-1);
+    cerr << "conflict." << endl;
+    return -1;
   }
   sequence s = diff3.getMergedSequence();
   sequence::iterator it;

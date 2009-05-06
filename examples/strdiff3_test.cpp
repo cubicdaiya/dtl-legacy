@@ -17,7 +17,7 @@ void merge_test (sequence A, sequence B, sequence C, sequence S) {
   diff3.compose();
   if (!diff3.merge()) {
     fprintf(stderr, "conflict.\n");
-    exit(-1);
+    return;
   }
   if (S == diff3.getMergedSequence()) {
     cout << "successed : " << A << " " << B << " "  << C << " " << S << " " << diff3.getMergedSequence() << endl;
