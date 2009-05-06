@@ -803,7 +803,9 @@ namespace dtl {
 	if (bc_it == ses_bc_v.end()) is_bc_end = true;
 	if (is_ba_end || is_bc_end) break;
 	while (true) {
-	  if (ba_it->first == bc_it->first 
+	  if (ba_it != ses_ba_v.end()
+	      && bc_it != ses_bc_v.end()
+	      && ba_it->first == bc_it->first 
 	      && ba_it->second.type == SES_COMMON 
 	      && bc_it->second.type == SES_COMMON) {
 	    // loop
