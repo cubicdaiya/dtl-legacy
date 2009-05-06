@@ -214,7 +214,6 @@ namespace dtl {
     bool onlyEditDistance;
     typedef std::pair<elem, elemInfo> sesElem;
     std::vector< uniHunk<sesElem> > uniHunks;
-    std::vector<int> change_idxes;
   public :
     Diff(sequence& a, sequence& b) : A(a), B(b) {
       M = std::distance(A.begin(), A.end());
@@ -234,9 +233,6 @@ namespace dtl {
       std::fill(&fp[0], &fp[size], -1);
       path = editPath(size);
       std::fill(path.begin(), path.end(), -1);
-      change_idxes.reserve(N);
-      change_idxes.resize(N);
-      std::fill(change_idxes.begin(), change_idxes.end(), SES_COMMON);
       huge = false;
       unserious = false;
       onlyEditDistance = false;
@@ -256,10 +252,6 @@ namespace dtl {
 
     Ses<elem> getSes () const {
       return ses;
-    }
-
-    std::vector<int> getChangeIdx () const {
-      return change_idxes;
     }
 
     std::vector< uniHunk<sesElem> > getUniHunks () const {
@@ -632,10 +624,8 @@ namespace dtl {
 	  if (v[i].y - v[i].x > py_idx - px_idx) {
 	    if (!isReverse()) {
 	      ses.addSequence(*y, y_idx, 0, SES_ADD);
-	      change_idxes[py_idx] = SES_ADD;
 	    } else {
 	      ses.addSequence(*y, y_idx, 0, SES_DELETE);
-	      change_idxes[py_idx] = SES_DELETE;
 	    }
 	    ++y;
 	    ++y_idx;
@@ -643,10 +633,8 @@ namespace dtl {
 	  } else if (v[i].y - v[i].x < py_idx - px_idx) {
 	    if (!isReverse()) {
 	      ses.addSequence(*x, x_idx, 0, SES_DELETE);
-	      change_idxes[px_idx] = SES_DELETE;
 	    } else {
 	      ses.addSequence(*x, x_idx, 0, SES_ADD);
-	      change_idxes[px_idx] = SES_ADD;
 	    }
 	    ++x;
 	    ++x_idx;
