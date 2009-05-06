@@ -40,9 +40,6 @@ int main(int, char**){
   
   cout << "merge test" << endl << endl;
 
-  merge_test("1234567390", "1234567890", "1239567890", "1239567390");
-  merge_test("1239567890", "1234567890", "1234567390", "1239567390");
-
   merge_test("ab", "b", "bc", "abc");
   merge_test("bc", "b", "ab", "abc");
 
@@ -66,6 +63,9 @@ int main(int, char**){
 
   merge_test("aiueo", "aeo", "aeKokaki", "aiueKokaki");
   merge_test("aeKokaki", "aeo", "aiueo", "aiueKokaki");
+
+  merge_test("1234567390", "1234567890", "1239567890", "1239567390");
+  merge_test("1239567890", "1234567890", "1234567390", "1239567390");
 
   merge_test("qabcdef", "abcdef", "ab",      "qab");
   merge_test("ab",      "abcdef", "qabcdef", "qab");
