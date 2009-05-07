@@ -1,11 +1,5 @@
 
-2009-05-00 Tatsuhiko Kubo <cubicdaiya@gmail.com>
-
-	* fixed invalid read bug on merge
-	
-	* 0.07 released
-	
-2009-05-00 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+2009-05-07 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* add flag for recording only editdistance
 	
