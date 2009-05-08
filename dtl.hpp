@@ -773,9 +773,7 @@ namespace dtl {
     }
     
   private :
-    
     sequence merge_ () {
-      // SES
       typedef std::pair< elem, elemInfo > sesElem;
       std::vector<elem> seq;
       Ses<elem> ses_ba = diff_ba->getSes();
@@ -796,16 +794,15 @@ namespace dtl {
 	      && ba_it->first == bc_it->first 
 	      && ba_it->second.type == SES_COMMON 
 	      && bc_it->second.type == SES_COMMON) {
-	    // loop
+	    // do nothing
 	  } else {
 	    break;
 	  }
 
-	  if (ba_it != ses_ba_v.end()) seq.push_back(ba_it->first);
+	  if      (ba_it != ses_ba_v.end()) seq.push_back(ba_it->first);
           else if (bc_it != ses_bc_v.end()) seq.push_back(bc_it->first);
 	  if (ba_it != ses_ba_v.end()) ++ba_it;
           if (bc_it != ses_bc_v.end()) ++bc_it;
-	  //continue;
         }
 	if (ba_it == ses_ba_v.end()) is_ba_end = true;
 	if (bc_it == ses_bc_v.end()) is_bc_end = true;
@@ -831,7 +828,7 @@ namespace dtl {
 	    return mergedSeq;
 	  }
 	} else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_ADD) {
-	  // conflict        
+	  // conflict
 	  conflict = true;
 	  sequence mergedSeq(seq.begin(), seq.end());
 	  return mergedSeq;
@@ -839,7 +836,7 @@ namespace dtl {
 	  seq.push_back(ba_it->first);
 	  if (ba_it != ses_ba_v.end()) ++ba_it;
 	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_DELETE) {
-	  // conflict        
+	  // conflict
 	  conflict = true;
 	  sequence mergedSeq(seq.begin(), seq.end());
 	  return mergedSeq;
