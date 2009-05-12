@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   dtl::Ses<elem> ses = d.getSes();
   
   string s1(A);
-  string s2 = d.patch(s1, ses);
+  string s2 = d.patch(s1);
   d.composeUnifiedHunks();
   string s3 = d.uniPatch(s1);
 

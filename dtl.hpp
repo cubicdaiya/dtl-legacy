@@ -349,7 +349,7 @@ namespace dtl {
     /**
      * patching with Shortest Edit Script
      */
-    sequence patch (sequence seq, Ses<elem>& ses) const {
+    sequence patch (sequence seq) const {
       std::vector<sesElem> sesSeq = ses.getSequence();
       std::list<elem> seqLst(seq.begin(), seq.end());
       std::list<sesElem> sesLst(sesSeq.begin(), sesSeq.end());
@@ -798,7 +798,6 @@ namespace dtl {
 	  } else {
 	    break;
 	  }
-
 	  if      (ba_it != ses_ba_v.end()) seq.push_back(ba_it->first);
           else if (bc_it != ses_bc_v.end()) seq.push_back(bc_it->first);
 	  if (ba_it != ses_ba_v.end()) ++ba_it;
@@ -810,7 +809,6 @@ namespace dtl {
 	if (ba_it->second.type == SES_COMMON && bc_it->second.type == SES_DELETE) {
 	  if (ba_it != ses_ba_v.end()) ++ba_it;
           if (bc_it != ses_bc_v.end()) ++bc_it;
-
 	} else if (ba_it->second.type == SES_COMMON && bc_it->second.type == SES_ADD) {
 	  seq.push_back(bc_it->first);
 	  if (bc_it != ses_bc_v.end()) ++bc_it;
@@ -823,23 +821,26 @@ namespace dtl {
 	    if (bc_it != ses_bc_v.end()) ++bc_it;
 	  } else {
 	    // conflict
+	    std::cout << "1" << std::endl;
 	    conflict = true;
-	    sequence mergedSeq(seq.begin(), seq.end());
-	    return mergedSeq;
+	    if (ba_it != ses_ba_v.end()) ++ba_it;
+	    if (bc_it != ses_bc_v.end()) ++bc_it;
 	  }
 	} else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_ADD) {
 	  // conflict
+	  std::cout << "2" << std::endl;
 	  conflict = true;
-	  sequence mergedSeq(seq.begin(), seq.end());
-	  return mergedSeq;
+	  if (ba_it != ses_ba_v.end()) ++ba_it;
+	  if (bc_it != ses_bc_v.end()) ++bc_it;
 	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_COMMON) {
 	  seq.push_back(ba_it->first);
 	  if (ba_it != ses_ba_v.end()) ++ba_it;
 	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_DELETE) {
 	  // conflict
+	  std::cout << "3" << std::endl;
 	  conflict = true;
-	  sequence mergedSeq(seq.begin(), seq.end());
-	  return mergedSeq;
+	  if (ba_it != ses_ba_v.end()) ++ba_it;
+	  if (bc_it != ses_bc_v.end()) ++bc_it;
 	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_ADD) {
 	  if (ba_it->first == bc_it->first) {
 	    seq.push_back(ba_it->first);
@@ -847,9 +848,29 @@ namespace dtl {
 	    if (bc_it != ses_bc_v.end()) ++bc_it;
 	  } else {
 	    // conflict
+	    std::cout << "4" << std::endl;
 	    conflict = true;
-	    sequence mergedSeq(seq.begin(), seq.end());
-	    return mergedSeq;
+	    seq.push_back('<');
+	    seq.push_back(ba_it->first);
+	    seq.push_back('|');
+	    seq.push_back('b');
+	    seq.push_back('|');
+	    seq.push_back(bc_it->first);
+	    seq.push_back('>');
+	    std::cout << ba_it->second.beforeIdx << " " << A[ba_it->second.beforeIdx-1] << std::endl;
+	    std::cout << ba_it->second.afterIdx << " " << A[ba_it->second.afterIdx] << std::endl;
+	    std::cout << ba_it->second.beforeIdx << " " << B[ba_it->second.beforeIdx-1] << std::endl;
+	    std::cout << ba_it->second.afterIdx << " " << B[ba_it->second.afterIdx] << std::endl;
+	    std::cout << ba_it->second.beforeIdx << " " << C[ba_it->second.beforeIdx-1] << std::endl;
+	    std::cout << ba_it->second.afterIdx << " " << C[ba_it->second.afterIdx] << std::endl;
+	    std::cout << bc_it->second.beforeIdx << " " << A[bc_it->second.beforeIdx-1] << std::endl;
+	    std::cout << bc_it->second.afterIdx << " " << A[bc_it->second.afterIdx] << std::endl;
+	    std::cout << bc_it->second.beforeIdx << " " << B[bc_it->second.beforeIdx-1] << std::endl;
+	    std::cout << bc_it->second.afterIdx << " " << B[bc_it->second.afterIdx] << std::endl;
+	    std::cout << bc_it->second.beforeIdx << " " << C[bc_it->second.beforeIdx-1] << std::endl;
+	    std::cout << bc_it->second.afterIdx << " " << C[bc_it->second.afterIdx] << std::endl;
+	    if (ba_it != ses_ba_v.end()) ++ba_it;
+	    if (bc_it != ses_bc_v.end()) ++bc_it;
 	  }
 	}        
       }

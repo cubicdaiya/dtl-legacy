@@ -30,7 +30,8 @@ void detect_conflict_test (sequence A, sequence B, sequence C) {
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   if (!diff3.merge()) {
-    cout << "detect conflict successed : " << A << " " << B << " "  << C << endl;
+    sequence S = diff3.getMergedSequence();
+    cout << "detect conflict successed : " << A << " " << B << " "  << C << " " << S << endl;
   } else {
     cout << "detect conflict failed    : " << A << " " << B << " "  << C << endl;
   }
