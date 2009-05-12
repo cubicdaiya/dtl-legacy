@@ -22,8 +22,6 @@ int main(int argc, char *argv[]) {
   dtl::Diff<elem, string> d(A, B);
   d.compose();
 
-  dtl::Ses<elem> ses = d.getSes();
-  
   string s1(A);
   string s2 = d.patch(s1);
   d.composeUnifiedHunks();
