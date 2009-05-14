@@ -75,7 +75,7 @@ int main(int, char**){
   merge_test("acdef", "abcdef", "abcdf", "acdf");
 
   merge_test("acdef",   "abcdef", "abcdfaa",  "acdfaa");
-  merge_test("abcdfaa", "abcdef", "acdef",   "acdfaa");
+  merge_test("abcdfaa", "abcdef", "acdef",    "acdfaa");
 
   cout << endl;
 
