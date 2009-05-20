@@ -27,7 +27,6 @@ int main(int argc, char *argv[]){
   // Longest Common Subsequence
   dtl::Lcs<elem> lcs = d.getLcs();
   vector<elem> lcs_v = lcs.getSequence();
-  vector<elem>::iterator vit;
   string lcs_s(lcs_v.begin(), lcs_v.end());
   cout << "LCS:" << lcs_s << endl;
 
@@ -37,7 +36,6 @@ int main(int argc, char *argv[]){
   vector< pair<elem, dtl::elemInfo> > ses_v = ses.getSequence();
   vector< pair<elem, dtl::elemInfo> >::iterator it;
 
-  it = ses_v.begin();
   for (it=ses_v.begin();it!=ses_v.end();++it) {
     switch (it->second.type) {
     case dtl::SES_ADD :

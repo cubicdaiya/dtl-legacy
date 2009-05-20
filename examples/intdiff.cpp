@@ -13,11 +13,11 @@ int main(int, char**){
   for (int i=0;i<10;++i) {
     cout << a[i] << " ";
   }
-   cout << endl;
+  cout << endl;
   for (int i=0;i<10;++i) {
     cout << b[i] << " ";
   }
-   cout << endl;
+  cout << endl;
   vector<int> A(&a[0], &a[10]);
   vector<int> B(&b[0], &b[10]);
   dtl::Diff<int, vector<int> > d(A, B);
@@ -40,7 +40,6 @@ int main(int, char**){
   vector< pair<int, dtl::elemInfo> > ses_v = ses.getSequence();
   vector< pair<int, dtl::elemInfo> >::iterator it;
 
-  it = ses_v.begin();
   for (it=ses_v.begin();it!=ses_v.end();++it) {
     switch (it->second.type) {
     case dtl::SES_ADD :
