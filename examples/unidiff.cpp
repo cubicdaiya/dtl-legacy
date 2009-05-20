@@ -83,19 +83,19 @@ int main(int argc, char *argv[])
   
   string s1(argv[1]);
   string s2(argv[2]);
-  bool isFileExist = true;
+  bool fileExist = true;
 
-  if (!fileExists(s1)) {
+  if (!isFileExist(s1)) {
     cerr << s1 << " is invalid." << endl;
-    isFileExist = false;
+    fileExist = false;
   }
 
-  if (!fileExists(s2)) {
+  if (!isFileExist(s2)) {
     cerr << s2 << " is invalid." << endl;
-    isFileExist = false;
+    fileExist = false;
   }
   
-  if (!isFileExist) {
+  if (!fileExist) {
     return -1;
   }
 

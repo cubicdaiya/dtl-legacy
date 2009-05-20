@@ -1,7 +1,7 @@
 
 #include "common.hpp"
 
-bool fileExists (string& fs) {
+bool isFileExist (string& fs) {
   FILE *fp;
   if ((fp = fopen(fs.c_str(), "r")) == NULL) {
     return false;

@@ -19,21 +19,21 @@ int main(int argc, char *argv[]){
 
   string A(argv[1]);
   string B(argv[2]);
-  bool isFileExist = true;
+  bool fileExist = true;
 
-  if (!fileExists(A)) {
+  if (!isFileExist(A)) {
     perror(A.c_str());
     cerr << "file A does not exist" << endl;
-    isFileExist = false;
+    fileExist = false;
   }
 
-  if (!fileExists(B)) {
+  if (!isFileExist(B)) {
     cerr << "file B does not exist" << endl;
     perror(B.c_str());
-    isFileExist = false;
+    fileExist = false;
   }
 
-  if (!isFileExist) {
+  if (!fileExist) {
     return -1;
   }
 
