@@ -216,26 +216,7 @@ namespace dtl {
     std::vector< uniHunk<sesElem> > uniHunks;
   public :
     Diff(sequence& a, sequence& b) : A(a), B(b) {
-      M = std::distance(A.begin(), A.end());
-      N = std::distance(B.begin(), B.end());
-      if (M < N) {
-	reverse = false;
-      } else {
-	std::swap(A, B);
-	std::swap(M, N);
-	reverse = true;
-      }
-      editDistance = 0;
-      delta = N - M;
-      offset = M + 1;
-      int size = M + N + 3;
-      fp = new int[size];
-      std::fill(&fp[0], &fp[size], -1);
-      path = editPath(size);
-      std::fill(path.begin(), path.end(), -1);
-      huge = false;
-      unserious = false;
-      onlyEditDistance = false;
+      init();
     }
 
     ~Diff() {
@@ -590,6 +571,29 @@ namespace dtl {
       }
     }
   private :
+    void init () {
+      M = std::distance(A.begin(), A.end());
+      N = std::distance(B.begin(), B.end());
+      if (M < N) {
+	reverse = false;
+      } else {
+	std::swap(A, B);
+	std::swap(M, N);
+	reverse = true;
+      }
+      editDistance = 0;
+      delta = N - M;
+      offset = M + 1;
+      int size = M + N + 3;
+      fp = new int[size];
+      std::fill(&fp[0], &fp[size], -1);
+      path = editPath(size);
+      std::fill(path.begin(), path.end(), -1);
+      huge = false;
+      unserious = false;
+      onlyEditDistance = false;
+    }
+    
     int snake(int k, int above, int below) {
       int r;
       if (above > below) {
@@ -717,27 +721,23 @@ namespace dtl {
   class Diff3
   {
   private:
-    Diff<elem, sequence> *diff_ba;
-    Diff<elem, sequence> *diff_bc;
     sequence A;
     sequence B;
     sequence C;
     sequence S;
+    Diff<elem, sequence> diff_ba;
+    Diff<elem, sequence> diff_bc;
     bool conflict;
     elem csepabegin;
     elem csepa1;
     elem csepa2;
     elem csepaend;
   public :
-    Diff3 (sequence& a, sequence& b, sequence& c) : A(a), B(b), C(c), conflict(false) {
-      diff_ba = new Diff<elem, sequence>(B, A);
-      diff_bc = new Diff<elem, sequence>(B, C);
-    } 
+    Diff3 (sequence& a, sequence& b, sequence& c) : A(a), B(b), C(c), 
+						    diff_ba(b, a), diff_bc(b, c), 
+						    conflict(false) {} 
 
-    ~Diff3 () {
-      delete diff_ba;
-      delete diff_bc;
-    }
+    ~Diff3 () {}
     
     bool isConflict () {
       return conflict;
@@ -756,15 +756,15 @@ namespace dtl {
 
     // merge changes B and C to A
     bool merge () {
-      if (diff_ba->getEditDistance() == 0) {   // A == B
-	if (diff_bc->getEditDistance() == 0) { // A == B == C
+      if (diff_ba.getEditDistance() == 0) {   // A == B
+	if (diff_bc.getEditDistance() == 0) { // A == B == C
 	  S = B;
 	  return true;
 	}
 	S = C;
 	return true;
       } else {                                 // A != B
-	if (diff_bc->getEditDistance() == 0) { // B == C
+	if (diff_bc.getEditDistance() == 0) { // B == C
 	  S = A;                              
 	  return true;
 	} else {
@@ -779,16 +779,16 @@ namespace dtl {
     }
 
     void compose () {
-      diff_ba->compose();
-      diff_bc->compose();
+      diff_ba.compose();
+      diff_bc.compose();
     }
     
   private :
     sequence merge_ () {
       typedef std::pair< elem, elemInfo > sesElem;
       std::vector<elem> seq;
-      Ses<elem> ses_ba = diff_ba->getSes();
-      Ses<elem> ses_bc = diff_bc->getSes();
+      Ses<elem> ses_ba = diff_ba.getSes();
+      Ses<elem> ses_bc = diff_bc.getSes();
       std::vector< sesElem > ses_ba_v = ses_ba.getSequence();
       std::vector< sesElem > ses_bc_v = ses_bc.getSequence();
       typename std::vector< sesElem >::iterator ba_it = ses_ba_v.begin();
