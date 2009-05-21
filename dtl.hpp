@@ -376,13 +376,13 @@ namespace dtl {
     
     /**
      * compose Longest Common Subsequence and Shortest Edit Script.
-     * The Algorithm of diff is O(NP).
+     * The algorithm implemented here is based on "An O(NP) Sequence Comparison Algorithm"
+     * by described by Sun Wu, Udi Manber and Gene Myers
      */
     void compose() {
 
       if (isHuge()) pathCordinates.reserve(MAX_CORDINATES_SIZE + 50000);
 
-      // O(NP) Algorithm
       int p = -1;
       int k;
     ONP:
@@ -709,7 +709,7 @@ namespace dtl {
 
   };
 
-  /* 
+  /**
    * diff3 template
    * sequence must support random_access_iterator.
    */
@@ -722,21 +722,32 @@ namespace dtl {
     sequence A;
     sequence B;
     sequence C;
-    sequence S;                                     // merged sequence
+    sequence S;
     bool conflict;
+    elem csepabegin;
+    elem csepa1;
+    elem csepa2;
+    elem csepaend;
   public :
-    Diff3 (sequence& a, sequence& b, sequence& c) : A(a), B(b), C(c) {
+    Diff3 (sequence& a, sequence& b, sequence& c) : A(a), B(b), C(c), conflict(false) {
       diff_ba = new Diff<elem, sequence>(B, A);
       diff_bc = new Diff<elem, sequence>(B, C);
-      conflict = false;
     } 
 
     ~Diff3 () {
       delete diff_ba;
       delete diff_bc;
     }
+    
     bool isConflict () {
       return conflict;
+    }
+    
+    void setConflictSeparators (elem begin, elem sepa1, elem sepa2, elem end) {
+      csepabegin = begin;
+      csepa1     = sepa1;
+      csepa2     = sepa2;
+      csepaend   = end;
     }
 
     sequence getMergedSequence () {
@@ -821,26 +832,20 @@ namespace dtl {
 	    if (bc_it != ses_bc_v.end()) ++bc_it;
 	  } else {
 	    // conflict
-	    std::cout << "1" << std::endl;
 	    conflict = true;
-	    if (ba_it != ses_ba_v.end()) ++ba_it;
-	    if (bc_it != ses_bc_v.end()) ++bc_it;
+	    return B;
 	  }
 	} else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_ADD) {
 	  // conflict
-	  std::cout << "2" << std::endl;
 	  conflict = true;
-	  if (ba_it != ses_ba_v.end()) ++ba_it;
-	  if (bc_it != ses_bc_v.end()) ++bc_it;
+	  return B;
 	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_COMMON) {
 	  seq.push_back(ba_it->first);
 	  if (ba_it != ses_ba_v.end()) ++ba_it;
 	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_DELETE) {
 	  // conflict
-	  std::cout << "3" << std::endl;
 	  conflict = true;
-	  if (ba_it != ses_ba_v.end()) ++ba_it;
-	  if (bc_it != ses_bc_v.end()) ++bc_it;
+	  return B;
 	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_ADD) {
 	  if (ba_it->first == bc_it->first) {
 	    seq.push_back(ba_it->first);
@@ -848,29 +853,8 @@ namespace dtl {
 	    if (bc_it != ses_bc_v.end()) ++bc_it;
 	  } else {
 	    // conflict
-	    std::cout << "4" << std::endl;
 	    conflict = true;
-	    seq.push_back('<');
-	    seq.push_back(ba_it->first);
-	    seq.push_back('|');
-	    seq.push_back('b');
-	    seq.push_back('|');
-	    seq.push_back(bc_it->first);
-	    seq.push_back('>');
-	    std::cout << ba_it->second.beforeIdx << " " << A[ba_it->second.beforeIdx-1] << std::endl;
-	    std::cout << ba_it->second.afterIdx << " " << A[ba_it->second.afterIdx] << std::endl;
-	    std::cout << ba_it->second.beforeIdx << " " << B[ba_it->second.beforeIdx-1] << std::endl;
-	    std::cout << ba_it->second.afterIdx << " " << B[ba_it->second.afterIdx] << std::endl;
-	    std::cout << ba_it->second.beforeIdx << " " << C[ba_it->second.beforeIdx-1] << std::endl;
-	    std::cout << ba_it->second.afterIdx << " " << C[ba_it->second.afterIdx] << std::endl;
-	    std::cout << bc_it->second.beforeIdx << " " << A[bc_it->second.beforeIdx-1] << std::endl;
-	    std::cout << bc_it->second.afterIdx << " " << A[bc_it->second.afterIdx] << std::endl;
-	    std::cout << bc_it->second.beforeIdx << " " << B[bc_it->second.beforeIdx-1] << std::endl;
-	    std::cout << bc_it->second.afterIdx << " " << B[bc_it->second.afterIdx] << std::endl;
-	    std::cout << bc_it->second.beforeIdx << " " << C[bc_it->second.beforeIdx-1] << std::endl;
-	    std::cout << bc_it->second.afterIdx << " " << C[bc_it->second.afterIdx] << std::endl;
-	    if (ba_it != ses_ba_v.end()) ++ba_it;
-	    if (bc_it != ses_bc_v.end()) ++bc_it;
+	    return B;
 	  }
 	}        
       }

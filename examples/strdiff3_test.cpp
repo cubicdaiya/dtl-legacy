@@ -15,6 +15,7 @@ void detect_conflict_test (sequence A, sequence B, sequence C);
 void merge_test (sequence A, sequence B, sequence C, sequence S) {
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
+  diff3.setConflictSeparators('<', '|', '=', '>');
   if (!diff3.merge()) {
     fprintf(stderr, "conflict.\n");
     return;
@@ -29,6 +30,7 @@ void merge_test (sequence A, sequence B, sequence C, sequence S) {
 void detect_conflict_test (sequence A, sequence B, sequence C) {
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
+  diff3.setConflictSeparators('<', '|', '=', '>');
   if (!diff3.merge()) {
     cout << "detect conflict successed : " << A << " " << B << " "  << C << endl;
   } else {
@@ -79,6 +81,7 @@ int main(int, char**){
   cout << endl;
 
   cout << "detect conflict test" << endl << endl;
+  
   detect_conflict_test("adc", "abc", "aec");
   detect_conflict_test("aec", "abc", "adc");
 
