@@ -609,9 +609,11 @@ namespace dtl {
       }
 
       path[k+offset] = pathCordinates.size();
-      P p;
-      p.x = x;p.y = y;p.k = r;
-      pathCordinates.push_back(p);      
+      if (!onlyEditDistance) {
+	P p;
+	p.x = x;p.y = y;p.k = r;
+	pathCordinates.push_back(p);      
+      }
       return y;
     }
 
@@ -763,7 +765,7 @@ namespace dtl {
 	}
 	S = C;
 	return true;
-      } else {                                 // A != B
+      } else {                                // A != B
 	if (diff_bc.getEditDistance() == 0) { // B == C
 	  S = A;                              
 	  return true;
