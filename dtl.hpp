@@ -76,18 +76,18 @@ namespace dtl {
   class Sequence
   {
   public :
-    typedef std::vector<elem> _Sequence;
+    typedef std::vector<elem> elemVec;
     Sequence () {}
     virtual ~Sequence () {}
 
-    _Sequence getSequence () {
+    elemVec getSequence () const {
       return sequence;
     }
     void addSequence (elem e) {
       sequence.push_back(e);
     }
   protected :
-    _Sequence sequence;
+    elemVec sequence;
   };
   
   template <typename elem>
@@ -128,7 +128,7 @@ namespace dtl {
   {
   private :
     typedef std::pair<elem, elemInfo> sesElem;
-    typedef std::vector< sesElem > sesSequence;
+    typedef std::vector< sesElem > sesElemVec;
   public :
     
     Ses () : onlyAdd(true), onlyDelete(true), onlyCopy(true) { }
@@ -153,7 +153,7 @@ namespace dtl {
     bool isChange () const {
       return !onlyCopy;
     }
-    
+
     using Sequence<elem>::addSequence;
     void addSequence (elem e, int beforeIdx, int afterIdx, editType type) {
       elemInfo info;
@@ -178,11 +178,11 @@ namespace dtl {
       }
     }
     
-    sesSequence getSequence () const {
+    sesElemVec getSequence () const {
       return sequence;
     }
   private :
-    sesSequence sequence;
+    sesElemVec sequence;
     bool onlyAdd;
     bool onlyDelete;
     bool onlyCopy;
@@ -195,6 +195,10 @@ namespace dtl {
   template <typename elem, typename sequence>
   class Diff
   {
+    typedef std::pair<elem, elemInfo> sesElem;
+    typedef std::vector< sesElem > sesElemVec;
+    typedef std::vector< uniHunk< sesElem > > uniHunkVec;
+    typedef std::list< elem > elemList;
   private :
     sequence A;
     sequence B;
@@ -212,8 +216,7 @@ namespace dtl {
     bool huge;
     bool unserious;
     bool onlyEditDistance;
-    typedef std::pair<elem, elemInfo> sesElem;
-    std::vector< uniHunk<sesElem> > uniHunks;
+    uniHunkVec uniHunks;
   public :
     Diff(sequence& a, sequence& b) : A(a), B(b) {
       init();
@@ -235,7 +238,7 @@ namespace dtl {
       return ses;
     }
 
-    std::vector< uniHunk<sesElem> > getUniHunks () const {
+    uniHunkVec getUniHunks () const {
       return uniHunks;
     }
 
@@ -275,12 +278,12 @@ namespace dtl {
      * patching with Unified Format Hunks
      */
     sequence uniPatch (sequence seq) {
-      std::list<elem> seqLst(seq.begin(), seq.end());
-      std::vector<sesElem> shunk;
-      typename std::vector< uniHunk<sesElem> >::iterator it;
-      typename std::list<elem>::iterator lstIt = seqLst.begin();
-      typename std::list<elem>::iterator lstIt_t = seqLst.begin();;
-      typename std::vector<sesElem>::iterator vsesIt;
+      elemList seqLst(seq.begin(), seq.end());
+      sesElemVec shunk;
+      typename uniHunkVec::iterator it;
+      typename elemList::iterator lstIt = seqLst.begin();
+      typename elemList::iterator lstIt_t = seqLst.begin();;
+      typename sesElemVec::iterator vsesIt;
       typename sequence::iterator cit = seq.begin();
       int inc_dec_total = 0;
       int seq_lnum = 1;
@@ -331,11 +334,11 @@ namespace dtl {
      * patching with Shortest Edit Script
      */
     sequence patch (sequence seq) const {
-      std::vector<sesElem> sesSeq = ses.getSequence();
-      std::list<elem> seqLst(seq.begin(), seq.end());
+      sesElemVec sesSeq = ses.getSequence();
+      elemList seqLst(seq.begin(), seq.end());
       std::list<sesElem> sesLst(sesSeq.begin(), sesSeq.end());
-      typename std::list<elem>::iterator lstIt = seqLst.begin();
-      typename std::vector<sesElem>::iterator sesIt;
+      typename elemList::iterator lstIt = seqLst.begin();
+      typename sesElemVec::iterator sesIt;
       for (sesIt=sesSeq.begin();sesIt!=sesSeq.end();++sesIt) {
 	switch (sesIt->second.type) {
 	case SES_ADD :
@@ -406,7 +409,7 @@ namespace dtl {
      * print difference between A and B with the format such as Unified Format.
      */
     void printUnifiedFormat () {
-      typename std::vector< uniHunk<sesElem> >::iterator uit;
+      typename uniHunkVec::iterator uit;
       for (uit=uniHunks.begin();uit!=uniHunks.end();++uit) {
 	// header
 	std::cout << "@@" 
@@ -415,7 +418,7 @@ namespace dtl {
 		  << " @@" << std::endl;
 
 	// header commons
-	typename std::vector<sesElem>::iterator vit;
+	typename sesElemVec::iterator vit;
 	for (vit=uit->common[0].begin();vit!=uit->common[0].end();++vit) {
 	  std::cout << SES_MARK_COMMON << vit->first << std::endl;
 	}
@@ -444,11 +447,10 @@ namespace dtl {
      * compose Unified Format Hunks from Shortest Edit Script
      */
     void composeUnifiedHunks () {
-      std::vector<sesElem> common[2];
-      std::vector<sesElem> change;
-      std::vector<sesElem> ses_v = ses.getSequence();
-      typename std::vector<sesElem>::iterator it;
-      it = ses_v.begin();
+      sesElemVec common[2];
+      sesElemVec change;
+      sesElemVec ses_v = ses.getSequence();
+      typename sesElemVec::iterator it;
       int l_cnt = 1;
       int length = std::distance(ses_v.begin(), ses_v.end());
       int middle = 0;
@@ -460,8 +462,8 @@ namespace dtl {
       int inc_dec_count = 0;
       a = b = c = d = 0;
       uniHunk<sesElem> hunk;
-      std::vector<sesElem> adds;
-      std::vector<sesElem> deletes;
+      sesElemVec adds;
+      sesElemVec deletes;
 
       for (it=ses_v.begin();it!=ses_v.end();++it, ++l_cnt) {
 	e = it->first;
@@ -510,7 +512,7 @@ namespace dtl {
 	  }
 	  if (isMiddle && !isAfter) {
 	    ++middle;
-	    typename std::vector<sesElem>::iterator vit;
+	    typename sesElemVec::iterator vit;
 	    joinSesVec(change, deletes);
 	    joinSesVec(change, adds);
 	    change.push_back(*it);
@@ -527,7 +529,7 @@ namespace dtl {
 	}
 	// compose unified format hunk
 	if (isAfter && !change.empty()) {
-	  typename std::vector<sesElem>::iterator cit = it;
+	  typename sesElemVec::iterator cit = it;
 	  int cnt = 0;
 	  for (int i=0;i<SEPARATE_SIZE;++i, ++cit) {
 	    if (cit->second.type == SES_COMMON) {
@@ -704,8 +706,8 @@ namespace dtl {
       ++editDistance;
     }
 
-    void joinSesVec (std::vector<sesElem>& s1, std::vector<sesElem>& s2) const {
-      typename std::vector<sesElem>::iterator vit;
+    void joinSesVec (sesElemVec& s1, sesElemVec& s2) const {
+      typename sesElemVec::iterator vit;
       if (!s2.empty()) {
 	for (vit=s2.begin();vit!=s2.end();++vit) {
 	  s1.push_back(*vit);
@@ -722,6 +724,9 @@ namespace dtl {
   template <typename elem, typename sequence>
   class Diff3
   {
+    typedef std::pair< elem, elemInfo > sesElem;
+    typedef std::vector< sesElem > sesElemVec;
+    typedef std::vector< elem > elemVec;
   private:
     sequence A;
     sequence B;
@@ -741,7 +746,7 @@ namespace dtl {
 
     ~Diff3 () {}
     
-    bool isConflict () {
+    bool isConflict () const {
       return conflict;
     }
     
@@ -766,11 +771,10 @@ namespace dtl {
 	S = C;
 	return true;
       } else {                                // A != B
-	if (diff_bc.getEditDistance() == 0) { // B == C
+	if (diff_bc.getEditDistance() == 0) { // A != B == C
 	  S = A;                              
 	  return true;
-	} else {
-	  // A != B != C
+	} else {                              // A != B != C
 	  S = merge_();
 	  if (isConflict()) {
 	    return false;
@@ -787,19 +791,18 @@ namespace dtl {
     
   private :
     sequence merge_ () {
-      typedef std::pair< elem, elemInfo > sesElem;
-      std::vector<elem> seq;
+      elemVec seq;
       Ses<elem> ses_ba = diff_ba.getSes();
       Ses<elem> ses_bc = diff_bc.getSes();
-      std::vector< sesElem > ses_ba_v = ses_ba.getSequence();
-      std::vector< sesElem > ses_bc_v = ses_bc.getSequence();
-      typename std::vector< sesElem >::iterator ba_it = ses_ba_v.begin();
-      typename std::vector< sesElem >::iterator bc_it = ses_bc_v.begin();
+      sesElemVec ses_ba_v = ses_ba.getSequence();
+      sesElemVec ses_bc_v = ses_bc.getSequence();
+      typename sesElemVec::iterator ba_it = ses_ba_v.begin();
+      typename sesElemVec::iterator bc_it = ses_bc_v.begin();
       bool is_ba_end = false;
       bool is_bc_end = false;
       while (ba_it != ses_ba_v.end() || bc_it != ses_bc_v.end()) {
-	if (ba_it == ses_ba_v.end()) is_ba_end = true;
-	if (bc_it == ses_bc_v.end()) is_bc_end = true;
+	setEndFlag(ses_ba_v, ba_it, is_ba_end);
+	setEndFlag(ses_bc_v, bc_it, is_bc_end);
 	if (is_ba_end || is_bc_end) break;
 	while (true) {
 	  if (ba_it != ses_ba_v.end()
@@ -813,25 +816,25 @@ namespace dtl {
 	  }
 	  if      (ba_it != ses_ba_v.end()) seq.push_back(ba_it->first);
           else if (bc_it != ses_bc_v.end()) seq.push_back(bc_it->first);
-	  if (ba_it != ses_ba_v.end()) ++ba_it;
-          if (bc_it != ses_bc_v.end()) ++bc_it;
+	  forwardUntilEnd(ses_ba_v, ba_it);
+	  forwardUntilEnd(ses_bc_v, bc_it);
         }
-	if (ba_it == ses_ba_v.end()) is_ba_end = true;
-	if (bc_it == ses_bc_v.end()) is_bc_end = true;
+	setEndFlag(ses_ba_v, ba_it, is_ba_end);
+	setEndFlag(ses_bc_v, bc_it, is_bc_end);
 	if (is_ba_end || is_bc_end) break;
 	if (ba_it->second.type == SES_COMMON && bc_it->second.type == SES_DELETE) {
-	  if (ba_it != ses_ba_v.end()) ++ba_it;
-          if (bc_it != ses_bc_v.end()) ++bc_it;
+	  forwardUntilEnd(ses_ba_v, ba_it);
+	  forwardUntilEnd(ses_bc_v, bc_it);
 	} else if (ba_it->second.type == SES_COMMON && bc_it->second.type == SES_ADD) {
 	  seq.push_back(bc_it->first);
-	  if (bc_it != ses_bc_v.end()) ++bc_it;
+	  forwardUntilEnd(ses_bc_v, bc_it);
 	} else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_COMMON) {
-	  if (ba_it != ses_ba_v.end()) ++ba_it;
-          if (bc_it != ses_bc_v.end()) ++bc_it;
+	  forwardUntilEnd(ses_ba_v, ba_it);
+	  forwardUntilEnd(ses_bc_v, bc_it);
 	} else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_DELETE) {
 	  if (ba_it->first == bc_it->first) {
-	    if (ba_it != ses_ba_v.end()) ++ba_it;
-	    if (bc_it != ses_bc_v.end()) ++bc_it;
+	    forwardUntilEnd(ses_ba_v, ba_it);
+	    forwardUntilEnd(ses_bc_v, bc_it);
 	  } else {
 	    // conflict
 	    conflict = true;
@@ -843,7 +846,7 @@ namespace dtl {
 	  return B;
 	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_COMMON) {
 	  seq.push_back(ba_it->first);
-	  if (ba_it != ses_ba_v.end()) ++ba_it;
+	  forwardUntilEnd(ses_ba_v, ba_it);
 	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_DELETE) {
 	  // conflict
 	  conflict = true;
@@ -851,8 +854,8 @@ namespace dtl {
 	} else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_ADD) {
 	  if (ba_it->first == bc_it->first) {
 	    seq.push_back(ba_it->first);
-	    if (ba_it != ses_ba_v.end()) ++ba_it;
-	    if (bc_it != ses_bc_v.end()) ++bc_it;
+	    forwardUntilEnd(ses_ba_v, ba_it);
+	    forwardUntilEnd(ses_bc_v, bc_it);
 	  } else {
 	    // conflict
 	    conflict = true;
@@ -862,19 +865,28 @@ namespace dtl {
       }
 
       if (is_ba_end) {
-	while (bc_it != ses_bc_v.end()) {
-	  if (bc_it->second.type == SES_ADD) seq.push_back(bc_it->first);
-	  ++bc_it;
-	}
+	addDecentSequence(ses_bc_v, bc_it, seq);
       } else if (is_bc_end) {
-	while (ba_it != ses_ba_v.end()) {
-	  if (ba_it->second.type == SES_ADD) seq.push_back(ba_it->first);
-	  ++ba_it;
-	}
+	addDecentSequence(ses_ba_v, ba_it, seq);
       }
 
       sequence mergedSeq(seq.begin(), seq.end());
       return mergedSeq;
+    }
+    
+    void forwardUntilEnd (sesElemVec& v, typename sesElemVec::iterator& it) const {
+      if (it != v.end()) ++it;
+    }
+
+    void setEndFlag (sesElemVec& v, typename sesElemVec::iterator& it, bool& b) const {
+      if (it == v.end()) b = true;
+    }
+
+    void addDecentSequence (sesElemVec& v, typename sesElemVec::iterator& it, elemVec& seq) const {
+      while (it != v.end()) {
+	if (it->second.type == SES_ADD) seq.push_back(it->first);
+	++it;
+      }      
     }
 
   };
