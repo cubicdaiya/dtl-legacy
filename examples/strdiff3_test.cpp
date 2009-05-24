@@ -9,10 +9,10 @@ using namespace std;
 typedef char elem;
 typedef string sequence;
 
-void merge_test(sequence A, sequence B, sequence C, sequence S);
-void detect_conflict_test (sequence A, sequence B, sequence C);
+static void merge_test(sequence A, sequence B, sequence C, sequence S);
+static void detect_conflict_test (sequence A, sequence B, sequence C);
 
-void merge_test (sequence A, sequence B, sequence C, sequence S) {
+static void merge_test (sequence A, sequence B, sequence C, sequence S) {
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   diff3.setConflictSeparators('<', '|', '=', '>');
@@ -27,7 +27,7 @@ void merge_test (sequence A, sequence B, sequence C, sequence S) {
   }
 }
 
-void detect_conflict_test (sequence A, sequence B, sequence C) {
+static void detect_conflict_test (sequence A, sequence B, sequence C) {
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   diff3.setConflictSeparators('<', '|', '=', '>');
