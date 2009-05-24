@@ -61,14 +61,14 @@ int main(int argc, char *argv[]){
 
   // fpatch 
   assert(BLines == s2);
-  cout << "fpatch OK" << endl;
+  cout << "fpatch successed" << endl;
 
   d.composeUnifiedHunks();
   vector<elem> s3 = d.uniPatch(s1);
 
   // unipatch 
   assert(BLines == s3);
-  cout << "unipatch OK" << endl;
+  cout << "unipatch successed" << endl;
   
   return 0;
 }

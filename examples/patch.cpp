@@ -30,12 +30,12 @@ int main(int argc, char *argv[]) {
   cout << "before:" << s1 << endl;
   cout << "after :" << s2 << endl;
   assert(B == s2);
-  cout << "patch OK" << endl;
+  cout << "patch successed" << endl;
   
   cout << "before:" << s1 << endl;
   cout << "after :" << s3 << endl;
   assert(B == s3);
-  cout << "unipatch OK" << endl;
+  cout << "unipatch successed" << endl;
 
   return 0;
 }
