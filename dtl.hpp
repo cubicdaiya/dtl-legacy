@@ -68,7 +68,39 @@ namespace dtl {
     std::vector<sesElem> change;      // changes
     int inc_dec_count;                // count of increace and decrease
   };
-
+  
+  
+  /**
+   * Functors
+   */
+  template <typename sesElem>
+  class PrintCommons
+  {
+  public :
+    void operator() (sesElem se) {
+      std::cout << SES_MARK_COMMON << se.first << std::endl;	
+    }
+  };
+  
+  template <typename sesElem>
+  class PrintChanges
+  {
+  public :
+    void operator() (sesElem se) {
+      switch (se.second.type) {
+      case SES_ADD:
+	std::cout << SES_MARK_ADD    << se.first << std::endl;
+	break;
+      case SES_DELETE:
+	std::cout << SES_MARK_DELETE << se.first << std::endl;
+	break;
+      case SES_COMMON:
+	std::cout << SES_MARK_COMMON << se.first << std::endl;
+	break;
+      }
+    }
+  };
+  
   /**
    * sequence template class
    */
@@ -79,7 +111,7 @@ namespace dtl {
     typedef std::vector<elem> elemVec;
     Sequence () {}
     virtual ~Sequence () {}
-
+    
     elemVec getSequence () const {
       return sequence;
     }
@@ -95,7 +127,7 @@ namespace dtl {
     elem e;
     int a_idx, b_idx;
   };
-
+  
   /**
    * Longest Common Subsequence template calss
    */
@@ -417,29 +449,9 @@ namespace dtl {
 		  << " +" << uit->c << "," << uit->d 
 		  << " @@" << std::endl;
 
-	// header commons
-	typename sesElemVec::iterator vit;
-	for (vit=uit->common[0].begin();vit!=uit->common[0].end();++vit) {
-	  std::cout << SES_MARK_COMMON << vit->first << std::endl;
-	}
-	// changes
-	for (vit=uit->change.begin();vit!=uit->change.end();++vit) {
-	  switch (vit->second.type) {
-	  case SES_ADD:
-	    std::cout << SES_MARK_ADD    << vit->first << std::endl;
-	    break;
-	  case SES_DELETE:
-	    std::cout << SES_MARK_DELETE << vit->first << std::endl;
-	    break;
-	  case SES_COMMON:
-	    std::cout << SES_MARK_COMMON << vit->first << std::endl;
-	    break;
-	  }
-	}
-	// footer commons
-	for (vit=uit->common[1].begin();vit!=uit->common[1].end();++vit) {
-	  std::cout << " " << vit->first << std::endl;
-	}
+	std::for_each(uit->common[0].begin(), uit->common[0].end(), PrintCommons< sesElem >());
+	std::for_each(uit->change.begin(),    uit->change.end(),    PrintChanges< sesElem >());
+	std::for_each(uit->common[1].begin(), uit->common[1].end(), PrintCommons< sesElem >());
       }
     }
     
