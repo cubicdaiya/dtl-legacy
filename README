@@ -14,7 +14,7 @@ examples
 
 * strdiff
 
-strdiff can calculate a diffrence between two string sequences, but multi byte is not supported.
+strdiff calculates a diffrence between two string sequences, but multi byte is not supported.
 
 $ cd dtl/examples
 $ make strdiff
@@ -40,7 +40,7 @@ $
 
 * intdiff
 
-intdiff can calculate a diffrence between two int arrays sequences.
+intdiff calculates a diffrence between two int arrays sequences.
 
 $ cd dtl/examples
 $ make intdiff
@@ -68,7 +68,7 @@ $
 
 * unidiff
 
-unidiff can calculate a diffrence between two text file sequences, 
+unidiff calculates a diffrence between two text file sequences, 
 and output the difference between files with unified format.
 
 $ cd dtl/examples
@@ -128,7 +128,7 @@ $
 
 * unistrdiff
 
-unistrdiff can calculate a diffrence between two string sequences.
+unistrdiff calculates a diffrence between two string sequences.
 and output the difference between strings with unified format.
 
 $ cd dtl/examples
@@ -156,6 +156,9 @@ $
 
 * strdiff3
 
+strdiff3 merges three string sequence and output the merged sequence.
+When the confliction has occured, output the string "conflict.".
+
 $ cd dtl/examples
 $ make strdiff3
 $ ./strdiff3 qabc abc abcdef
@@ -163,6 +166,8 @@ result:qabcdef
 $
 
 * intdiff3
+
+intdiff3 merges three integer sequence(vector) and output the merged sequence.
 
 $ cd dtl/examples
 $ make intdiff3
