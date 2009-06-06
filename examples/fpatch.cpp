@@ -19,19 +19,21 @@ int main(int argc, char *argv[]){
 
   string A(argv[1]);
   string B(argv[2]);
-  bool isFileExist = true;
+  bool fileExist = true;
 
-  if (!fileExists(A)) {
+  if (!isFileExist(A)) {
     perror(A.c_str());
-    isFileExist = false;
+    cerr << "file A does not exist" << endl;
+    fileExist = false;
   }
 
-  if (!fileExists(B)) {
+  if (!isFileExist(B)) {
+    cerr << "file B does not exist" << endl;
     perror(B.c_str());
-    isFileExist = false;
+    fileExist = false;
   }
 
-  if (!isFileExist) {
+  if (!fileExist) {
     return -1;
   }
 
@@ -55,23 +57,18 @@ int main(int argc, char *argv[]){
   dtl::Ses<elem> ses = d.getSes();
   
   vector<elem> s1 = ALines;
-  vector<elem> s2 = d.patch(s1, ses);
+  vector<elem> s2 = d.patch(s1);
 
   // fpatch 
   assert(BLines == s2);
-  cout << "fpatch OK" << endl;
+  cout << "fpatch successed" << endl;
 
   d.composeUnifiedHunks();
   vector<elem> s3 = d.uniPatch(s1);
 
-  dtl::Diff<elem, vector<elem> > d2(s3, BLines);
-  d2.compose();
-
-  d2.composeUnifiedHunks();
-
   // unipatch 
   assert(BLines == s3);
-  cout << "unipatch OK" << endl;
+  cout << "unipatch successed" << endl;
   
   return 0;
 }

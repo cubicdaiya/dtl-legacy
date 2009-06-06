@@ -22,22 +22,20 @@ int main(int argc, char *argv[]) {
   dtl::Diff<elem, string> d(A, B);
   d.compose();
 
-  dtl::Ses<elem> ses = d.getSes();
-  
   string s1(A);
-  string s2 = d.patch(s1, ses);
+  string s2 = d.patch(s1);
   d.composeUnifiedHunks();
   string s3 = d.uniPatch(s1);
 
   cout << "before:" << s1 << endl;
   cout << "after :" << s2 << endl;
   assert(B == s2);
-  cout << "patch OK" << endl;
+  cout << "patch successed" << endl;
   
   cout << "before:" << s1 << endl;
   cout << "after :" << s3 << endl;
   assert(B == s3);
-  cout << "unipatch OK" << endl;
+  cout << "unipatch successed" << endl;
 
   return 0;
 }

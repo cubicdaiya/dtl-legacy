@@ -13,11 +13,11 @@ int main(int, char**){
   for (int i=0;i<10;++i) {
     cout << a[i] << " ";
   }
-   cout << endl;
+  cout << endl;
   for (int i=0;i<10;++i) {
     cout << b[i] << " ";
   }
-   cout << endl;
+  cout << endl;
   vector<int> A(&a[0], &a[10]);
   vector<int> B(&b[0], &b[10]);
   dtl::Diff<int, vector<int> > d(A, B);
@@ -37,25 +37,10 @@ int main(int, char**){
   // Short Edit Script
   cout << "SES" << endl;
   dtl::Ses<int> ses = d.getSes();
-  vector< pair<int, dtl::elemInfo> > ses_v = ses.getSequence();
-  vector< pair<int, dtl::elemInfo> >::iterator it;
+  typedef pair<int, dtl::elemInfo> sesElem;
+  vector< sesElem > ses_v = ses.getSequence();
 
-  it = ses_v.begin();
-  for (it=ses_v.begin();it!=ses_v.end();++it) {
-    switch (it->second.type) {
-    case dtl::SES_ADD :
-      cout << dtl::SES_MARK_ADD    << " " << it->first << endl;
-      break;
-    case dtl::SES_DELETE :
-      cout << dtl::SES_MARK_DELETE << " " << it->first << endl;
-      break;
-    case dtl::SES_COMMON :
-      cout << dtl::SES_MARK_COMMON << " " << it->first << endl;
-      break;
-    default :
-      break;
-    }
-  }
+  std::for_each(ses_v.begin(), ses_v.end(), dtl::PrintChanges< sesElem >());
 
   return 0;
 }

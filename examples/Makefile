@@ -14,35 +14,35 @@ ALL_OBJS          = strdiff strdiff3 strdiff3_test unidiff unistrdiff intdiff in
 
 
 .cpp.o:
-	$(CPP) -c -g -Wall $<
+	$(CPP) -c -O2 -Wall $<
 all : $(ALL_OBJS)
 
 strdiff : $(STRDIFF_OBJS)
-	$(CPP) -o $@ $(STRDIFF_OBJS)
+	$(CPP) -O2 -o $@ $(STRDIFF_OBJS)
 
 strdiff3 : $(STRDIFF3_OBJS)
-	$(CPP) -o $@ $(STRDIFF3_OBJS)
+	$(CPP) -O2 -o $@ $(STRDIFF3_OBJS)
 
 strdiff3_test : $(STRDIFF3TEST_OBJS)
-	$(CPP) -o $@ $(STRDIFF3TEST_OBJS)
+	$(CPP) -O2 -o $@ $(STRDIFF3TEST_OBJS)
 
 unidiff : $(UNIDIFF_OBJS)
-	$(CPP) -o $@ $(UNIDIFF_OBJS)
+	$(CPP) -O2 -o $@ $(UNIDIFF_OBJS)
 
 unistrdiff : $(UNISTRDIFF_OBJS)
-	$(CPP) -o $@ $(UNISTRDIFF_OBJS)
+	$(CPP) -O2 -o $@ $(UNISTRDIFF_OBJS)
 
 intdiff : $(INTDIFF_OBJS)
-	$(CPP) -o $@ $(INTDIFF_OBJS)
+	$(CPP) -O2 -o $@ $(INTDIFF_OBJS)
 
 intdiff3 : $(INTDIFF3_OBJS)
-	$(CPP) -o $@ $(INTDIFF3_OBJS)
+	$(CPP) -O2 -o $@ $(INTDIFF3_OBJS)
 
 patch : $(PATCH_OBJS)
-	$(CPP) -o $@ $(PATCH_OBJS)
+	$(CPP) -O2 -o $@ $(PATCH_OBJS)
 
 fpatch : $(FPATCH_OBJS)
-	$(CPP) -o $@ $(FPATCH_OBJS)
+	$(CPP) -O2 -o $@ $(FPATCH_OBJS)
 
 clean:
 	${RM} *.o *~ $(ALL_OBJS)

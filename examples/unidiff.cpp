@@ -13,7 +13,10 @@
 
 using namespace std;
 
-void showStats (string fp1, string fp2) 
+static void showStats (string fp1, string fp2);
+static void unifiedDiff (string fp1, string fp2); 
+
+static void showStats (string fp1, string fp2) 
 {
   const int MAX_LENGTH = 255;
   time_t rawtime[2];
@@ -41,7 +44,7 @@ void showStats (string fp1, string fp2)
   cout << "+++ " << fp2 << '\t' << buf[1] << endl;
 }
 
-void unifiedDiff (string fp1, string fp2) 
+static void unifiedDiff (string fp1, string fp2) 
 {
   typedef string elem;
   ifstream Aifs(fp1.c_str());
@@ -83,19 +86,19 @@ int main(int argc, char *argv[])
   
   string s1(argv[1]);
   string s2(argv[2]);
-  bool isFileExist = true;
+  bool fileExist = true;
 
-  if (!fileExists(s1)) {
+  if (!isFileExist(s1)) {
     cerr << s1 << " is invalid." << endl;
-    isFileExist = false;
+    fileExist = false;
   }
 
-  if (!fileExists(s2)) {
+  if (!isFileExist(s2)) {
     cerr << s2 << " is invalid." << endl;
-    isFileExist = false;
+    fileExist = false;
   }
   
-  if (!isFileExist) {
+  if (!fileExist) {
     return -1;
   }
 

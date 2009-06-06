@@ -16,6 +16,7 @@ int main(int argc, char *argv[]){
   string A(argv[1]);
   string B(argv[2]);
   typedef char elem;
+  typedef pair<elem, dtl::elemInfo> sesElem;
 
   dtl::Diff<elem, string> d(A, B);
   //d.onOnlyEditDistance();
@@ -27,32 +28,15 @@ int main(int argc, char *argv[]){
   // Longest Common Subsequence
   dtl::Lcs<elem> lcs = d.getLcs();
   vector<elem> lcs_v = lcs.getSequence();
-  vector<elem>::iterator vit;
   string lcs_s(lcs_v.begin(), lcs_v.end());
   cout << "LCS:" << lcs_s << endl;
 
   // Short Edit Script
   cout << "SES" << endl;
   dtl::Ses<elem> ses = d.getSes();
-  vector< pair<elem, dtl::elemInfo> > ses_v = ses.getSequence();
-  vector< pair<elem, dtl::elemInfo> >::iterator it;
+  vector< sesElem > ses_v = ses.getSequence();
 
-  it = ses_v.begin();
-  for (it=ses_v.begin();it!=ses_v.end();++it) {
-    switch (it->second.type) {
-    case dtl::SES_ADD :
-      cout << dtl::SES_MARK_ADD    << " " << it->first << endl;
-      break;
-    case dtl::SES_DELETE :
-      cout << dtl::SES_MARK_DELETE << " " << it->first << endl;
-      break;
-    case dtl::SES_COMMON :
-      cout << dtl::SES_MARK_COMMON << " " << it->first << endl;
-      break;
-    default :
-      break;
-    }
-  }
+  std::for_each(ses_v.begin(), ses_v.end(), dtl::PrintChanges< sesElem >());
 
   return 0;
 }
