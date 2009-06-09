@@ -74,7 +74,7 @@ namespace dtl {
    * Functors
    */
   template <typename sesElem>
-  class PrintCommons
+  class PrintCommon
   {
   public :
     void operator() (sesElem se) {
@@ -83,7 +83,7 @@ namespace dtl {
   };
   
   template <typename sesElem>
-  class PrintChanges
+  class PrintChange
   {
   public :
     void operator() (sesElem se) {
@@ -98,6 +98,23 @@ namespace dtl {
         std::cout << SES_MARK_COMMON << se.first << std::endl;
         break;
       }
+    }
+  };
+  
+  template <typename sesElem>
+  class PrintUniHunk
+  {
+  public :
+    void operator() (uniHunk< sesElem > hunk) {
+      // header
+      std::cout << "@@"
+                << " -" << hunk.a << "," << hunk.b
+                << " +" << hunk.c << "," << hunk.d
+                << " @@" << std::endl;
+      
+      std::for_each(hunk.common[0].begin(), hunk.common[0].end(), PrintCommon< sesElem >());
+      std::for_each(hunk.change.begin(),    hunk.change.end(),    PrintChange< sesElem >());
+      std::for_each(hunk.common[1].begin(), hunk.common[1].end(), PrintCommon< sesElem >());
     }
   };
   
@@ -441,18 +458,7 @@ namespace dtl {
      * print difference between A and B with the format such as Unified Format.
      */
     void printUnifiedFormat () {
-      typename uniHunkVec::iterator uit;
-      for (uit=uniHunks.begin();uit!=uniHunks.end();++uit) {
-        // header
-        std::cout << "@@" 
-                  << " -" << uit->a << "," << uit->b 
-                  << " +" << uit->c << "," << uit->d 
-                  << " @@" << std::endl;
-
-        std::for_each(uit->common[0].begin(), uit->common[0].end(), PrintCommons< sesElem >());
-        std::for_each(uit->change.begin(),    uit->change.end(),    PrintChanges< sesElem >());
-        std::for_each(uit->common[1].begin(), uit->common[1].end(), PrintCommons< sesElem >());
-      }
+      std::for_each(uniHunks.begin(), uniHunks.end(), PrintUniHunk< sesElem >());
     }
     
     /**
