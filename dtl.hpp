@@ -810,8 +810,8 @@ namespace dtl {
   private :
     sequence merge_ () {
       elemVec seq;
-      Ses<elem> ses_ba = diff_ba.getSes();
-      Ses<elem> ses_bc = diff_bc.getSes();
+      Ses<elem> ses_ba    = diff_ba.getSes();
+      Ses<elem> ses_bc    = diff_bc.getSes();
       sesElemVec ses_ba_v = ses_ba.getSequence();
       sesElemVec ses_bc_v = ses_bc.getSequence();
       typename sesElemVec::iterator ba_it = ses_ba_v.begin();
