@@ -55,16 +55,16 @@ int main(int, char**){
   merge_test("aaabbbqqq",  "aaabbb", "aeaacccbbb", "aeaacccbbbqqq");
 
   merge_test("aeaacccbbb", "aaabbb", "aaabebbqqq",  "aeaacccbebbqqq");
-  merge_test("aaabebbqqq",  "aaabbb", "aeaacccbbb", "aeaacccbebbqqq");
+  merge_test("aaabebbqqq", "aaabbb", "aeaacccbbb",  "aeaacccbebbqqq");
 
   merge_test("aaacccbbb",  "aaabbb", "aeaabbbqqq", "aeaacccbbbqqq");
   merge_test("aeaabbbqqq", "aaabbb", "aaacccbbb",  "aeaacccbbbqqq");
 
-  merge_test("aaacccbbb",  "aaabbb", "aaabeebbeeqqq", "aaacccbeebbeeqqq");
-  merge_test("aaabeebbeeqqq", "aaabbb", "aaacccbbb",  "aaacccbeebbeeqqq");
+  merge_test("aaacccbbb",     "aaabbb", "aaabeebbeeqqq", "aaacccbeebbeeqqq");
+  merge_test("aaabeebbeeqqq", "aaabbb", "aaacccbbb",     "aaacccbeebbeeqqq");
 
-  merge_test("aiueo", "aeo", "aeKokaki", "aiueKokaki");
-  merge_test("aeKokaki", "aeo", "aiueo", "aiueKokaki");
+  merge_test("aiueo",    "aeo", "aeKokaki", "aiueKokaki");
+  merge_test("aeKokaki", "aeo", "aiueo",    "aiueKokaki");
 
   merge_test("1234567390", "1234567890", "1239567890", "1239567390");
   merge_test("1239567890", "1234567890", "1234567390", "1239567390");
@@ -75,8 +75,8 @@ int main(int, char**){
   merge_test("abcdf", "abcdef", "acdef", "acdf");
   merge_test("acdef", "abcdef", "abcdf", "acdf");
 
-  merge_test("acdef",   "abcdef", "abcdfaa",  "acdfaa");
-  merge_test("abcdfaa", "abcdef", "acdef",    "acdfaa");
+  merge_test("acdef",   "abcdef", "abcdfaa", "acdfaa");
+  merge_test("abcdfaa", "abcdef", "acdef",   "acdfaa");
 
   cout << endl;
 
