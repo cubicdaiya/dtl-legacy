@@ -385,7 +385,6 @@ namespace dtl {
     sequence patch (sequence seq) const {
       sesElemVec sesSeq = ses.getSequence();
       elemList seqLst(seq.begin(), seq.end());
-      std::list<sesElem> sesLst(sesSeq.begin(), sesSeq.end());
       typename elemList::iterator lstIt = seqLst.begin();
       typename sesElemVec::iterator sesIt;
       for (sesIt=sesSeq.begin();sesIt!=sesSeq.end();++sesIt) {
