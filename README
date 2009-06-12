@@ -4,7 +4,7 @@ Summary
 ==================
 
 dtl is the diff template library.
-dtl can calculate difference between two sequences.
+dtl calculates difference between two sequences.
 
 Copyright(C) 2008-2009  Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
