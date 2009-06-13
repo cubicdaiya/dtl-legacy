@@ -267,13 +267,11 @@ namespace dtl {
     bool onlyEditDistance;
     uniHunkVec uniHunks;
   public :
-    Diff(sequence& a, sequence& b) : A(a), B(b) {
+    Diff (sequence& a, sequence& b) : A(a), B(b) {
       init();
     }
 
-    ~Diff() {
-      delete[] this->fp;
-    }
+    ~Diff() {}
 
     int getEditDistance () const {
       return editDistance;
@@ -417,6 +415,11 @@ namespace dtl {
 
       int p = -1;
       int k;
+      int size = M + N + 3;
+      fp = new int[size];
+      std::fill(&fp[0], &fp[size], -1);
+      path = editPath(size);
+      std::fill(path.begin(), path.end(), -1);
     ONP:
       do {
         ++p;
@@ -451,6 +454,7 @@ namespace dtl {
         p = -1;
         goto ONP;
       }
+      delete[] this->fp;
     }
 
     /**
@@ -603,14 +607,10 @@ namespace dtl {
       editDistance = 0;
       delta = N - M;
       offset = M + 1;
-      int size = M + N + 3;
-      fp = new int[size];
-      std::fill(&fp[0], &fp[size], -1);
-      path = editPath(size);
-      std::fill(path.begin(), path.end(), -1);
       huge = false;
       unserious = false;
       onlyEditDistance = false;
+      fp = NULL;
     }
     
     int snake(int k, int above, int below) {

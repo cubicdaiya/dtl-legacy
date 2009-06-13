@@ -1,5 +1,7 @@
 
-2009-xx-xx Tatsuhiko Kubo <cubicdaiya@gmail.com>
+2009-06-14 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* resolved problem memory leak occurs when copy constructor set in motion.
 
 	* 1.00 released.
 
