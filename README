@@ -4,9 +4,12 @@ Summary
 ==================
 
 dtl is the diff template library.
-dtl calculates difference between two sequences.
 
 Copyright(C) 2008-2009  Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+Please read the following URL about the detail of dtl.
+
+http://code.google.com/p/dtl-cpp/
 
 ==================
 examples
