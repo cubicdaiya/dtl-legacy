@@ -32,7 +32,7 @@ static void detect_conflict_test (sequence A, sequence B, sequence C) {
   diff3.compose();
   diff3.setConflictSeparators('<', '|', '=', '>');
   if (!diff3.merge()) {
-    cout << "detect conflict successed : " << A << " " << B << " "  << C << endl;
+    cout << "detect conflict successed : " << A << " " << B << " "  << C << " " << diff3.getMergedSequence() << endl;
   } else {
     cout << "detect conflict failed    : " << A << " " << B << " "  << C << endl;
   }
@@ -84,7 +84,6 @@ int main(int, char**){
   
   detect_conflict_test("adc", "abc", "aec");
   detect_conflict_test("aec", "abc", "adc");
-
   
   return 0;
 }
