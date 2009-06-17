@@ -328,14 +328,14 @@ namespace dtl {
       elemList seqLst(seq.begin(), seq.end());
       sesElemVec shunk;
       typename uniHunkVec::iterator it;
-      typename elemList::iterator lstIt = seqLst.begin();
-      typename elemList::iterator lstIt_t = seqLst.begin();;
       typename sesElemVec::iterator vsesIt;
-      typename sequence::iterator cit = seq.begin();
-      int inc_dec_total = 0;
-      int seq_lnum = 1;
+      typename elemList::iterator lstIt   = seqLst.begin();
+      typename elemList::iterator lstIt_t = seqLst.begin();;
+      typename sequence::iterator cit     = seq.begin();
+      int inc_dec_total   = 0;
+      int seq_lnum        = 1;
       int longer_seq_lnum = 1;
-      int loop = 0;
+      int loop            = 0;
       for (it=uniHunks.begin();it!=uniHunks.end();++it, ++loop) {
         joinSesVec(shunk, it->common[0]);
         joinSesVec(shunk, it->change);
@@ -397,6 +397,7 @@ namespace dtl {
           ++lstIt;
           break;
         default :
+          // no through
           break;
         }
       }
@@ -472,7 +473,7 @@ namespace dtl {
       sesElemVec change;
       sesElemVec ses_v = ses.getSequence();
       typename sesElemVec::iterator it;
-      int l_cnt = 1;
+      int l_cnt  = 1;
       int length = std::distance(ses_v.begin(), ses_v.end());
       int middle = 0;
       bool isMiddle, isAfter;
@@ -604,13 +605,13 @@ namespace dtl {
         std::swap(M, N);
         reverse = true;
       }
-      editDistance = 0;
-      delta = N - M;
-      offset = M + 1;
-      huge = false;
-      unserious = false;
+      editDistance     = 0;
+      delta            = N - M;
+      offset           = M + 1;
+      huge             = false;
+      unserious        = false;
       onlyEditDistance = false;
-      fp = NULL;
+      fp               = NULL;
     }
     
     int snake(int k, int above, int below) {
@@ -642,7 +643,7 @@ namespace dtl {
       int x_idx, y_idx;   // line number for Unified Format
       int px_idx, py_idx; // cordinates
       int size = v.size() - 1;
-      x_idx = y_idx = 1;
+      x_idx  = y_idx  = 1;
       px_idx = py_idx = 0;
       for (int i=size;i>=0;--i) {
         while(px_idx < v[i].x || py_idx < v[i].y) {
@@ -696,12 +697,12 @@ namespace dtl {
         // decent difference
         sequence A_(A.begin() + x_idx - 1, A.end());
         sequence B_(B.begin() + y_idx - 1, B.end());
-        A = A_;
-        B = B_;
-        M = std::distance(A.begin(), A.end());
-        N = std::distance(B.begin(), B.end());
-        delta = N - M;
-        offset = M + 1;
+        A        = A_;
+        B        = B_;
+        M        = std::distance(A.begin(), A.end());
+        N        = std::distance(B.begin(), B.end());
+        delta    = N - M;
+        offset   = M + 1;
         int size = M + N + 3;
         delete[] fp;
         fp = new int[size];
@@ -815,8 +816,8 @@ namespace dtl {
       sesElemVec ses_bc_v = ses_bc.getSequence();
       typename sesElemVec::iterator ba_it = ses_ba_v.begin();
       typename sesElemVec::iterator bc_it = ses_bc_v.begin();
-      bool is_ba_end = false;
-      bool is_bc_end = false;
+      bool is_ba_end       = false;
+      bool is_bc_end       = false;
       while (ba_it != ses_ba_v.end() || bc_it != ses_bc_v.end()) {
         setEndFlag(ses_ba_v, ba_it, is_ba_end);
         setEndFlag(ses_bc_v, bc_it, is_bc_end);
