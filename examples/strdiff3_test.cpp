@@ -10,7 +10,7 @@ typedef char elem;
 typedef string sequence;
 
 static void merge_test(sequence A, sequence B, sequence C, sequence S);
-static void detect_conflict_test (sequence A, sequence B, sequence C);
+static void detect_confliction_test (sequence A, sequence B, sequence C);
 static void specify_confliction_test(sequence A, sequence B, sequence C, sequence S);
 
 static void merge_test (sequence A, sequence B, sequence C, sequence S) {
@@ -28,7 +28,7 @@ static void merge_test (sequence A, sequence B, sequence C, sequence S) {
   }
 }
 
-static void detect_conflict_test (sequence A, sequence B, sequence C) {
+static void detect_confliction_test (sequence A, sequence B, sequence C) {
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   diff3.setConflictSeparators('<', '|', '=', '>');
@@ -93,8 +93,8 @@ int main(int, char**){
 
   cout << endl;
 
-  detect_conflict_test("adc", "abc", "aec");
-  detect_conflict_test("abqdcf", "abcdef", "abqqef");
+  detect_confliction_test("adc", "abc", "aec");
+  detect_confliction_test("abqdcf", "abcdef", "abqqef");
 
   cout << endl;
 
