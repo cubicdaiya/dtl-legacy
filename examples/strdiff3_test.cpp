@@ -11,6 +11,7 @@ typedef string sequence;
 
 static void merge_test(sequence A, sequence B, sequence C, sequence S);
 static void detect_conflict_test (sequence A, sequence B, sequence C);
+static void specify_confliction_test(sequence A, sequence B, sequence C, sequence S);
 
 static void merge_test (sequence A, sequence B, sequence C, sequence S) {
   dtl::Diff3<elem, sequence> diff3(A, B, C);
@@ -21,9 +22,9 @@ static void merge_test (sequence A, sequence B, sequence C, sequence S) {
     return;
   }
   if (S == diff3.getMergedSequence()) {
-    cout << "successed : " << A << " " << B << " "  << C << " " << S << " " << diff3.getMergedSequence() << endl;
+    cout << "merge successed : " << A << " " << B << " "  << C << " " << S << " " << diff3.getMergedSequence() << endl;
   } else { 
-    cout << "failed    : " << A << " " << B << " "  << C << " " << S << " " << diff3.getMergedSequence() << endl;
+    cout << "merge failed    : " << A << " " << B << " "  << C << " " << S << " " << diff3.getMergedSequence() << endl;
   }
 }
 
@@ -32,16 +33,28 @@ static void detect_conflict_test (sequence A, sequence B, sequence C) {
   diff3.compose();
   diff3.setConflictSeparators('<', '|', '=', '>');
   if (!diff3.merge()) {
-    cout << "detect conflict successed : " << A << " " << B << " "  << C << " " << diff3.getMergedSequence() << endl;
+    cout << "detect confliction successed  : " << A << " " << B << " "  << C << " " << diff3.getMergedSequence() << endl;
   } else {
-    cout << "detect conflict failed    : " << A << " " << B << " "  << C << endl;
+    cout << "detect confliction failed     : " << A << " " << B << " "  << C << endl;
+  }
+}
+
+static void specify_confliction_test (sequence A, sequence B, sequence C, sequence S) {
+  dtl::Diff3<elem, sequence> diff3(A, B, C);
+  diff3.compose();
+  diff3.setConflictSeparators('<', '|', '=', '>');
+  diff3.merge();
+  if (S == diff3.getMergedSequence()) {
+    cout << "specify confliction successed : " << A << " " << B << " "  << C << " " << S 
+         << " " << diff3.getMergedSequence() << endl;
+  } else { 
+    cout << "specify confliction failed    : " << A << " " << B << " "  << C << " " << S 
+         << " " << diff3.getMergedSequence() << endl;
   }
 }
 
 int main(int, char**){
   
-  cout << "merge test" << endl << endl;
-
   merge_test("ab", "b", "bc", "abc");
   merge_test("bc", "b", "ab", "abc");
 
@@ -80,10 +93,13 @@ int main(int, char**){
 
   cout << endl;
 
-  cout << "detect conflict test" << endl << endl;
-  
   detect_conflict_test("adc", "abc", "aec");
-  detect_conflict_test("aec", "abc", "adc");
+  detect_conflict_test("abqdcf", "abcdef", "abqqef");
+
+  cout << endl;
+
+  specify_confliction_test("adc", "abc", "aec", "a<d|b=e>c");
+  specify_confliction_test("abqdcf", "abcdef", "abqqef", "ab<qd|cd=qq>ef");
   
   return 0;
 }
