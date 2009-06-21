@@ -18,7 +18,6 @@ examples
 * strdiff
 
 strdiff calculates a diffrence between two string sequences, but multi-byte is not supported.
-If you want to treat multi-byte character with dtl, 
 
 
 $ cd dtl/examples
