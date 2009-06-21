@@ -1,7 +1,7 @@
 
 2009-06-xx Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
-	* resolved problem memory leak occurs when copy constructor set in motion.
+	* resolved problem memory leak occurs when default copy constructor set in motion.
 
 	* 1.00 released.
 
