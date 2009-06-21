@@ -17,7 +17,9 @@ examples
 
 * strdiff
 
-strdiff calculates a diffrence between two string sequences, but multi byte is not supported.
+strdiff calculates a diffrence between two string sequences, but multi-byte is not supported.
+If you want to treat multi-byte character with dtl, 
+
 
 $ cd dtl/examples
 $ make strdiff
@@ -160,7 +162,7 @@ $
 * strdiff3
 
 strdiff3 merges three string sequence and output the merged sequence.
-When the confliction has occured, output the string "conflict.".
+When confliction occurred, dtl detects confliction, but does not specify the point of confliction.
 
 $ cd dtl/examples
 $ make strdiff3
@@ -182,11 +184,65 @@ s:1 2 3 9 5 6 7 3 9 10
 intdiff3 OK
 $
 
-* patch, fpatch
+* patch
 
-patch and fpatch are the test programs for patching with difference data.
-patch translates A to B with Shortest Edit Script A to B.
-fpatch translates A to B with Unified Format Data Structure Difference A and B.
+patch is the test program. Supposing that there are two strings is called by A and B, 
+patch translates A to B with Shortest Edit Script or unified format difference.
 
+$ cd dtl/examples
+$ make patch
+$ ./patch abc abd
+before:abc
+after :abd
+patch successed
+before:abc
+after :abd
+unipatch successed
+$
 
+* fpatch
+
+fpatch is the test program. Supposing that there are two files is called by A and B, 
+fpatch translates A to B with Shortest Edit Script or unified format difference.
+
+$ cd dtl/examples
+$ make fpatch
+$ cat a.txt
+a
+e
+c
+z
+z
+d
+e
+f
+a
+b
+c
+d
+e
+f
+g
+h
+i
+$ cat b.txt
+a
+d
+e
+c
+f
+e
+a
+b
+c
+d
+e
+f
+g
+h
+i
+$ ./fpatch a.txt b.txt
+fpatch successed
+unipatch successed
+$
 
