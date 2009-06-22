@@ -8,3 +8,5 @@ intdiff3
 strdiff3_test
 patch
 fpatch
+*.o
+*~
