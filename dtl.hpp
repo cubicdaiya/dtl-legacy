@@ -1,7 +1,36 @@
 /**
- * dtl-1.00 -- Diff Template Library
- * Copyright(C) 2008-2009  Tatsuhiko Kubo <cubicdaiya@gmail.com>
- */
+ dtl-1.00 -- Diff Template Library
+ 
+ In short, Diff Template Library is distributed under so called "BSD license",
+ 
+ Copyright (c) 2008-2009 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+ All rights reserved.
+ 
+ Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+ 
+ * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+ 
+    * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+ 
+    * Neither the name of the authors nor the names of its contributors
+    may be used to endorse or promote products derived from this software without specific prior written permission.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
 #ifndef DTL_H
 #define DTL_H
@@ -106,7 +135,6 @@ namespace dtl {
   {
   public :
     void operator() (uniHunk< sesElem > hunk) {
-      // header
       std::cout << "@@"
                 << " -" << hunk.a << "," << hunk.b
                 << " +" << hunk.c << "," << hunk.d
@@ -816,14 +844,14 @@ namespace dtl {
       sesElemVec ses_bc_v = ses_bc.getSequence();
       typename sesElemVec::iterator ba_it = ses_ba_v.begin();
       typename sesElemVec::iterator bc_it = ses_bc_v.begin();
-      bool is_ba_end       = false;
-      bool is_bc_end       = false;
+      bool is_ba_end      = false;
+      bool is_bc_end      = false;
       while (ba_it != ses_ba_v.end() || bc_it != ses_bc_v.end()) {
         setEndFlag(ses_ba_v, ba_it, is_ba_end);
         setEndFlag(ses_bc_v, bc_it, is_bc_end);
         if (is_ba_end || is_bc_end) break;
         while (true) {
-          if (ba_it != ses_ba_v.end()
+          if (   ba_it != ses_ba_v.end()
               && bc_it != ses_bc_v.end()
               && ba_it->first == bc_it->first 
               && ba_it->second.type == SES_COMMON 
@@ -879,7 +907,7 @@ namespace dtl {
             conflict = true;
             return B;
           }
-        }        
+        }
       }
 
       if (is_ba_end) {
@@ -906,7 +934,6 @@ namespace dtl {
         ++it;
       }      
     }
-
   };
 }
 
