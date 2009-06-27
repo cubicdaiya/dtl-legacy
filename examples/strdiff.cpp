@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
   dtl::Ses<elem> ses = d.getSes();
   vector< sesElem > ses_v = ses.getSequence();
 
-  std::for_each(ses_v.begin(), ses_v.end(), dtl::PrintChange< sesElem >());
+  for_each(ses_v.begin(), ses_v.end(), dtl::PrintChange< sesElem >());
 
   return 0;
 }
