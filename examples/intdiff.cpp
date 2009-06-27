@@ -34,7 +34,7 @@ int main(int, char**){
   }
   cout << endl;
 
-  // Short Edit Script
+  // Shortest Edit Script
   cout << "SES" << endl;
   dtl::Ses<int> ses = d.getSes();
   typedef pair<int, dtl::elemInfo> sesElem;

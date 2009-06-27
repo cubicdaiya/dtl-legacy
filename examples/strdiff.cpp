@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
   string lcs_s(lcs_v.begin(), lcs_v.end());
   cout << "LCS:" << lcs_s << endl;
 
-  // Short Edit Script
+  // Shortest Edit Script
   cout << "SES" << endl;
   dtl::Ses<elem> ses = d.getSes();
   vector< sesElem > ses_v = ses.getSequence();
