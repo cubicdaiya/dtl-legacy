@@ -40,7 +40,7 @@ int main(int, char**){
   typedef pair<int, dtl::elemInfo> sesElem;
   vector< sesElem > ses_v = ses.getSequence();
 
-  std::for_each(ses_v.begin(), ses_v.end(), dtl::PrintChange< sesElem >());
+  for_each(ses_v.begin(), ses_v.end(), dtl::PrintChange< sesElem >());
 
   return 0;
 }
