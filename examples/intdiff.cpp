@@ -34,19 +34,13 @@ int main(int, char**){
   }
   cout << endl;
 
-  // Short Edit Script
+  // Shortest Edit Script
   cout << "SES" << endl;
   dtl::Ses<int> ses = d.getSes();
   typedef pair<int, dtl::elemInfo> sesElem;
   vector< sesElem > ses_v = ses.getSequence();
 
-  std::for_each(ses_v.begin(), ses_v.end(), dtl::PrintChanges< sesElem >());
+  for_each(ses_v.begin(), ses_v.end(), dtl::PrintChange< sesElem >());
 
   return 0;
 }
-
-
-
-
-
-

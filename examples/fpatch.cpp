@@ -2,10 +2,9 @@
 #include "../dtl.hpp"
 #include "common.hpp"
 #include <iostream>
-#include <fstream>
 #include <sstream>
+#include <fstream>
 #include <vector>
-#include <cstdlib>
 #include <cassert>
 
 using namespace std;
@@ -22,14 +21,12 @@ int main(int argc, char *argv[]){
   bool fileExist = true;
 
   if (!isFileExist(A)) {
-    perror(A.c_str());
     cerr << "file A does not exist" << endl;
     fileExist = false;
   }
 
   if (!isFileExist(B)) {
     cerr << "file B does not exist" << endl;
-    perror(B.c_str());
     fileExist = false;
   }
 
