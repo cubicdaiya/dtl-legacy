@@ -1,7 +1,5 @@
 
-2009-06-xx Tatsuhiko Kubo <cubicdaiya@gmail.com>
-
-        * specify the points of confliction
+2009-07-04 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
         * resolved problem memory leak occurs when default copy constructor set in motion.
 
