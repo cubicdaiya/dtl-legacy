@@ -5,10 +5,8 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <algorithm>
 
 #include <time.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 
 using namespace std;
