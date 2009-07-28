@@ -106,7 +106,7 @@ namespace dtl {
   class PrintCommon
   {
   public :
-    void operator() (sesElem se) {
+    void operator() (sesElem se) const {
       std::cout << SES_MARK_COMMON << se.first << std::endl;    
     }
   };
@@ -115,7 +115,7 @@ namespace dtl {
   class PrintChange
   {
   public :
-    void operator() (sesElem se) {
+    void operator() (sesElem se) const {
       switch (se.second.type) {
       case SES_ADD:
         std::cout << SES_MARK_ADD    << se.first << std::endl;
@@ -134,7 +134,7 @@ namespace dtl {
   class PrintUniHunk
   {
   public :
-    void operator() (uniHunk< sesElem > hunk) {
+    void operator() (uniHunk< sesElem > hunk) const {
       std::cout << "@@"
                 << " -" << hunk.a << "," << hunk.b
                 << " +" << hunk.c << "," << hunk.d
@@ -489,7 +489,7 @@ namespace dtl {
     /**
      * print difference between A and B with the format such as Unified Format.
      */
-    void printUnifiedFormat () {
+    void printUnifiedFormat () const {
       std::for_each(uniHunks.begin(), uniHunks.end(), PrintUniHunk< sesElem >());
     }
     
@@ -803,7 +803,7 @@ namespace dtl {
       csepaend   = end;
     }
 
-    sequence getMergedSequence () {
+    sequence getMergedSequence () const {
       return S;
     }
 
