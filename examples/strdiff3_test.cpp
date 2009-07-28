@@ -98,8 +98,8 @@ int main(int, char**){
 
   cout << endl;
 
-  specify_confliction_test("adc", "abc", "aec", "a<d|b=e>c");
-  specify_confliction_test("abqdcf", "abcdef", "abqqef", "ab<qd|cd=qq>ef");
+  //specify_confliction_test("adc", "abc", "aec", "a<d|b=e>c");
+  //specify_confliction_test("abqdcf", "abcdef", "abqqef", "ab<qd|cd=qq>ef");
   
   return 0;
 }
