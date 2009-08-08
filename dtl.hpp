@@ -67,8 +67,8 @@ namespace dtl {
     editType type;
   } elemInfo;
 
-  #define SEPARATE_SIZE (3)
-  #define CONTEXT_SIZE (3)
+  #define DTL_SEPARATE_SIZE (3)
+  #define DTL_CONTEXT_SIZE (3)
 
   /**
    * cordinate for registering route
@@ -551,7 +551,7 @@ namespace dtl {
         case SES_COMMON :
           ++b;++d;
           if (common[1].empty() && adds.empty() && deletes.empty() && change.empty()) {
-            if (common[0].size() < CONTEXT_SIZE) {
+            if (common[0].size() < DTL_CONTEXT_SIZE) {
               if (a == 0 && c == 0) {
                 a = einfo.beforeIdx;
                 c = einfo.afterIdx;
@@ -570,7 +570,7 @@ namespace dtl {
             joinSesVec(change, deletes);
             joinSesVec(change, adds);
             change.push_back(*it);
-            if (middle >= SEPARATE_SIZE || l_cnt >= length) {
+            if (middle >= DTL_SEPARATE_SIZE || l_cnt >= length) {
               isAfter = true;
             }
             adds.clear();
@@ -585,26 +585,26 @@ namespace dtl {
         if (isAfter && !change.empty()) {
           sesElemVec_iter cit = it;
           int cnt = 0;
-          for (int i=0;i<SEPARATE_SIZE;++i, ++cit) {
+          for (int i=0;i<DTL_SEPARATE_SIZE;++i, ++cit) {
             if (cit->second.type == SES_COMMON) {
               ++cnt;
             }
           }
-          if (cnt < SEPARATE_SIZE && l_cnt < length) {
+          if (cnt < DTL_SEPARATE_SIZE && l_cnt < length) {
             middle = 0;
             isAfter = false;
             continue;
           }
-          if (common[0].size() >= SEPARATE_SIZE) {
+          if (common[0].size() >= DTL_SEPARATE_SIZE) {
             int c0size = common[0].size();
             std::rotate(common[0].begin(), 
-                        common[0].begin() + c0size - SEPARATE_SIZE, 
+                        common[0].begin() + c0size - DTL_SEPARATE_SIZE, 
                         common[0].end());
-            for (int i=0;i<c0size-SEPARATE_SIZE;++i) {
+            for (int i=0;i<c0size-DTL_SEPARATE_SIZE;++i) {
               common[0].pop_back();
             }
-            a += c0size - SEPARATE_SIZE;
-            c += c0size - SEPARATE_SIZE;
+            a += c0size - DTL_SEPARATE_SIZE;
+            c += c0size - DTL_SEPARATE_SIZE;
           }
           if (a == 0) ++a;
           if (c == 0) ++c;
