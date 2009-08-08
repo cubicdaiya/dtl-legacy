@@ -10,3 +10,7 @@ patch
 fpatch
 *.o
 *~
+GPATH
+GRTAGS
+GSYMS
+GTAGS
