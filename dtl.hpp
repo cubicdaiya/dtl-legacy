@@ -567,7 +567,6 @@ namespace dtl {
           }
           if (isMiddle && !isAfter) {
             ++middle;
-            sesElemVec_iter vit;
             joinSesVec(change, deletes);
             joinSesVec(change, adds);
             change.push_back(*it);
