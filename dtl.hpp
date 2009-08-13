@@ -360,7 +360,6 @@ namespace dtl {
     sequence uniPatch (sequence seq) {
       elemList seqLst(seq.begin(), seq.end());
       sesElemVec shunk;
-      uniHunkVec_iter it;
       sesElemVec_iter vsesIt;
       elemList_iter lstIt   = seqLst.begin();
       elemList_iter lstIt_t = seqLst.begin();;
@@ -369,7 +368,7 @@ namespace dtl {
       int seq_lnum        = 1;
       int longer_seq_lnum = 1;
       int loop            = 0;
-      for (it=uniHunks.begin();it!=uniHunks.end();++it, ++loop) {
+      for (uniHunkVec_iter it=uniHunks.begin();it!=uniHunks.end();++it, ++loop) {
         joinSesVec(shunk, it->common[0]);
         joinSesVec(shunk, it->change);
         joinSesVec(shunk, it->common[1]);
@@ -417,8 +416,7 @@ namespace dtl {
       sesElemVec sesSeq = ses.getSequence();
       elemList seqLst(seq.begin(), seq.end());
       elemList_iter lstIt = seqLst.begin();
-      sesElemVec_iter sesIt;
-      for (sesIt=sesSeq.begin();sesIt!=sesSeq.end();++sesIt) {
+      for (sesElemVec_iter sesIt=sesSeq.begin();sesIt!=sesSeq.end();++sesIt) {
         switch (sesIt->second.type) {
         case SES_ADD :
           seqLst.insert(lstIt, sesIt->first);
@@ -448,7 +446,6 @@ namespace dtl {
       if (isHuge()) pathCordinates.reserve(MAX_CORDINATES_SIZE + 50000);
 
       int p = -1;
-      int k;
       int size = M + N + 3;
       fp = new int[size];
       std::fill(&fp[0], &fp[size], -1);
@@ -457,10 +454,10 @@ namespace dtl {
     ONP:
       do {
         ++p;
-        for (k=-p;k<=delta-1;++k) {
+        for (int k=-p;k<=delta-1;++k) {
           fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
         }
-        for (k=delta+p;k>=delta+1;--k) {
+        for (int k=delta+p;k>=delta+1;--k) {
           fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
         }
         fp[delta+offset] = snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset]);
@@ -505,7 +502,6 @@ namespace dtl {
       sesElemVec common[2];
       sesElemVec change;
       sesElemVec ses_v = ses.getSequence();
-      sesElemVec_iter it;
       int l_cnt  = 1;
       int length = std::distance(ses_v.begin(), ses_v.end());
       int middle = 0;
@@ -520,7 +516,7 @@ namespace dtl {
       sesElemVec adds;
       sesElemVec deletes;
 
-      for (it=ses_v.begin();it!=ses_v.end();++it, ++l_cnt) {
+      for (sesElemVec_iter it=ses_v.begin();it!=ses_v.end();++it, ++l_cnt) {
         e = it->first;
         einfo = it->second;
         switch (einfo.type) {
