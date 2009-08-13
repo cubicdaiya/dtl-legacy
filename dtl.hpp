@@ -362,7 +362,7 @@ namespace dtl {
       sesElemVec shunk;
       sesElemVec_iter vsesIt;
       elemList_iter lstIt   = seqLst.begin();
-      elemList_iter lstIt_t = seqLst.begin();;
+      elemList_iter lstIt_t = seqLst.begin();
       sequence_iter cit     = seq.begin();
       int inc_dec_total   = 0;
       int seq_lnum        = 1;
