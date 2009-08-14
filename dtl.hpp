@@ -103,28 +103,43 @@ namespace dtl {
    * Functors
    */
   template <typename sesElem>
-  class PrintCommon
+  class Print
   {
   public :
+    Print ()                  : out_(std::cout) {}
+    Print (std::ostream& out) : out_(out)       {}
+    virtual void operator() (const sesElem& se) const = 0;
+  protected :
+    std::ostream& out_;
+  };
+  
+  template <typename sesElem>
+  class PrintCommon : public Print < sesElem >
+  {
+  public :
+    PrintCommon ()                  : Print < sesElem > ()    {}
+    PrintCommon (std::ostream& out) : Print < sesElem > (out) {}
     void operator() (const sesElem& se) const {
-      std::cout << SES_MARK_COMMON << se.first << std::endl;    
+      this->out_ << SES_MARK_COMMON << se.first << std::endl;    
     }
   };
   
   template <typename sesElem>
-  class PrintChange
+  class PrintChange : public Print < sesElem >
   {
   public :
+    PrintChange ()                  : Print < sesElem > ()    {}
+    PrintChange (std::ostream& out) : Print < sesElem > (out) {}
     void operator() (const sesElem& se) const {
       switch (se.second.type) {
       case SES_ADD:
-        std::cout << SES_MARK_ADD    << se.first << std::endl;
+        this->out_ << SES_MARK_ADD    << se.first << std::endl;
         break;
       case SES_DELETE:
-        std::cout << SES_MARK_DELETE << se.first << std::endl;
+        this->out_ << SES_MARK_DELETE << se.first << std::endl;
         break;
       case SES_COMMON:
-        std::cout << SES_MARK_COMMON << se.first << std::endl;
+        this->out_ << SES_MARK_COMMON << se.first << std::endl;
         break;
       }
     }
@@ -134,16 +149,20 @@ namespace dtl {
   class PrintUniHunk
   {
   public :
+    PrintUniHunk () : out_(std::cout) {}
+    PrintUniHunk (std::ostream& out) : out_(out) {}
     void operator() (const uniHunk< sesElem >& hunk) const {
-      std::cout << "@@"
-                << " -" << hunk.a << "," << hunk.b
-                << " +" << hunk.c << "," << hunk.d
-                << " @@" << std::endl;
+      out_ << "@@"
+           << " -"  << hunk.a << "," << hunk.b
+           << " +"  << hunk.c << "," << hunk.d
+           << " @@" << std::endl;
       
       std::for_each(hunk.common[0].begin(), hunk.common[0].end(), PrintCommon< sesElem >());
       std::for_each(hunk.change.begin(),    hunk.change.end(),    PrintChange< sesElem >());
       std::for_each(hunk.common[1].begin(), hunk.common[1].end(), PrintCommon< sesElem >());
     }
+  private :
+    std::ostream& out_;
   };
   
   /**
