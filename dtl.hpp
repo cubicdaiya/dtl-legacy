@@ -112,7 +112,6 @@ namespace dtl {
     int inc_dec_count;           // count of increace and decrease
   };
   
-  
   /**
    * Functors
    */
