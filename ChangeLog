@@ -1,4 +1,16 @@
 
+2009-09-xx Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+        * add functor of compare
+
+        * use 'using' declaration
+
+        * refactoring
+
+        * add ignore patterns for Mercurial
+
+        * 1.02 released.
+
 2009-08-08 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
         * append appropriate const keyword
