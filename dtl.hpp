@@ -120,7 +120,7 @@ namespace dtl {
   class Print
   {
   public :
-    Print ()                  : out_(cout) {}
+    Print ()             : out_(cout) {}
     Print (ostream& out) : out_(out)       {}
     virtual void operator() (const sesElem& se) const = 0;
   protected :
@@ -131,7 +131,7 @@ namespace dtl {
   class PrintCommon : public Print < sesElem >
   {
   public :
-    PrintCommon ()                  : Print < sesElem > ()    {}
+    PrintCommon ()             : Print < sesElem > ()    {}
     PrintCommon (ostream& out) : Print < sesElem > (out) {}
     void operator() (const sesElem& se) const {
       this->out_ << SES_MARK_COMMON << se.first << endl;    
@@ -142,7 +142,7 @@ namespace dtl {
   class PrintChange : public Print < sesElem >
   {
   public :
-    PrintChange ()                  : Print < sesElem > ()    {}
+    PrintChange ()             : Print < sesElem > ()    {}
     PrintChange (ostream& out) : Print < sesElem > (out) {}
     void operator() (const sesElem& se) const {
       switch (se.second.type) {
@@ -163,8 +163,8 @@ namespace dtl {
   class PrintUniHunk
   {
   public :
-    PrintUniHunk () : out_(cout) {}
-    PrintUniHunk (ostream& out) : out_(out) {}
+    PrintUniHunk ()             : out_(cout) {}
+    PrintUniHunk (ostream& out) : out_(out)  {}
     void operator() (const uniHunk< sesElem >& hunk) const {
       out_ << "@@"
            << " -"  << hunk.a << "," << hunk.b
