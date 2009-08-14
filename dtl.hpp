@@ -178,6 +178,15 @@ namespace dtl {
   private :
     ostream& out_;
   };
+
+  template <typename elem>
+  class Compare
+  {
+  public :
+    virtual bool impl (const elem& e1, const elem& e2) const {
+      return e1 == e2;
+    }
+  };
   
   /**
    * sequence template class
@@ -332,8 +341,13 @@ namespace dtl {
     bool unserious;
     bool onlyEditDistance;
     uniHunkVec uniHunks;
+    Compare<elem> cmp;
   public :
     Diff (sequence& a, sequence& b) : A(a), B(b) {
+      init();
+    }
+
+    Diff (sequence& a, sequence& b, Compare<elem>& comp) : A(a), B(b), cmp(comp) {
       init();
     }
 
@@ -685,7 +699,7 @@ namespace dtl {
 
       int y = max(above, below);
       int x = y - k;
-      while (x < M && y < N && A[x] == B[y]) {
+      while (x < M && y < N && cmp.impl(A[x], B[y])) {
         ++x;++y;
       }
 
