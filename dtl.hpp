@@ -397,10 +397,10 @@ namespace dtl {
       elemList_iter lstIt   = seqLst.begin();
       elemList_iter lstIt_t = seqLst.begin();
       sequence_iter cit     = seq.begin();
-      int inc_dec_total   = 0;
-      int seq_lnum        = 1;
-      int longer_seq_lnum = 1;
-      int loop            = 0;
+      int inc_dec_total     = 0;
+      int seq_lnum          = 1;
+      int longer_seq_lnum   = 1;
+      int loop              = 0;
       for (uniHunkVec_iter it=uniHunks.begin();it!=uniHunks.end();++it, ++loop) {
         joinSesVec(shunk, it->common[0]);
         joinSesVec(shunk, it->change);
