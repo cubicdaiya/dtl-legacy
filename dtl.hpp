@@ -120,7 +120,8 @@ namespace dtl {
   {
   public :
     Print ()             : out_(cout) {}
-    Print (ostream& out) : out_(out)       {}
+    Print (ostream& out) : out_(out)  {}
+    virtual ~Print () {}
     virtual void operator() (const sesElem& se) const = 0;
   protected :
     ostream& out_;
@@ -132,6 +133,7 @@ namespace dtl {
   public :
     PrintCommon ()             : Print < sesElem > ()    {}
     PrintCommon (ostream& out) : Print < sesElem > (out) {}
+    ~PrintCommon () {}
     void operator() (const sesElem& se) const {
       this->out_ << SES_MARK_COMMON << se.first << endl;    
     }
@@ -143,6 +145,7 @@ namespace dtl {
   public :
     PrintChange ()             : Print < sesElem > ()    {}
     PrintChange (ostream& out) : Print < sesElem > (out) {}
+    ~PrintChange () {}
     void operator() (const sesElem& se) const {
       switch (se.second.type) {
       case SES_ADD:
@@ -164,6 +167,7 @@ namespace dtl {
   public :
     PrintUniHunk ()             : out_(cout) {}
     PrintUniHunk (ostream& out) : out_(out)  {}
+    ~PrintUniHunk () {}
     void operator() (const uniHunk< sesElem >& hunk) const {
       out_ << "@@"
            << " -"  << hunk.a << "," << hunk.b
@@ -182,6 +186,8 @@ namespace dtl {
   class Compare
   {
   public :
+    Compare () {}
+    virtual ~Compare () {}
     virtual bool impl (const elem& e1, const elem& e2) const {
       return e1 == e2;
     }
