@@ -27,9 +27,8 @@ int main(int, char**){
   // Longest Common Subsequence
   dtl::Lcs<int> lcs = d.getLcs();
   vector<int> lcs_v = lcs.getSequence();
-  vector<int>::iterator vit;
   cout << "LCS: ";
-  for (vit=lcs_v.begin();vit!=lcs_v.end();++vit) {
+  for (vector<int>::iterator vit=lcs_v.begin();vit!=lcs_v.end();++vit) {
     cout << *vit << " ";
   }
   cout << endl;

@@ -35,10 +35,11 @@ int main(int argc, char *argv[]){
   }
 
   typedef string elem;
+  typedef vector<elem> sequence;
   ifstream Aifs(A.c_str());
   ifstream Bifs(B.c_str());
   elem buf;
-  vector<elem> ALines, BLines;
+  sequence ALines, BLines;
   ostringstream ossLine, ossInfo;
 
   while(getline(Aifs, buf)){
@@ -48,20 +49,20 @@ int main(int argc, char *argv[]){
     BLines.push_back(buf);
   }
   
-  dtl::Diff<elem, vector<elem> > d(ALines, BLines);
+  dtl::Diff<elem, sequence > d(ALines, BLines);
   d.compose();
 
   dtl::Ses<elem> ses = d.getSes();
   
-  vector<elem> s1 = ALines;
-  vector<elem> s2 = d.patch(s1);
+  sequence s1 = ALines;
+  sequence s2 = d.patch(s1);
 
   // fpatch 
   assert(BLines == s2);
   cout << "fpatch successed" << endl;
 
   d.composeUnifiedHunks();
-  vector<elem> s3 = d.uniPatch(s1);
+  sequence s3 = d.uniPatch(s1);
 
   // unipatch 
   assert(BLines == s3);
