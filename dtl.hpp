@@ -113,6 +113,15 @@ namespace dtl {
   };
   
   /**
+   * lcs with index
+   */
+  template <typename elem>
+  struct idxLcs {
+    elem e;
+    int a_idx, b_idx;
+  };
+  
+  /**
    * Functors
    */
   template <typename sesElem>
@@ -212,12 +221,6 @@ namespace dtl {
     }
   protected :
     elemVec sequence;
-  };
-  
-  template <typename elem>
-  struct idxLcs {
-    elem e;
-    int a_idx, b_idx;
   };
   
   /**
