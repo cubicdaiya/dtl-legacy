@@ -377,10 +377,6 @@ namespace dtl {
       return uniHunks;
     }
 
-    bool isReverse () const {
-      return reverse;
-    }
-
     bool isHuge () const {
       return huge;
     }
@@ -832,6 +828,9 @@ namespace dtl {
       }      
     }
 
+    bool isReverse () const {
+      return reverse;
+    }
   };
 
   /**
