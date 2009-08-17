@@ -34,10 +34,7 @@ int main(int argc, char *argv[]){
 
   // Shortest Edit Script
   cout << "SES" << endl;
-  dtl::Ses<elem> ses = d.getSes();
-  vector< sesElem > ses_v = ses.getSequence();
-
-  for_each(ses_v.begin(), ses_v.end(), dtl::PrintChange< sesElem >());
+  d.printSES();
 
   return 0;
 }

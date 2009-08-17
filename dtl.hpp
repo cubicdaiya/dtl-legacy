@@ -541,12 +541,29 @@ namespace dtl {
     }
 
     /**
-     * print difference between A and B with the format such as Unified Format.
+     * print difference between A and B with SES
+     */
+    void printSES () const {
+      sesElemVec ses_v = ses.getSequence();
+      for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
+    }
+
+    static void printSES (Ses<elem>& s) {
+      sesElemVec ses_v = s.getSequence();
+      for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
+    }
+
+    /**
+     * print difference between A and B with the format such as Unified Format
      */
     void printUnifiedFormat () const {
       for_each(uniHunks.begin(), uniHunks.end(), PrintUniHunk< sesElem >());
     }
     
+    static void printUnifiedFormat (uniHunkVec& hunks) {
+      for_each(hunks.begin(), hunks.end(), PrintUniHunk< sesElem >());
+    }
+
     /**
      * compose Unified Format Hunks from Shortest Edit Script
      */

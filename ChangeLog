@@ -1,6 +1,8 @@
 
 2009-09-08 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
+        * add print functions
+
         * add functor of compare
 
         * use 'using' declaration

@@ -36,11 +36,7 @@ int main(int, char**){
 
   // Shortest Edit Script
   cout << "SES" << endl;
-  dtl::Ses<int> ses = d.getSes();
-  typedef pair<int, dtl::elemInfo> sesElem;
-  vector< sesElem > ses_v = ses.getSequence();
-
-  for_each(ses_v.begin(), ses_v.end(), dtl::PrintChange< sesElem >());
+  d.printSES();
 
   return 0;
 }
