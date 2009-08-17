@@ -82,7 +82,7 @@ namespace dtl {
   } elemInfo;
 
   #define DTL_SEPARATE_SIZE (3)
-  #define DTL_CONTEXT_SIZE (3)
+  #define DTL_CONTEXT_SIZE  (3)
 
   /**
    * cordinate for registering route
