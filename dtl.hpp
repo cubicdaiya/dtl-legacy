@@ -60,10 +60,10 @@ namespace dtl {
   /**
    * type of edit for SES
    */
-  typedef int editType;
-  const   editType SES_DELETE = -1;
-  const   editType SES_COMMON = 0;
-  const   editType SES_ADD    = 1;
+  typedef int edit_t;
+  const   edit_t SES_DELETE = -1;
+  const   edit_t SES_COMMON = 0;
+  const   edit_t SES_ADD    = 1;
 
   /**
    * mark of SES
@@ -78,7 +78,7 @@ namespace dtl {
   typedef struct eleminfo {
     int      beforeIdx;
     int      afterIdx;
-    editType type;
+    edit_t type;
   } elemInfo;
 
   #define DTL_SEPARATE_SIZE (3)
@@ -282,7 +282,7 @@ namespace dtl {
     }
 
     using Sequence<elem>::addSequence;
-    void addSequence (elem e, int beforeIdx, int afterIdx, editType type) {
+    void addSequence (elem e, int beforeIdx, int afterIdx, edit_t type) {
       elemInfo info;
       info.beforeIdx = beforeIdx;
       info.afterIdx  = afterIdx;
@@ -809,7 +809,7 @@ namespace dtl {
       return true;
     }
 
-    void recordOddSequence (int idx, int length, sequence_const_iter it, const editType et) {
+    void recordOddSequence (int idx, int length, sequence_const_iter it, const edit_t et) {
       while(idx < length){
         ses.addSequence(*it, idx, 0, et);
         ++it;
@@ -893,7 +893,7 @@ namespace dtl {
           return true;
         } else {                              // A != B != C
           S = merge_();
-          if (isConflict()) {
+          if (isConflict()) {                 // conflict occured
             return false;
           }
         }
