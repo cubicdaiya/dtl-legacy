@@ -662,8 +662,8 @@ namespace dtl {
           if (common[0].size() >= DTL_SEPARATE_SIZE) {
             int c0size = common[0].size();
             rotate(common[0].begin(), 
-                        common[0].begin() + c0size - DTL_SEPARATE_SIZE, 
-                        common[0].end());
+                   common[0].begin() + c0size - DTL_SEPARATE_SIZE, 
+                   common[0].end());
             for (int i=0;i<c0size-DTL_SEPARATE_SIZE;++i) {
               common[0].pop_back();
             }
@@ -925,10 +925,10 @@ namespace dtl {
         if (is_ba_end || is_bc_end) break;
         while (true) {
           if (   ba_it != ba_end
-              && bc_it != bc_end
-              && ba_it->first == bc_it->first 
-              && ba_it->second.type == SES_COMMON 
-              && bc_it->second.type == SES_COMMON) {
+                 && bc_it != bc_end
+                 && ba_it->first == bc_it->first 
+                 && ba_it->second.type == SES_COMMON 
+                 && bc_it->second.type == SES_COMMON) {
             // do nothing
           } else {
             break;
