@@ -895,6 +895,7 @@ namespace dtl {
         } else {                              // A != B != C
           S = merge_();
           if (isConflict()) {                 // conflict occured
+            specifyConfliction();
             return false;
           }
         }
@@ -992,6 +993,10 @@ namespace dtl {
 
       sequence mergedSeq(seq.begin(), seq.end());
       return mergedSeq;
+    }
+    
+    void specifyConfliction () {
+      // not implement
     }
     
     void forwardUntilEnd (const sesElemVec_iter& end, sesElemVec_iter& it) const {
