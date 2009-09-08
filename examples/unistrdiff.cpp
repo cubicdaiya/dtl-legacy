@@ -14,10 +14,11 @@ int main(int argc, char *argv[]){
   }
   
   typedef char elem;
-  string A(argv[1]);
-  string B(argv[2]);
+  typedef string sequence;
+  sequence A(argv[1]);
+  sequence B(argv[2]);
 
-  dtl::Diff<elem, string > d(A, B);
+  dtl::Diff<elem, sequence > d(A, B);
   d.compose();
   d.composeUnifiedHunks();
 
@@ -27,7 +28,7 @@ int main(int argc, char *argv[]){
   // Longest Common Subsequence
   dtl::Lcs<elem> lcs = d.getLcs();
   vector<elem> lcs_v = lcs.getSequence();
-  string lcs_s(lcs_v.begin(), lcs_v.end());
+  sequence lcs_s(lcs_v.begin(), lcs_v.end());
   cout << "LCS:" << lcs_s << endl;
 
   // print Unified Format

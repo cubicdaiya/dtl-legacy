@@ -27,20 +27,15 @@ int main(int, char**){
   // Longest Common Subsequence
   dtl::Lcs<int> lcs = d.getLcs();
   vector<int> lcs_v = lcs.getSequence();
-  vector<int>::iterator vit;
   cout << "LCS: ";
-  for (vit=lcs_v.begin();vit!=lcs_v.end();++vit) {
+  for (vector<int>::iterator vit=lcs_v.begin();vit!=lcs_v.end();++vit) {
     cout << *vit << " ";
   }
   cout << endl;
 
   // Shortest Edit Script
   cout << "SES" << endl;
-  dtl::Ses<int> ses = d.getSes();
-  typedef pair<int, dtl::elemInfo> sesElem;
-  vector< sesElem > ses_v = ses.getSequence();
-
-  for_each(ses_v.begin(), ses_v.end(), dtl::PrintChange< sesElem >());
+  d.printSES();
 
   return 0;
 }

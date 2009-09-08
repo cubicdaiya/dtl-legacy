@@ -22,9 +22,9 @@ int main(int argc, char *argv[]){
 
   dtl::Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
-  diff3.setConflictSeparators('<', '|', '=', '>');
+  //diff3.setConflictSeparators('<', '|', '=', '>');
   if (!diff3.merge()) {
-    cerr << "conflict.\n" << endl;
+    cerr << "conflict." << endl;
     return -1;
   }
   cout << "result:" << diff3.getMergedSequence() << endl;

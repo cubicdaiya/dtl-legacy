@@ -9,4 +9,19 @@ strdiff3_test
 patch
 fpatch
 *.o
+*.orig
 *~
+.semantic.cache
+.DS_Store
+GPATH
+GRTAGS
+GSYMS
+GTAGS
+TAGS
+
+syntax: regexp
+
+^\#
+\#$
+\.\#
+

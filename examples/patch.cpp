@@ -14,17 +14,18 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  string A(argv[1]);
-  string B(argv[2]);
   typedef char elem;
+  typedef string sequence;
+  sequence A(argv[1]);
+  sequence B(argv[2]);
   
-  dtl::Diff<elem, string> d(A, B);
+  dtl::Diff<elem, sequence> d(A, B);
   d.compose();
 
-  string s1(A);
-  string s2 = d.patch(s1);
+  sequence s1(A);
+  sequence s2 = d.patch(s1);
   d.composeUnifiedHunks();
-  string s3 = d.uniPatch(s1);
+  sequence s3 = d.uniPatch(s1);
 
   cout << "before:" << s1 << endl;
   cout << "after :" << s2 << endl;

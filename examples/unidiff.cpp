@@ -45,6 +45,7 @@ static void showStats (string fp1, string fp2)
 static void unifiedDiff (string fp1, string fp2) 
 {
   typedef string elem;
+  typedef pair<elem, dtl::elemInfo> sesElem;
   ifstream Aifs(fp1.c_str());
   ifstream Bifs(fp2.c_str());
   elem buf;
@@ -64,7 +65,7 @@ static void unifiedDiff (string fp1, string fp2)
   diff.compose();
 
   // type unihunk definition test
-  dtl::uniHunk< pair<elem, dtl::elemInfo> > hunk;
+  dtl::uniHunk< sesElem > hunk;
 
   if (diff.getEditDistance() > 0) {
     showStats(fp1, fp2);             // show file info
