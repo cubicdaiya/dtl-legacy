@@ -927,10 +927,10 @@ namespace dtl {
         if (is_ba_end || is_bc_end) break;
         while (true) {
           if (   ba_it != ba_end
-                 && bc_it != bc_end
-                 && ba_it->first == bc_it->first 
-                 && ba_it->second.type == SES_COMMON 
-                 && bc_it->second.type == SES_COMMON) {
+              && bc_it != bc_end
+              && ba_it->first == bc_it->first 
+              && ba_it->second.type == SES_COMMON 
+              && bc_it->second.type == SES_COMMON) {
             // do nothing
           } else {
             break;
