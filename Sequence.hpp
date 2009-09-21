@@ -33,15 +33,35 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DTL_H
-#define DTL_H
+/* include dtl.hpp only */
+
+#ifndef DTL_SEQUENCE_H
+#define DTL_SEQUENCE_H
 
 #include "variables.hpp"
-#include "functors.hpp"
-#include "Sequence.hpp"
-#include "Lcs.hpp"
-#include "Ses.hpp"
-#include "Diff.hpp"
-#include "Diff3.hpp"
 
-#endif // DTL_H
+namespace dtl {
+
+  /**  
+   * sequence template class
+   */
+  template <typename elem>
+  class Sequence
+  {
+  public :
+    typedef vector<elem> elemVec;
+    Sequence () {}
+    virtual ~Sequence () {}
+    
+    elemVec getSequence () const {
+      return sequence;
+    }
+    void addSequence (elem e) {
+      sequence.push_back(e);
+    }
+  protected :
+    elemVec sequence;
+  };
+}
+
+#endif

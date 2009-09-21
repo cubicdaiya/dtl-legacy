@@ -33,15 +33,37 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DTL_H
-#define DTL_H
+/* include dtl.hpp only */
+
+#ifndef DTL_LCS_H
+#define DTL_LCS_H
 
 #include "variables.hpp"
-#include "functors.hpp"
-#include "Sequence.hpp"
-#include "Lcs.hpp"
-#include "Ses.hpp"
-#include "Diff.hpp"
-#include "Diff3.hpp"
 
-#endif // DTL_H
+namespace dtl {
+  /**
+   * Longest Common Subsequence template calss
+   */
+  template <typename elem>
+  class Lcs : public Sequence<elem>
+  {
+  private :
+    typedef vector< idxLcs<elem> > lcsSequence;
+    lcsSequence lcsSeq;
+  public :
+    Lcs ()  {}
+    ~Lcs () {}
+    void addLcsSequence (elem e, int a_idx, int b_idx) {
+      idxLcs<elem> ie;
+      ie.e = e;
+      ie.a_idx = a_idx;
+      ie.b_idx = b_idx;
+      lcsSeq.push_back(ie);
+    }
+    lcsSequence getLcsSequence () const {
+      return lcsSeq;
+    }
+  };
+}
+
+#endif

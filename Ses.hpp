@@ -33,15 +33,81 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DTL_H
-#define DTL_H
+/* include dtl.hpp only */
+
+#ifndef DTL_SES_H
+#define DTL_SES_H
 
 #include "variables.hpp"
-#include "functors.hpp"
-#include "Sequence.hpp"
-#include "Lcs.hpp"
-#include "Ses.hpp"
-#include "Diff.hpp"
-#include "Diff3.hpp"
 
-#endif // DTL_H
+namespace dtl {
+  /**
+   * Shortest Edit Script template calss
+   */
+  template <typename elem>
+  class Ses : public Sequence<elem>
+  {
+  private :
+    typedef pair<elem, elemInfo> sesElem;
+    typedef vector< sesElem > sesElemVec;
+  public :
+    
+    Ses () : onlyAdd(true), onlyDelete(true), onlyCopy(true) { }
+    ~Ses () {}
+    
+    bool isOnlyAdd () const {
+      return onlyAdd;
+    }
+    
+    bool isOnlyDelete () const {
+      return onlyDelete;
+    }
+    
+    bool isOnlyCopy () const {
+      return onlyCopy;
+    }
+    
+    bool isOnlyOneOperation () const {
+      return isOnlyAdd() || isOnlyAdd() || isOnlyCopy();
+    }
+    
+    bool isChange () const {
+      return !onlyCopy;
+    }
+
+    using Sequence<elem>::addSequence;
+    void addSequence (elem e, int beforeIdx, int afterIdx, const edit_t type) {
+      elemInfo info;
+      info.beforeIdx = beforeIdx;
+      info.afterIdx  = afterIdx;
+      info.type      = type;
+      sesElem pe(e, info);
+      sequence.push_back(pe);
+      switch (type) {
+      case SES_DELETE:
+        onlyCopy   = false;
+        onlyAdd    = false;
+        break;
+      case SES_COMMON:
+        onlyAdd    = false;
+        onlyDelete = false;
+        break;
+      case SES_ADD:
+        onlyDelete = false;
+        onlyCopy   = false;
+        break;
+      }
+    }
+    
+    sesElemVec getSequence () const {
+      return sequence;
+    }
+  private :
+    sesElemVec sequence;
+    bool onlyAdd;
+    bool onlyDelete;
+    bool onlyCopy;
+  };
+}
+
+#endif
