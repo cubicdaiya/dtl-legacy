@@ -33,7 +33,7 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/* include dtl.hpp only */
+/* If you use this library, you must include dtl.hpp only. */
 
 #ifndef DTL_SES_H
 #define DTL_SES_H
