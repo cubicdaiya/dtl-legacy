@@ -41,6 +41,7 @@
 #include "variables.hpp"
 
 namespace dtl {
+
   /**
    * Longest Common Subsequence template calss
    */

@@ -41,6 +41,7 @@
 #include "variables.hpp"
 
 namespace dtl {
+
   /**
    * diff template class
    * sequence must support random_access_iterator.
@@ -558,7 +559,6 @@ namespace dtl {
       return reverse;
     }
   };
-  
 }
 
 #endif

@@ -41,6 +41,7 @@
 #include "variables.hpp"
 
 namespace dtl {
+
   /**
    * Shortest Edit Script template calss
    */

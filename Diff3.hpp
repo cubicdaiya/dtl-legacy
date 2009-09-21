@@ -222,7 +222,6 @@ namespace dtl {
       }      
     }
   };
-  
 }
 
 #endif
