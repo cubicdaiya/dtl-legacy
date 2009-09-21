@@ -1,5 +1,5 @@
 
-#include "../dtl.hpp"
+#include "../src/dtl.hpp"
 #include "common.hpp"
 #include <iostream>
 #include <fstream>

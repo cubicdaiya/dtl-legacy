@@ -48,12 +48,12 @@ clean:
 	${RM} *.o *~ $(ALL_OBJS)
 
 common.o: common.cpp common.hpp
-fpatch.o: fpatch.cpp ../dtl.hpp ../variables.hpp ../functors.hpp ../Sequence.hpp ../Lcs.hpp ../Ses.hpp ../Diff.hpp ../Diff3.hpp common.hpp
-intdiff.o: intdiff.cpp ../dtl.hpp ../variables.hpp ../functors.hpp ../Sequence.hpp ../Lcs.hpp ../Ses.hpp ../Diff.hpp ../Diff3.hpp
-intdiff3.o: intdiff3.cpp ../dtl.hpp ../variables.hpp ../functors.hpp ../Sequence.hpp ../Lcs.hpp ../Ses.hpp ../Diff.hpp ../Diff3.hpp common.hpp
-patch.o: patch.cpp ../dtl.hpp ../variables.hpp ../functors.hpp ../Sequence.hpp ../Lcs.hpp ../Ses.hpp ../Diff.hpp ../Diff3.hpp common.hpp
-strdiff.o: strdiff.cpp ../dtl.hpp ../variables.hpp ../functors.hpp ../Sequence.hpp ../Lcs.hpp ../Ses.hpp ../Diff.hpp ../Diff3.hpp common.hpp
-strdiff3.o: strdiff3.cpp ../dtl.hpp ../variables.hpp ../functors.hpp ../Sequence.hpp ../Lcs.hpp ../Ses.hpp ../Diff.hpp ../Diff3.hpp common.hpp
-strdiff3_test.o: strdiff3_test.cpp ../dtl.hpp ../variables.hpp ../functors.hpp ../Sequence.hpp ../Lcs.hpp ../Ses.hpp ../Diff.hpp ../Diff3.hpp
-unidiff.o: unidiff.cpp ../dtl.hpp ../variables.hpp ../functors.hpp ../Sequence.hpp ../Lcs.hpp ../Ses.hpp ../Diff.hpp ../Diff3.hpp common.hpp
-unistrdiff.o: unistrdiff.cpp ../dtl.hpp ../variables.hpp ../functors.hpp ../Sequence.hpp ../Lcs.hpp ../Ses.hpp ../Diff.hpp ../Diff3.hpp common.hpp
+fpatch.o: fpatch.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+intdiff.o: intdiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp
+intdiff3.o: intdiff3.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+patch.o: patch.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+strdiff.o: strdiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+strdiff3.o: strdiff3.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+strdiff3_test.o: strdiff3_test.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp
+unidiff.o: unidiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+unistrdiff.o: unistrdiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
