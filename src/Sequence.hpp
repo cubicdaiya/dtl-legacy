@@ -38,8 +38,6 @@
 #ifndef DTL_SEQUENCE_H
 #define DTL_SEQUENCE_H
 
-#include "variables.hpp"
-
 namespace dtl {
 
   /**  

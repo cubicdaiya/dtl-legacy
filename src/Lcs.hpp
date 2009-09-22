@@ -38,8 +38,6 @@
 #ifndef DTL_LCS_H
 #define DTL_LCS_H
 
-#include "variables.hpp"
-
 namespace dtl {
 
   /**

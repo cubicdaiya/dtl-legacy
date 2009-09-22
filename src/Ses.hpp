@@ -38,8 +38,6 @@
 #ifndef DTL_SES_H
 #define DTL_SES_H
 
-#include "variables.hpp"
-
 namespace dtl {
 
   /**

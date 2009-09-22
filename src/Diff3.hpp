@@ -38,8 +38,6 @@
 #ifndef DTL_DIFF3_H
 #define DTL_DIFF3_H
 
-#include "variables.hpp"
-
 namespace dtl {
 
   /**

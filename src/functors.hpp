@@ -38,8 +38,6 @@
 #ifndef DTL_FUNCTOR_H
 #define DTL_FUNCTOR_H
 
-#include "variables.hpp"
-
 namespace dtl {
 
   template <typename sesElem>
