@@ -62,4 +62,4 @@ namespace dtl {
   };
 }
 
-#endif
+#endif // DTL_SEQUENCE_H

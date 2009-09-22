@@ -559,4 +559,4 @@ namespace dtl {
   };
 }
 
-#endif
+#endif // DTL_DIFF_H

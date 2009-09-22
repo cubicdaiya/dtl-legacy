@@ -65,4 +65,4 @@ namespace dtl {
   };
 }
 
-#endif
+#endif // DTL_LCS_H

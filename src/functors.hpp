@@ -119,4 +119,4 @@ namespace dtl {
   };
 }
 
-#endif 
+#endif // DTL_FUNCTOR_H
