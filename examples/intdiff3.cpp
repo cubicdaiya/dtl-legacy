@@ -7,6 +7,8 @@
 
 using namespace std;
 
+using dtl::Diff3;
+
 int main(int, char**) {
 
   int a[10]      = {1, 2, 3, 4, 5, 6, 7, 3, 9, 10};
@@ -37,7 +39,7 @@ int main(int, char**) {
   sequence B(&b[0], &b[10]);
   sequence C(&c[0], &c[10]);
   sequence Answer(&answer[0], &answer[10]);
-  dtl::Diff3<elem, sequence> diff3(A, B, C);
+  Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   if (!diff3.merge()) {
     fprintf(stderr, "conflict.\n");

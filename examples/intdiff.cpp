@@ -5,6 +5,9 @@
 
 using namespace std;
 
+using dtl::Diff;
+using dtl::Lcs;
+
 int main(int, char**){
   
   int a[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -20,12 +23,12 @@ int main(int, char**){
   cout << endl;
   vector<int> A(&a[0], &a[10]);
   vector<int> B(&b[0], &b[10]);
-  dtl::Diff<int, vector<int> > d(A, B);
+  Diff<int, vector<int> > d(A, B);
   d.compose();
   // editDistance
   cout << "editDistance:" << d.getEditDistance() << endl;
   // Longest Common Subsequence
-  dtl::Lcs<int> lcs = d.getLcs();
+  Lcs<int> lcs = d.getLcs();
   vector<int> lcs_v = lcs.getSequence();
   cout << "LCS: ";
   for (vector<int>::iterator vit=lcs_v.begin();vit!=lcs_v.end();++vit) {

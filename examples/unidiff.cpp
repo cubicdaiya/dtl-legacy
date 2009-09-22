@@ -11,6 +11,10 @@
 
 using namespace std;
 
+using dtl::Diff;
+using dtl::elemInfo;
+using dtl::uniHunk;
+
 static void showStats (string fp1, string fp2);
 static void unifiedDiff (string fp1, string fp2); 
 
@@ -45,7 +49,7 @@ static void showStats (string fp1, string fp2)
 static void unifiedDiff (string fp1, string fp2) 
 {
   typedef string elem;
-  typedef pair<elem, dtl::elemInfo> sesElem;
+  typedef pair<elem, elemInfo> sesElem;
   ifstream Aifs(fp1.c_str());
   ifstream Bifs(fp2.c_str());
   elem buf;
@@ -59,13 +63,13 @@ static void unifiedDiff (string fp1, string fp2)
     BLines.push_back(buf);
   }
   
-  dtl::Diff<elem, vector<elem> > diff(ALines, BLines);
+  Diff<elem, vector<elem> > diff(ALines, BLines);
   diff.onHuge();
   //diff.onUnserious();
   diff.compose();
 
   // type unihunk definition test
-  dtl::uniHunk< sesElem > hunk;
+  uniHunk< sesElem > hunk;
 
   if (diff.getEditDistance() > 0) {
     showStats(fp1, fp2);             // show file info

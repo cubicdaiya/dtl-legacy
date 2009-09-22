@@ -9,6 +9,9 @@
 
 using namespace std;
 
+using dtl::Diff;
+using dtl::Ses;
+
 int main(int argc, char *argv[]){
   
   if (isFewArgs(argc)) {
@@ -49,10 +52,10 @@ int main(int argc, char *argv[]){
     BLines.push_back(buf);
   }
   
-  dtl::Diff<elem, sequence > d(ALines, BLines);
+  Diff<elem, sequence > d(ALines, BLines);
   d.compose();
 
-  dtl::Ses<elem> ses = d.getSes();
+  Ses<elem> ses = d.getSes();
   
   sequence s1 = ALines;
   sequence s2 = d.patch(s1);
