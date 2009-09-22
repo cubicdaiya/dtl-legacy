@@ -47,9 +47,8 @@ int main(int, char**) {
     return -1;
   }
   sequence s = diff3.getMergedSequence();
-  sequence::iterator it;
   cout << "s:";
-  for (it=s.begin();it!=s.end();++it) {
+  for (sequence::iterator it=s.begin();it!=s.end();++it) {
     cout << *it << " ";
   }
    cout << endl;
