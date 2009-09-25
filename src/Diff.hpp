@@ -41,7 +41,7 @@
 namespace dtl {
 
   /**
-   * diff template class
+   * diff class template
    * sequence must support random_access_iterator.
    */
   template <typename elem, typename sequence>

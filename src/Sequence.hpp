@@ -41,7 +41,7 @@
 namespace dtl {
 
   /**  
-   * sequence template class
+   * sequence class template
    */
   template <typename elem>
   class Sequence

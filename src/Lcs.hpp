@@ -41,7 +41,7 @@
 namespace dtl {
 
   /**
-   * Longest Common Subsequence template calss
+   * Longest Common Subsequence template class
    */
   template <typename elem>
   class Lcs : public Sequence<elem>

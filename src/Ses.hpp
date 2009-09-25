@@ -41,7 +41,7 @@
 namespace dtl {
 
   /**
-   * Shortest Edit Script template calss
+   * Shortest Edit Script template class
    */
   template <typename elem>
   class Ses : public Sequence<elem>
