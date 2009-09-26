@@ -79,9 +79,9 @@ namespace dtl {
    * info for Unified Format
    */
   typedef struct eleminfo {
-    int      beforeIdx;
-    int      afterIdx;
-    edit_t type;
+    int      beforeIdx;           // index of prev sequence
+    int      afterIdx;            // index of after sequence
+    edit_t type;                  // type of edit(Add, Delete, Common)
   } elemInfo;
 
   #define DTL_SEPARATE_SIZE (3)
@@ -91,9 +91,9 @@ namespace dtl {
    * cordinate for registering route
    */
   typedef struct Point {
-    int x;
-    int y;
-    int k;
+    int x;                         // x cordinate
+    int y;                         // y cordinate
+    int k;                         // vertex
   } P;
 
   /**
@@ -120,8 +120,9 @@ namespace dtl {
    */
   template <typename elem>
   struct idxLcs {
-    elem e;
-    int a_idx, b_idx;
+    elem e;                      // element of lcs
+    int a_idx;                   // prev index of element
+    int b_idx;                   // after index of element
   };
 }
 

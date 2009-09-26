@@ -272,6 +272,9 @@ namespace dtl {
       for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
     }
 
+    /**
+     * print difference with gived SES
+     */
     static void printSES (Ses<elem>& s) {
       sesElemVec ses_v = s.getSequence();
       for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
@@ -284,6 +287,9 @@ namespace dtl {
       for_each(uniHunks.begin(), uniHunks.end(), PrintUniHunk< sesElem >());
     }
     
+    /**
+     * print unified format difference with gived unified format hunks
+     */
     static void printUnifiedFormat (uniHunkVec& hunks) {
       for_each(hunks.begin(), hunks.end(), PrintUniHunk< sesElem >());
     }
@@ -457,7 +463,10 @@ namespace dtl {
       }
       return y;
     }
-
+    
+    /**
+     * record SES and LCS
+     */
     bool recordSequence (editPathCordinates& v) {
       sequence_const_iter x(A.begin());
       sequence_const_iter y(B.begin());
@@ -534,6 +543,9 @@ namespace dtl {
       return true;
     }
 
+    /**
+     * record odd sequence to ses
+     */
     void recordOddSequence (int idx, int length, sequence_const_iter it, const edit_t et) {
       while(idx < length){
         ses.addSequence(*it, idx, 0, et);
@@ -545,6 +557,9 @@ namespace dtl {
       ++editDistance;
     }
 
+    /**
+     * join ses vectors
+     */
     void joinSesVec (sesElemVec& s1, sesElemVec& s2) const {
       if (!s2.empty()) {
         for (sesElemVec_iter vit=s2.begin();vit!=s2.end();++vit) {

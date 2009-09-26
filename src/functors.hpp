@@ -40,6 +40,9 @@
 
 namespace dtl {
 
+  /**
+   * printer class template
+   */
   template <typename sesElem>
   class Print
   {
@@ -52,6 +55,9 @@ namespace dtl {
     ostream& out_;
   };
   
+  /**
+   * common element printer class template
+   */
   template <typename sesElem>
   class PrintCommon : public Print < sesElem >
   {
@@ -64,6 +70,9 @@ namespace dtl {
     }
   };
   
+  /**
+   * ses element printer class template
+   */
   template <typename sesElem>
   class PrintChange : public Print < sesElem >
   {
@@ -86,6 +95,9 @@ namespace dtl {
     }
   };
   
+  /**
+   * unfiend format element printer class template
+   */
   template <typename sesElem>
   class PrintUniHunk
   {
@@ -107,6 +119,9 @@ namespace dtl {
     ostream& out_;
   };
 
+  /**
+   * compare class template
+   */
   template <typename elem>
   class Compare
   {

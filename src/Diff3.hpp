@@ -109,6 +109,9 @@ namespace dtl {
       return true;
     }
 
+    /**
+     * compose two kind of difference
+     */
     void compose () {
       diff_ba.compose();
       diff_bc.compose();
