@@ -110,8 +110,8 @@ namespace dtl {
    */
   const unsigned int MAX_CORDINATES_SIZE = 2000000;
   
-  typedef vector<int> editPath;
-  typedef vector<P>   editPathCordinates;
+  typedef vector< int > editPath;
+  typedef vector< P >   editPathCordinates;
   
   /**
    * Structure of Unified Format Hunk
@@ -119,8 +119,8 @@ namespace dtl {
   template <typename sesElem>
   struct uniHunk {
     int a, b, c, d;              // @@ -a,b +c,d @@
-    vector<sesElem> common[2];   // anteroposterior commons on changes
-    vector<sesElem> change;      // changes
+    vector< sesElem > common[2];   // anteroposterior commons on changes
+    vector< sesElem > change;      // changes
     int inc_dec_count;           // count of increace and decrease
   };
   
