@@ -47,7 +47,7 @@ namespace dtl {
   class Sequence
   {
   public :
-    typedef vector<elem> elemVec;
+    typedef vector< elem > elemVec;
     Sequence () {}
     virtual ~Sequence () {}
     

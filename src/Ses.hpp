@@ -44,10 +44,10 @@ namespace dtl {
    * Shortest Edit Script template class
    */
   template <typename elem>
-  class Ses : public Sequence<elem>
+  class Ses : public Sequence< elem >
   {
   private :
-    typedef pair<elem, elemInfo> sesElem;
+    typedef pair< elem, elemInfo > sesElem;
     typedef vector< sesElem > sesElemVec;
   public :
     
@@ -74,7 +74,7 @@ namespace dtl {
       return !onlyCopy;
     }
 
-    using Sequence<elem>::addSequence;
+    using Sequence< elem >::addSequence;
     void addSequence (elem e, int beforeIdx, int afterIdx, const edit_t type) {
       elemInfo info;
       info.beforeIdx = beforeIdx;

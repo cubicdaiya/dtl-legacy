@@ -56,8 +56,8 @@ namespace dtl {
     sequence B;
     sequence C;
     sequence S;
-    Diff<elem, sequence> diff_ba;
-    Diff<elem, sequence> diff_bc;
+    Diff< elem, sequence > diff_ba;
+    Diff< elem, sequence > diff_bc;
     bool conflict;
     elem csepabegin;
     elem csepa1;
@@ -120,8 +120,8 @@ namespace dtl {
   private :
     sequence merge_ () {
       elemVec seq;
-      Ses<elem> ses_ba       = diff_ba.getSes();
-      Ses<elem> ses_bc       = diff_bc.getSes();
+      Ses< elem > ses_ba     = diff_ba.getSes();
+      Ses< elem > ses_bc     = diff_bc.getSes();
       sesElemVec ses_ba_v    = ses_ba.getSequence();
       sesElemVec ses_bc_v    = ses_bc.getSequence();
       sesElemVec_iter ba_it  = ses_ba_v.begin();

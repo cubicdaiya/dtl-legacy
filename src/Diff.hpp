@@ -47,7 +47,7 @@ namespace dtl {
   template <typename elem, typename sequence>
   class Diff
   {
-    typedef pair<elem, elemInfo> sesElem;
+    typedef pair< elem, elemInfo > sesElem;
     typedef vector< sesElem > sesElemVec;
     typedef vector< uniHunk< sesElem > > uniHunkVec;
     typedef list< elem > elemList;
@@ -66,8 +66,8 @@ namespace dtl {
     int offset;
     int *fp;
     int editDistance;
-    Lcs<elem> lcs;
-    Ses<elem> ses;
+    Lcs< elem > lcs;
+    Ses< elem > ses;
     editPath path;
     editPathCordinates pathCordinates;
     bool reverse;
@@ -81,7 +81,7 @@ namespace dtl {
       init();
     }
 
-    Diff (sequence& a, sequence& b, Compare<elem>& comp) : A(a), B(b), cmp(comp) {
+    Diff (sequence& a, sequence& b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
       init();
     }
 
@@ -91,7 +91,7 @@ namespace dtl {
       return editDistance;
     }
 
-    Lcs<elem> getLcs () const {
+    Lcs< elem > getLcs () const {
       return lcs;
     }
 
@@ -99,7 +99,7 @@ namespace dtl {
       return lcs.getSequence();
     }
 
-    Ses<elem> getSes () const {
+    Ses< elem > getSes () const {
       return ses;
     }
 
@@ -280,7 +280,7 @@ namespace dtl {
     /**
      * print difference with gived SES
      */
-    static void printSES (Ses<elem>& s) {
+    static void printSES (Ses< elem >& s) {
       sesElemVec ses_v = s.getSequence();
       for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
     }

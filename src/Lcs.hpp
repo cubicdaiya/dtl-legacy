@@ -44,10 +44,10 @@ namespace dtl {
    * Longest Common Subsequence template class
    */
   template <typename elem>
-  class Lcs : public Sequence<elem>
+  class Lcs : public Sequence< elem >
   {
   private :
-    typedef vector< idxLcs<elem> > lcsSequence;
+    typedef vector< idxLcs< elem > > lcsSequence;
     lcsSequence lcsSeq;
   public :
     Lcs ()  {}
