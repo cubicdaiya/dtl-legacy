@@ -1,6 +1,8 @@
 
 2009-10-02 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
+	* add function getLcsVec
+
 	* divide header files
 
 	* 1.03 released

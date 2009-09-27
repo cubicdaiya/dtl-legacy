@@ -51,6 +51,7 @@ namespace dtl {
     typedef vector< sesElem > sesElemVec;
     typedef vector< uniHunk< sesElem > > uniHunkVec;
     typedef list< elem > elemList;
+    typedef vector< elem > elemVec;
     typedef typename uniHunkVec::iterator uniHunkVec_iter;
     typedef typename sesElemVec::iterator sesElemVec_iter;
     typedef typename elemList::iterator elemList_iter;
@@ -92,6 +93,10 @@ namespace dtl {
 
     Lcs<elem> getLcs () const {
       return lcs;
+    }
+
+    elemVec getLcsVec () const {
+      return lcs.getSequence();
     }
 
     Ses<elem> getSes () const {

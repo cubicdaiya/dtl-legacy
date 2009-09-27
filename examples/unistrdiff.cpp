@@ -29,8 +29,7 @@ int main(int argc, char *argv[]){
   cout << "editDistance:" << d.getEditDistance() << endl;
 
   // Longest Common Subsequence
-  Lcs<elem> lcs = d.getLcs();
-  vector<elem> lcs_v = lcs.getSequence();
+  vector<elem> lcs_v = d.getLcsVec();
   sequence lcs_s(lcs_v.begin(), lcs_v.end());
   cout << "LCS:" << lcs_s << endl;
 
