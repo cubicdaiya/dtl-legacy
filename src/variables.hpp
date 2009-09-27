@@ -76,12 +76,21 @@ namespace dtl {
   const string SES_MARK_ADD    = "+";
 
   /**
+   * 
+   */
+  typedef struct sesmark {
+    string del;
+    string common;
+    string add;
+  } sesMark;
+
+  /**
    * info for Unified Format
    */
   typedef struct eleminfo {
     int      beforeIdx;           // index of prev sequence
     int      afterIdx;            // index of after sequence
-    edit_t type;                  // type of edit(Add, Delete, Common)
+    edit_t   type;                // type of edit(Add, Delete, Common)
   } elemInfo;
 
   #define DTL_SEPARATE_SIZE (3)
