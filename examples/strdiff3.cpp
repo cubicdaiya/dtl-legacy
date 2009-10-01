@@ -1,11 +1,13 @@
 
-#include "../dtl.hpp"
+#include "../src/dtl.hpp"
 #include "common.hpp"
 #include <iostream>
 #include <vector>
 #include <string>
 
 using namespace std;
+
+using dtl::Diff3;
 
 int main(int argc, char *argv[]){
 
@@ -20,7 +22,7 @@ int main(int argc, char *argv[]){
   sequence B(argv[2]);
   sequence C(argv[3]);
 
-  dtl::Diff3<elem, sequence> diff3(A, B, C);
+  Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   //diff3.setConflictSeparators('<', '|', '=', '>');
   if (!diff3.merge()) {

@@ -1,5 +1,5 @@
 /**
- dtl-1.02 -- Diff Template Library
+ dtl-1.03 -- Diff Template Library
  
  In short, Diff Template Library is distributed under so called "BSD license",
  
@@ -33,300 +33,25 @@
  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef DTL_H
-#define DTL_H
+/* If you use this library, you must include dtl.hpp only. */
 
-#include <vector>
-#include <list>
-#include <string>
-#include <algorithm>
-#include <iostream>
+#ifndef DTL_DIFF_H
+#define DTL_DIFF_H
 
 namespace dtl {
-  
-  using std::vector;
-  using std::string;
-  using std::pair;
-  using std::ostream;
-  using std::list;
-  using std::for_each;
-  using std::distance;
-  using std::fill;
-  using std::cout;
-  using std::endl;
-  using std::rotate;
-  using std::swap;
-  using std::max;
 
   /**
-   * type of edit for SES
-   */
-  typedef int edit_t;
-  const   edit_t SES_DELETE = -1;
-  const   edit_t SES_COMMON = 0;
-  const   edit_t SES_ADD    = 1;
-
-  /**
-   * mark of SES
-   */
-  const string SES_MARK_DELETE = "-";
-  const string SES_MARK_COMMON = " ";
-  const string SES_MARK_ADD    = "+";
-
-  /**
-   * info for Unified Format
-   */
-  typedef struct eleminfo {
-    int      beforeIdx;
-    int      afterIdx;
-    edit_t type;
-  } elemInfo;
-
-  #define DTL_SEPARATE_SIZE (3)
-  #define DTL_CONTEXT_SIZE  (3)
-
-  /**
-   * cordinate for registering route
-   */
-  typedef struct Point {
-    int x;
-    int y;
-    int k;
-  } P;
-
-  /**
-   * limit of cordinate size
-   */
-  const unsigned int MAX_CORDINATES_SIZE = 2000000;
-  
-  typedef vector<int> editPath;
-  typedef vector<P>   editPathCordinates;
-  
-  /**
-   * Structure of Unified Format Hunk
-   */
-  template <typename sesElem>
-  struct uniHunk {
-    int a, b, c, d;              // @@ -a,b +c,d @@
-    vector<sesElem> common[2];   // anteroposterior commons on changes
-    vector<sesElem> change;      // changes
-    int inc_dec_count;           // count of increace and decrease
-  };
-  
-  /**
-   * lcs with index
-   */
-  template <typename elem>
-  struct idxLcs {
-    elem e;
-    int a_idx, b_idx;
-  };
-  
-  /**
-   * Functors
-   */
-  template <typename sesElem>
-  class Print
-  {
-  public :
-    Print ()             : out_(cout) {}
-    Print (ostream& out) : out_(out)  {}
-    virtual ~Print () {}
-    virtual void operator() (const sesElem& se) const = 0;
-  protected :
-    ostream& out_;
-  };
-  
-  template <typename sesElem>
-  class PrintCommon : public Print < sesElem >
-  {
-  public :
-    PrintCommon ()             : Print < sesElem > ()    {}
-    PrintCommon (ostream& out) : Print < sesElem > (out) {}
-    ~PrintCommon () {}
-    void operator() (const sesElem& se) const {
-      this->out_ << SES_MARK_COMMON << se.first << endl;    
-    }
-  };
-  
-  template <typename sesElem>
-  class PrintChange : public Print < sesElem >
-  {
-  public :
-    PrintChange ()             : Print < sesElem > ()    {}
-    PrintChange (ostream& out) : Print < sesElem > (out) {}
-    ~PrintChange () {}
-    void operator() (const sesElem& se) const {
-      switch (se.second.type) {
-      case SES_ADD:
-        this->out_ << SES_MARK_ADD    << se.first << endl;
-        break;
-      case SES_DELETE:
-        this->out_ << SES_MARK_DELETE << se.first << endl;
-        break;
-      case SES_COMMON:
-        this->out_ << SES_MARK_COMMON << se.first << endl;
-        break;
-      }
-    }
-  };
-  
-  template <typename sesElem>
-  class PrintUniHunk
-  {
-  public :
-    PrintUniHunk ()             : out_(cout) {}
-    PrintUniHunk (ostream& out) : out_(out)  {}
-    ~PrintUniHunk () {}
-    void operator() (const uniHunk< sesElem >& hunk) const {
-      out_ << "@@"
-           << " -"  << hunk.a << "," << hunk.b
-           << " +"  << hunk.c << "," << hunk.d
-           << " @@" << endl;
-      
-      for_each(hunk.common[0].begin(), hunk.common[0].end(), PrintCommon< sesElem >());
-      for_each(hunk.change.begin(),    hunk.change.end(),    PrintChange< sesElem >());
-      for_each(hunk.common[1].begin(), hunk.common[1].end(), PrintCommon< sesElem >());
-    }
-  private :
-    ostream& out_;
-  };
-
-  template <typename elem>
-  class Compare
-  {
-  public :
-    Compare () {}
-    virtual ~Compare () {}
-    virtual bool impl (const elem& e1, const elem& e2) const {
-      return e1 == e2;
-    }
-  };
-  
-  /**
-   * sequence template class
-   */
-  template <typename elem>
-  class Sequence
-  {
-  public :
-    typedef vector<elem> elemVec;
-    Sequence () {}
-    virtual ~Sequence () {}
-    
-    elemVec getSequence () const {
-      return sequence;
-    }
-    void addSequence (elem e) {
-      sequence.push_back(e);
-    }
-  protected :
-    elemVec sequence;
-  };
-  
-  /**
-   * Longest Common Subsequence template calss
-   */
-  template <typename elem>
-  class Lcs : public Sequence<elem>
-  {
-  private :
-    typedef vector< idxLcs<elem> > lcsSequence;
-    lcsSequence lcsSeq;
-  public :
-    Lcs ()  {}
-    ~Lcs () {}
-    void addLcsSequence (elem e, int a_idx, int b_idx) {
-      idxLcs<elem> ie;
-      ie.e = e;
-      ie.a_idx = a_idx;
-      ie.b_idx = b_idx;
-      lcsSeq.push_back(ie);
-    }
-    lcsSequence getLcsSequence () const {
-      return lcsSeq;
-    }
-  };
-
-  /**
-   * Shortest Edit Script template calss
-   */
-  template <typename elem>
-  class Ses : public Sequence<elem>
-  {
-  private :
-    typedef pair<elem, elemInfo> sesElem;
-    typedef vector< sesElem > sesElemVec;
-  public :
-    
-    Ses () : onlyAdd(true), onlyDelete(true), onlyCopy(true) { }
-    ~Ses () {}
-    
-    bool isOnlyAdd () const {
-      return onlyAdd;
-    }
-    
-    bool isOnlyDelete () const {
-      return onlyDelete;
-    }
-    
-    bool isOnlyCopy () const {
-      return onlyCopy;
-    }
-    
-    bool isOnlyOneOperation () const {
-      return isOnlyAdd() || isOnlyAdd() || isOnlyCopy();
-    }
-    
-    bool isChange () const {
-      return !onlyCopy;
-    }
-
-    using Sequence<elem>::addSequence;
-    void addSequence (elem e, int beforeIdx, int afterIdx, const edit_t type) {
-      elemInfo info;
-      info.beforeIdx = beforeIdx;
-      info.afterIdx  = afterIdx;
-      info.type      = type;
-      sesElem pe(e, info);
-      sequence.push_back(pe);
-      switch (type) {
-      case SES_DELETE:
-        onlyCopy   = false;
-        onlyAdd    = false;
-        break;
-      case SES_COMMON:
-        onlyAdd    = false;
-        onlyDelete = false;
-        break;
-      case SES_ADD:
-        onlyDelete = false;
-        onlyCopy   = false;
-        break;
-      }
-    }
-    
-    sesElemVec getSequence () const {
-      return sequence;
-    }
-  private :
-    sesElemVec sequence;
-    bool onlyAdd;
-    bool onlyDelete;
-    bool onlyCopy;
-  };
-
-  /**
-   * diff template class
+   * diff class template
    * sequence must support random_access_iterator.
    */
   template <typename elem, typename sequence>
   class Diff
   {
-    typedef pair<elem, elemInfo> sesElem;
+    typedef pair< elem, elemInfo > sesElem;
     typedef vector< sesElem > sesElemVec;
     typedef vector< uniHunk< sesElem > > uniHunkVec;
     typedef list< elem > elemList;
+    typedef vector< elem > elemVec;
     typedef typename uniHunkVec::iterator uniHunkVec_iter;
     typedef typename sesElemVec::iterator sesElemVec_iter;
     typedef typename elemList::iterator elemList_iter;
@@ -341,8 +66,8 @@ namespace dtl {
     int offset;
     int *fp;
     int editDistance;
-    Lcs<elem> lcs;
-    Ses<elem> ses;
+    Lcs< elem > lcs;
+    Ses< elem > ses;
     editPath path;
     editPathCordinates pathCordinates;
     bool reverse;
@@ -356,7 +81,7 @@ namespace dtl {
       init();
     }
 
-    Diff (sequence& a, sequence& b, Compare<elem>& comp) : A(a), B(b), cmp(comp) {
+    Diff (sequence& a, sequence& b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
       init();
     }
 
@@ -366,11 +91,15 @@ namespace dtl {
       return editDistance;
     }
 
-    Lcs<elem> getLcs () const {
+    Lcs< elem > getLcs () const {
       return lcs;
     }
 
-    Ses<elem> getSes () const {
+    elemVec getLcsVec () const {
+      return lcs.getSequence();
+    }
+
+    Ses< elem > getSes () const {
       return ses;
     }
 
@@ -548,7 +277,10 @@ namespace dtl {
       for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
     }
 
-    static void printSES (Ses<elem>& s) {
+    /**
+     * print difference with gived SES
+     */
+    static void printSES (Ses< elem >& s) {
       sesElemVec ses_v = s.getSequence();
       for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
     }
@@ -560,6 +292,9 @@ namespace dtl {
       for_each(uniHunks.begin(), uniHunks.end(), PrintUniHunk< sesElem >());
     }
     
+    /**
+     * print unified format difference with gived unified format hunks
+     */
     static void printUnifiedFormat (uniHunkVec& hunks) {
       for_each(hunks.begin(), hunks.end(), PrintUniHunk< sesElem >());
     }
@@ -733,7 +468,10 @@ namespace dtl {
       }
       return y;
     }
-
+    
+    /**
+     * record SES and LCS
+     */
     bool recordSequence (editPathCordinates& v) {
       sequence_const_iter x(A.begin());
       sequence_const_iter y(B.begin());
@@ -810,6 +548,9 @@ namespace dtl {
       return true;
     }
 
+    /**
+     * record odd sequence to ses
+     */
     void recordOddSequence (int idx, int length, sequence_const_iter it, const edit_t et) {
       while(idx < length){
         ses.addSequence(*it, idx, 0, et);
@@ -821,6 +562,9 @@ namespace dtl {
       ++editDistance;
     }
 
+    /**
+     * join ses vectors
+     */
     void joinSesVec (sesElemVec& s1, sesElemVec& s2) const {
       if (!s2.empty()) {
         for (sesElemVec_iter vit=s2.begin();vit!=s2.end();++vit) {
@@ -833,187 +577,6 @@ namespace dtl {
       return reverse;
     }
   };
-
-  /**
-   * diff3 template class
-   * sequence must support random_access_iterator.
-   */
-  template <typename elem, typename sequence>
-  class Diff3
-  {
-    typedef pair< elem, elemInfo > sesElem;
-    typedef vector< sesElem > sesElemVec;
-    typedef vector< elem > elemVec;
-    typedef typename sesElemVec::iterator sesElemVec_iter;
-  private:
-    sequence A;
-    sequence B;
-    sequence C;
-    sequence S;
-    Diff<elem, sequence> diff_ba;
-    Diff<elem, sequence> diff_bc;
-    bool conflict;
-    elem csepabegin;
-    elem csepa1;
-    elem csepa2;
-    elem csepaend;
-  public :
-    Diff3 (sequence& a, sequence& b, sequence& c) : A(a), B(b), C(c), 
-                                                    diff_ba(b, a), diff_bc(b, c), 
-                                                    conflict(false) {} 
-
-    ~Diff3 () {}
-    
-    bool isConflict () const {
-      return conflict;
-    }
-    
-    void setConflictSeparators (elem begin, elem sepa1, elem sepa2, elem end) {
-      csepabegin = begin;
-      csepa1     = sepa1;
-      csepa2     = sepa2;
-      csepaend   = end;
-    }
-
-    sequence getMergedSequence () const {
-      return S;
-    }
-
-    // merge changes B and C to A
-    bool merge () {
-      if (diff_ba.getEditDistance() == 0) {   // A == B
-        if (diff_bc.getEditDistance() == 0) { // A == B == C
-          S = B;
-          return true;
-        }
-        S = C;
-        return true;
-      } else {                                // A != B
-        if (diff_bc.getEditDistance() == 0) { // A != B == C
-          S = A;                              
-          return true;
-        } else {                              // A != B != C
-          S = merge_();
-          if (isConflict()) {                 // conflict occured
-            specifyConfliction();
-            return false;
-          }
-        }
-      }
-      return true;
-    }
-
-    void compose () {
-      diff_ba.compose();
-      diff_bc.compose();
-    }
-    
-  private :
-    sequence merge_ () {
-      elemVec seq;
-      Ses<elem> ses_ba       = diff_ba.getSes();
-      Ses<elem> ses_bc       = diff_bc.getSes();
-      sesElemVec ses_ba_v    = ses_ba.getSequence();
-      sesElemVec ses_bc_v    = ses_bc.getSequence();
-      sesElemVec_iter ba_it  = ses_ba_v.begin();
-      sesElemVec_iter bc_it  = ses_bc_v.begin();
-      sesElemVec_iter ba_end = ses_ba_v.end();
-      sesElemVec_iter bc_end = ses_bc_v.end();
-      bool is_ba_end         = false;
-      bool is_bc_end         = false;
-      while (ba_it != ba_end || bc_it != ba_end) {
-        setEndFlag(ba_end, ba_it, is_ba_end);
-        setEndFlag(bc_end, bc_it, is_bc_end);
-        if (is_ba_end || is_bc_end) break;
-        while (true) {
-          if (   ba_it != ba_end
-                 && bc_it != bc_end
-                 && ba_it->first == bc_it->first 
-                 && ba_it->second.type == SES_COMMON 
-                 && bc_it->second.type == SES_COMMON) {
-            // do nothing
-          } else {
-            break;
-          }
-          if      (ba_it != ba_end) seq.push_back(ba_it->first);
-          else if (bc_it != bc_end) seq.push_back(bc_it->first);
-          forwardUntilEnd(ba_end, ba_it);
-          forwardUntilEnd(bc_end, bc_it);
-        }
-        setEndFlag(ba_end, ba_it, is_ba_end);
-        setEndFlag(bc_end, bc_it, is_bc_end);
-        if (is_ba_end || is_bc_end) break;
-        if (ba_it->second.type == SES_COMMON && bc_it->second.type == SES_DELETE) {
-          forwardUntilEnd(ba_end, ba_it);
-          forwardUntilEnd(bc_end, bc_it);
-        } else if (ba_it->second.type == SES_COMMON && bc_it->second.type == SES_ADD) {
-          seq.push_back(bc_it->first);
-          forwardUntilEnd(bc_end, bc_it);
-        } else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_COMMON) {
-          forwardUntilEnd(ba_end, ba_it);
-          forwardUntilEnd(bc_end, bc_it);
-        } else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_DELETE) {
-          if (ba_it->first == bc_it->first) {
-            forwardUntilEnd(ba_end, ba_it);
-            forwardUntilEnd(bc_end, bc_it);
-          } else {
-            // conflict
-            conflict = true;
-            return B;
-          }
-        } else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_ADD) {
-          // conflict
-          conflict = true;
-          return B;
-        } else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_COMMON) {
-          seq.push_back(ba_it->first);
-          forwardUntilEnd(ba_end, ba_it);
-        } else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_DELETE) {
-          // conflict
-          conflict = true;
-          return B;
-        } else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_ADD) {
-          if (ba_it->first == bc_it->first) {
-            seq.push_back(ba_it->first);
-            forwardUntilEnd(ba_end, ba_it);
-            forwardUntilEnd(bc_end, bc_it);
-          } else {
-            // conflict
-            conflict = true;
-            return B;
-          }
-        }
-      }
-
-      if (is_ba_end) {
-        addDecentSequence(bc_end, bc_it, seq);
-      } else if (is_bc_end) {
-        addDecentSequence(ba_end, ba_it, seq);
-      }
-
-      sequence mergedSeq(seq.begin(), seq.end());
-      return mergedSeq;
-    }
-    
-    void specifyConfliction () {
-      // not implement
-    }
-    
-    void forwardUntilEnd (const sesElemVec_iter& end, sesElemVec_iter& it) const {
-      if (it != end) ++it;
-    }
-
-    void setEndFlag (const sesElemVec_iter& end, sesElemVec_iter& it, bool& b) const {
-      if (it == end) b = true;
-    }
-
-    void addDecentSequence (const sesElemVec_iter& end, sesElemVec_iter& it, elemVec& seq) const {
-      while (it != end) {
-        if (it->second.type == SES_ADD) seq.push_back(it->first);
-        ++it;
-      }      
-    }
-  };
 }
 
-#endif // DTL_H
+#endif // DTL_DIFF_H

@@ -1,10 +1,12 @@
 
-#include "../dtl.hpp"
+#include "../src/dtl.hpp"
 #include <iostream>
 #include <vector>
 #include <string>
 
 using namespace std;
+
+using dtl::Diff3;
 
 typedef char elem;
 typedef string sequence;
@@ -14,7 +16,7 @@ static void detect_confliction_test (sequence A, sequence B, sequence C);
 static void specify_confliction_test(sequence A, sequence B, sequence C, sequence S);
 
 static void merge_test (sequence A, sequence B, sequence C, sequence S) {
-  dtl::Diff3<elem, sequence> diff3(A, B, C);
+  Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   diff3.setConflictSeparators('<', '|', '=', '>');
   if (!diff3.merge()) {
@@ -29,7 +31,7 @@ static void merge_test (sequence A, sequence B, sequence C, sequence S) {
 }
 
 static void detect_confliction_test (sequence A, sequence B, sequence C) {
-  dtl::Diff3<elem, sequence> diff3(A, B, C);
+  Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   diff3.setConflictSeparators('<', '|', '=', '>');
   if (!diff3.merge()) {
@@ -40,7 +42,7 @@ static void detect_confliction_test (sequence A, sequence B, sequence C) {
 }
 
 static void specify_confliction_test (sequence A, sequence B, sequence C, sequence S) {
-  dtl::Diff3<elem, sequence> diff3(A, B, C);
+  Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   diff3.setConflictSeparators('<', '|', '=', '>');
   diff3.merge();

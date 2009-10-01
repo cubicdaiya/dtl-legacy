@@ -1,9 +1,12 @@
 
 #include <iostream>
 #include <vector>
-#include "../dtl.hpp"
+#include "../src/dtl.hpp"
 
 using namespace std;
+
+using dtl::Diff;
+using dtl::Lcs;
 
 int main(int, char**){
   
@@ -18,17 +21,19 @@ int main(int, char**){
     cout << b[i] << " ";
   }
   cout << endl;
-  vector<int> A(&a[0], &a[10]);
-  vector<int> B(&b[0], &b[10]);
-  dtl::Diff<int, vector<int> > d(A, B);
+  
+  typedef int elem;
+  typedef vector<int> sequence;
+  sequence A(&a[0], &a[10]);
+  sequence B(&b[0], &b[10]);
+  Diff< elem, sequence > d(A, B);
   d.compose();
   // editDistance
   cout << "editDistance:" << d.getEditDistance() << endl;
   // Longest Common Subsequence
-  dtl::Lcs<int> lcs = d.getLcs();
-  vector<int> lcs_v = lcs.getSequence();
+  sequence lcs_v = d.getLcsVec();
   cout << "LCS: ";
-  for (vector<int>::iterator vit=lcs_v.begin();vit!=lcs_v.end();++vit) {
+  for (sequence::iterator vit=lcs_v.begin();vit!=lcs_v.end();++vit) {
     cout << *vit << " ";
   }
   cout << endl;

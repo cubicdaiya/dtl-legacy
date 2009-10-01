@@ -47,12 +47,13 @@ fpatch : $(FPATCH_OBJS)
 clean:
 	${RM} *.o *~ $(ALL_OBJS)
 
-intdiff.o: intdiff.cpp ../dtl.hpp
-intdiff3.o: intdiff3.cpp ../dtl.hpp
-patch.o: patch.cpp common.cpp ../dtl.hpp
-strdiff.o: strdiff.cpp common.cpp ../dtl.hpp
-strdiff3.o: strdiff3.cpp common.cpp ../dtl.hpp
-strdiff3_test.o: strdiff3_test.cpp ../dtl.hpp
-unidiff.o: unidiff.cpp common.cpp ../dtl.hpp
-unistrdiff.o: unistrdiff.cpp common.cpp ../dtl.hpp
-fpatch.o: fpatch.cpp common.cpp ../dtl.hpp
+common.o: common.cpp common.hpp
+fpatch.o: fpatch.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+intdiff.o: intdiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp
+intdiff3.o: intdiff3.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+patch.o: patch.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+strdiff.o: strdiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+strdiff3.o: strdiff3.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+strdiff3_test.o: strdiff3_test.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp
+unidiff.o: unidiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+unistrdiff.o: unistrdiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp

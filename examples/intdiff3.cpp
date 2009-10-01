@@ -1,11 +1,13 @@
 
-#include "../dtl.hpp"
+#include "../src/dtl.hpp"
 #include "common.hpp"
 #include <iostream>
 #include <vector>
 #include <cassert>
 
 using namespace std;
+
+using dtl::Diff3;
 
 int main(int, char**) {
 
@@ -30,14 +32,13 @@ int main(int, char**) {
   }
    cout << endl;
   
-  
   typedef int elem;
   typedef vector<int> sequence;
   sequence A(&a[0], &a[10]);
   sequence B(&b[0], &b[10]);
   sequence C(&c[0], &c[10]);
   sequence Answer(&answer[0], &answer[10]);
-  dtl::Diff3<elem, sequence> diff3(A, B, C);
+  Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   if (!diff3.merge()) {
     fprintf(stderr, "conflict.\n");
@@ -45,9 +46,8 @@ int main(int, char**) {
     return -1;
   }
   sequence s = diff3.getMergedSequence();
-  sequence::iterator it;
   cout << "s:";
-  for (it=s.begin();it!=s.end();++it) {
+  for (sequence::iterator it=s.begin();it!=s.end();++it) {
     cout << *it << " ";
   }
    cout << endl;

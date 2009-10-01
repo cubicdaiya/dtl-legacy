@@ -1,11 +1,13 @@
 
-#include "../dtl.hpp"
+#include "../src/dtl.hpp"
 #include "common.hpp"
 #include <iostream>
 #include <vector>
 #include <cassert>
 
 using namespace std;
+
+using dtl::Diff;
 
 int main(int argc, char *argv[]) {
 
@@ -19,7 +21,7 @@ int main(int argc, char *argv[]) {
   sequence A(argv[1]);
   sequence B(argv[2]);
   
-  dtl::Diff<elem, sequence> d(A, B);
+  Diff<elem, sequence> d(A, B);
   d.compose();
 
   sequence s1(A);
