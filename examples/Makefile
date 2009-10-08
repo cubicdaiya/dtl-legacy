@@ -15,6 +15,7 @@ ALL_OBJS          = strdiff strdiff3 strdiff3_test unidiff unistrdiff intdiff in
 
 .cpp.o:
 	$(CPP) -c -O2 -Wall $<
+
 all : $(ALL_OBJS)
 
 strdiff : $(STRDIFF_OBJS)
