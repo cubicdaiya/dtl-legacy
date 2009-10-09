@@ -6,7 +6,6 @@
 using namespace std;
 
 using dtl::Diff;
-using dtl::Lcs;
 
 int main(int, char**){
   
