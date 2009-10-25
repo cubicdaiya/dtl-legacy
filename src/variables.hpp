@@ -59,6 +59,11 @@ namespace dtl {
   using std::rotate;
   using std::swap;
   using std::max;
+  
+  /**
+   * typedef
+   */
+  typedef unsigned int uint;
 
   /**
    * type of edit for SES
@@ -93,8 +98,8 @@ namespace dtl {
     edit_t   type;                // type of edit(Add, Delete, Common)
   } elemInfo;
 
-  #define DTL_SEPARATE_SIZE (3)
-  #define DTL_CONTEXT_SIZE  (3)
+  const uint DTL_SEPARATE_SIZE = 3;
+  const uint DTL_CONTEXT_SIZE  = 3;
 
   /**
    * cordinate for registering route
