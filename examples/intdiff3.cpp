@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
+#include <cstdio>
 
 using namespace std;
 
