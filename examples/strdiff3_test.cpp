@@ -3,7 +3,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <cstdio>
 
 using namespace std;
 
@@ -21,7 +20,7 @@ static void merge_test (sequence A, sequence B, sequence C, sequence S) {
   diff3.compose();
   diff3.setConflictSeparators('<', '|', '=', '>');
   if (!diff3.merge()) {
-    fprintf(stderr, "conflict.\n");
+    cerr << "conflict." << endl;
     return;
   }
   if (S == diff3.getMergedSequence()) {
