@@ -81,15 +81,6 @@ namespace dtl {
   const string SES_MARK_ADD    = "+";
 
   /**
-   * 
-   */
-  typedef struct sesmark {
-    string del;
-    string common;
-    string add;
-  } sesMark;
-
-  /**
    * info for Unified Format
    */
   typedef struct eleminfo {
