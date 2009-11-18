@@ -7,11 +7,13 @@ STRDIFF3TEST_OBJS = strdiff3_test.o
 UNIDIFF_OBJS      = unidiff.o common.o
 UNISTRDIFF_OBJS   = unistrdiff.o common.o
 INTDIFF_OBJS      = intdiff.o
+UINTDIFF_OBJS     = uintdiff.o
 INTDIFF3_OBJS     = intdiff3.o
 PATCH_OBJS        = patch.o common.o
 FPATCH_OBJS       = fpatch.o common.o
-ALL_OBJS          = strdiff strdiff3 strdiff3_test unidiff unistrdiff intdiff intdiff3 patch fpatch
+ALL_OBJS          = strdiff strdiff3 strdiff3_test unidiff unistrdiff intdiff uintdiff intdiff3 patch fpatch
 
+DEPEND_FILE       = Makefile.depend
 
 .cpp.o:
 	$(CPP) -c -O2 -Wall $<
@@ -36,6 +38,9 @@ unistrdiff : $(UNISTRDIFF_OBJS)
 intdiff : $(INTDIFF_OBJS)
 	$(CPP) -O2 -o $@ $(INTDIFF_OBJS)
 
+uintdiff : $(UINTDIFF_OBJS)
+	$(CPP) -O2 -o $@ $(UINTDIFF_OBJS)
+
 intdiff3 : $(INTDIFF3_OBJS)
 	$(CPP) -O2 -o $@ $(INTDIFF3_OBJS)
 
@@ -48,13 +53,8 @@ fpatch : $(FPATCH_OBJS)
 clean:
 	${RM} *.o *~ $(ALL_OBJS)
 
-common.o: common.cpp common.hpp
-fpatch.o: fpatch.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
-intdiff.o: intdiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp
-intdiff3.o: intdiff3.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
-patch.o: patch.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
-strdiff.o: strdiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
-strdiff3.o: strdiff3.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
-strdiff3_test.o: strdiff3_test.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp
-unidiff.o: unidiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
-unistrdiff.o: unistrdiff.cpp ../src/dtl.hpp ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp common.hpp
+depend:
+	@echo "generating dependency file"
+	@$(CPP) -MM *.cpp > $(DEPEND_FILE)
+
+include $(DEPEND_FILE)

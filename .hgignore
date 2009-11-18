@@ -4,6 +4,7 @@ unistrdiff
 strdiff
 strdiff3
 intdiff
+uintdiff
 intdiff3
 strdiff3_test
 patch
