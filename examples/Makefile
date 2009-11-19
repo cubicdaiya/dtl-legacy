@@ -1,6 +1,8 @@
 
 
-CPP = g++
+CPP               = g++
+CPPFLAGS          = -c -O2 -Wall
+OBJS_FLAGS        = -O2 -o
 STRDIFF_OBJS      = strdiff.o common.o
 STRDIFF3_OBJS     = strdiff3.o common.o
 STRDIFF3TEST_OBJS = strdiff3_test.o
@@ -16,39 +18,39 @@ ALL_OBJS          = strdiff strdiff3 strdiff3_test unidiff unistrdiff intdiff ui
 DEPEND_FILE       = Makefile.depend
 
 .cpp.o:
-	$(CPP) -c -O2 -Wall $<
+	$(CPP) $(CPPFLAGS) $<
 
 all : $(ALL_OBJS)
 
 strdiff : $(STRDIFF_OBJS)
-	$(CPP) -O2 -o $@ $(STRDIFF_OBJS)
+	$(CPP) $(OBJS_FLAGS) $@ $(STRDIFF_OBJS)
 
 strdiff3 : $(STRDIFF3_OBJS)
-	$(CPP) -O2 -o $@ $(STRDIFF3_OBJS)
+	$(CPP) $(OBJS_FLAGS) $@ $(STRDIFF3_OBJS)
 
 strdiff3_test : $(STRDIFF3TEST_OBJS)
-	$(CPP) -O2 -o $@ $(STRDIFF3TEST_OBJS)
+	$(CPP) $(OBJS_FLAGS) $@ $(STRDIFF3TEST_OBJS)
 
 unidiff : $(UNIDIFF_OBJS)
-	$(CPP) -O2 -o $@ $(UNIDIFF_OBJS)
+	$(CPP) $(OBJS_FLAGS) $@ $(UNIDIFF_OBJS)
 
 unistrdiff : $(UNISTRDIFF_OBJS)
-	$(CPP) -O2 -o $@ $(UNISTRDIFF_OBJS)
+	$(CPP) $(OBJS_FLAGS) $@ $(UNISTRDIFF_OBJS)
 
 intdiff : $(INTDIFF_OBJS)
-	$(CPP) -O2 -o $@ $(INTDIFF_OBJS)
+	$(CPP) $(OBJS_FLAGS) $@ $(INTDIFF_OBJS)
 
 uintdiff : $(UINTDIFF_OBJS)
-	$(CPP) -O2 -o $@ $(UINTDIFF_OBJS)
+	$(CPP) $(OBJS_FLAGS) $@ $(UINTDIFF_OBJS)
 
 intdiff3 : $(INTDIFF3_OBJS)
-	$(CPP) -O2 -o $@ $(INTDIFF3_OBJS)
+	$(CPP) $(OBJS_FLAGS) $@ $(INTDIFF3_OBJS)
 
 patch : $(PATCH_OBJS)
-	$(CPP) -O2 -o $@ $(PATCH_OBJS)
+	$(CPP) $(OBJS_FLAGS) $@ $(PATCH_OBJS)
 
 fpatch : $(FPATCH_OBJS)
-	$(CPP) -O2 -o $@ $(FPATCH_OBJS)
+	$(CPP) $(OBJS_FLAGS) $@ $(FPATCH_OBJS)
 
 clean:
 	${RM} *.o *~ $(ALL_OBJS)
