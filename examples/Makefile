@@ -1,4 +1,4 @@
-
+# Makefile for example programs
 
 CPP               = g++
 CPPFLAGS          = -c -O2 -Wall
