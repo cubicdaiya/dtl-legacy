@@ -306,19 +306,20 @@ namespace dtl {
       sesElemVec common[2];
       sesElemVec change;
       sesElemVec ses_v = ses.getSequence();
-      int l_cnt  = 1;
-      int length = distance(ses_v.begin(), ses_v.end());
-      uint middle = 0;
+      int l_cnt        = 1;
+      int length       = distance(ses_v.begin(), ses_v.end());
+      uint middle      = 0;
       bool isMiddle, isAfter;
-      isMiddle = isAfter = false;
       elem e;
       elemInfo einfo;
       int a, b, c, d;         // @@ -a,b +c,d @@
       int inc_dec_count = 0;
-      a = b = c = d = 0;
       uniHunk<sesElem> hunk;
       sesElemVec adds;
       sesElemVec deletes;
+
+      isMiddle = isAfter = false;
+      a = b = c = d = 0;
 
       for (sesElemVec_iter it=ses_v.begin();it!=ses_v.end();++it, ++l_cnt) {
         e = it->first;
