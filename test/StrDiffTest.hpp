@@ -1,6 +1,6 @@
 
-#ifndef STRDIFFTEST
-#define STRDIFFTEST
+#ifndef STRDIFF_TEST
+#define STRDIFF_TEST
 
 #include <gtest/gtest.h>
 #include <string>

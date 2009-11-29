@@ -1,6 +1,6 @@
 
-#ifndef PATCHTEST
-#define PATCHTEST
+#ifndef PATCH_TEST
+#define PATCH_TEST
 
 #include <gtest/gtest.h>
 #include <string>
