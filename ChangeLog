@@ -1,7 +1,9 @@
 
 2009-xx-xx Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
-	* added sample of diff(uintdiff)
+	* add test programs with googletest
+
+	* add sample of diff(uintdiff)
 
 	* 1.04 released
 
