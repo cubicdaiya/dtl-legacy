@@ -19,7 +19,7 @@ GRTAGS
 GSYMS
 GTAGS
 TAGS
-
+dtl_test
 syntax: regexp
 
 ^\#
