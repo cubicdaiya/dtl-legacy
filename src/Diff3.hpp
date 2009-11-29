@@ -64,9 +64,10 @@ namespace dtl {
     elem csepa2;
     elem csepaend;
   public :
-    Diff3 (sequence& a, sequence& b, sequence& c) : A(a), B(b), C(c), 
-                                                    diff_ba(b, a), diff_bc(b, c), 
-                                                    conflict(false) {} 
+    Diff3 () {}
+    Diff3 (sequence a, sequence b, sequence c) : A(a), B(b), C(c), 
+                                                 diff_ba(b, a), diff_bc(b, c), 
+                                                 conflict(false) {} 
 
     ~Diff3 () {}
     

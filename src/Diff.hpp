@@ -77,11 +77,13 @@ namespace dtl {
     uniHunkVec uniHunks;
     Compare<elem> cmp;
   public :
-    Diff (sequence& a, sequence& b) : A(a), B(b) {
+    Diff () {}
+
+    Diff (sequence a, sequence b) : A(a), B(b) {
       init();
     }
 
-    Diff (sequence& a, sequence& b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
+    Diff (sequence a, sequence b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
       init();
     }
 
