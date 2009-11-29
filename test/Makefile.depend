@@ -1,0 +1,4 @@
+dtl_test.o: dtl_test.cpp StrDiffTest.hpp ../src/dtl.hpp \
+ ../src/variables.hpp ../src/functors.hpp ../src/Sequence.hpp \
+ ../src/Lcs.hpp ../src/Ses.hpp ../src/Diff.hpp ../src/Diff3.hpp \
+ IntDiffTest.hpp StrDiff3Test.hpp PatchTest.hpp
