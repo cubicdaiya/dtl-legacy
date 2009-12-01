@@ -8,7 +8,16 @@
 #include <utility>
 #include "../src/dtl.hpp"
 
-using namespace std;
-using namespace dtl;
+using std::string;
+using std::vector;
+using std::pair;
+
+using dtl::Diff;
+using dtl::Diff3;
+using dtl::SES_COMMON;
+using dtl::SES_ADD;
+using dtl::SES_DELETE;
+using dtl::elemInfo;
+using dtl::uniHunk;
 
 #endif
