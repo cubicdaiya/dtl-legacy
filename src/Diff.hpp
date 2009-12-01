@@ -79,11 +79,11 @@ namespace dtl {
   public :
     Diff () {}
 
-    Diff (sequence a, sequence b) : A(a), B(b) {
+    Diff (sequence& a, sequence& b) : A(a), B(b) {
       init();
     }
 
-    Diff (sequence a, sequence b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
+    Diff (sequence& a, sequence& b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
       init();
     }
 
@@ -276,7 +276,7 @@ namespace dtl {
      */
     void printSES () const {
       sesElemVec ses_v = ses.getSequence();
-      for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
+      for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >());
     }
 
     /**
@@ -284,21 +284,21 @@ namespace dtl {
      */
     static void printSES (Ses< elem >& s) {
       sesElemVec ses_v = s.getSequence();
-      for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
+      for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >());
     }
 
     /**
      * print difference between A and B with the format such as Unified Format
      */
     void printUnifiedFormat () const {
-      for_each(uniHunks.begin(), uniHunks.end(), PrintUniHunk< sesElem >());
+      for_each(uniHunks.begin(), uniHunks.end(), UniHunkPrinter< sesElem >());
     }
     
     /**
      * print unified format difference with gived unified format hunks
      */
     static void printUnifiedFormat (uniHunkVec& hunks) {
-      for_each(hunks.begin(), hunks.end(), PrintUniHunk< sesElem >());
+      for_each(hunks.begin(), hunks.end(), UniHunkPrinter< sesElem >());
     }
 
     /**
