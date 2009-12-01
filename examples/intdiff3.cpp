@@ -41,7 +41,6 @@ int main(int, char**) {
   Diff3<elem, sequence> diff3(A, B, C);
   diff3.compose();
   if (!diff3.merge()) {
-    fprintf(stderr, "conflict.\n");
     cerr << "conflict." << endl;
     return -1;
   }

@@ -10,7 +10,6 @@
 using namespace std;
 
 using dtl::Diff;
-using dtl::Ses;
 
 int main(int argc, char *argv[]){
   
@@ -55,8 +54,6 @@ int main(int argc, char *argv[]){
   Diff<elem, sequence > d(ALines, BLines);
   d.compose();
 
-  Ses<elem> ses = d.getSes();
-  
   sequence s1 = ALines;
   sequence s2 = d.patch(s1);
 

@@ -2,8 +2,10 @@
 #ifndef DTL_EXAMPLE_COMMON_H
 #define DTL_EXAMPLE_COMMON_H
 
-#include <cstdio>
 #include <string>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 using namespace std;
 

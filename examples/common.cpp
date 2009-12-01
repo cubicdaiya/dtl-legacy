@@ -2,11 +2,10 @@
 #include "common.hpp"
 
 bool isFileExist (string& fs) {
-  FILE *fp;
-  if ((fp = fopen(fs.c_str(), "r")) == NULL) {
+  struct stat s;
+  if (stat(fs.c_str(), &s) == -1) {
     return false;
   }
-  fclose(fp);
   return true;
 }
 

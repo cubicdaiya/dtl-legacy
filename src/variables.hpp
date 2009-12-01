@@ -1,5 +1,5 @@
 /**
- dtl-1.03 -- Diff Template Library
+ dtl-1.04 -- Diff Template Library
  
  In short, Diff Template Library is distributed under so called "BSD license",
  
@@ -59,6 +59,11 @@ namespace dtl {
   using std::rotate;
   using std::swap;
   using std::max;
+  
+  /**
+   * typedef
+   */
+  typedef unsigned int uint;
 
   /**
    * type of edit for SES
@@ -76,15 +81,6 @@ namespace dtl {
   const string SES_MARK_ADD    = "+";
 
   /**
-   * 
-   */
-  typedef struct sesmark {
-    string del;
-    string common;
-    string add;
-  } sesMark;
-
-  /**
    * info for Unified Format
    */
   typedef struct eleminfo {
@@ -93,8 +89,8 @@ namespace dtl {
     edit_t   type;                // type of edit(Add, Delete, Common)
   } elemInfo;
 
-  #define DTL_SEPARATE_SIZE (3)
-  #define DTL_CONTEXT_SIZE  (3)
+  const uint DTL_SEPARATE_SIZE = 3;
+  const uint DTL_CONTEXT_SIZE  = 3;
 
   /**
    * cordinate for registering route

@@ -1,5 +1,5 @@
 /**
- dtl-1.03 -- Diff Template Library
+ dtl-1.04 -- Diff Template Library
  
  In short, Diff Template Library is distributed under so called "BSD license",
  
@@ -35,8 +35,8 @@
 
 /* If you use this library, you must include dtl.hpp only. */
 
-#ifndef DTL_FUNCTOR_H
-#define DTL_FUNCTOR_H
+#ifndef DTL_FUNCTORS_H
+#define DTL_FUNCTORS_H
 
 namespace dtl {
 
@@ -44,12 +44,12 @@ namespace dtl {
    * printer class template
    */
   template <typename sesElem>
-  class Print
+  class Printer
   {
   public :
-    Print ()             : out_(cout) {}
-    Print (ostream& out) : out_(out)  {}
-    virtual ~Print () {}
+    Printer ()             : out_(cout) {}
+    Printer (ostream& out) : out_(out)  {}
+    virtual ~Printer () {}
     virtual void operator() (const sesElem& se) const = 0;
   protected :
     ostream& out_;
@@ -59,12 +59,12 @@ namespace dtl {
    * common element printer class template
    */
   template <typename sesElem>
-  class PrintCommon : public Print < sesElem >
+  class CommonPrinter : public Printer < sesElem >
   {
   public :
-    PrintCommon  ()             : Print < sesElem > ()    {}
-    PrintCommon  (ostream& out) : Print < sesElem > (out) {}
-    ~PrintCommon () {}
+    CommonPrinter  ()             : Printer < sesElem > ()    {}
+    CommonPrinter  (ostream& out) : Printer < sesElem > (out) {}
+    ~CommonPrinter () {}
     void operator() (const sesElem& se) const {
       this->out_ << SES_MARK_COMMON << se.first << endl;    
     }
@@ -74,12 +74,12 @@ namespace dtl {
    * ses element printer class template
    */
   template <typename sesElem>
-  class PrintChange : public Print < sesElem >
+  class ChangePrinter : public Printer < sesElem >
   {
   public :
-    PrintChange  ()             : Print < sesElem > ()    {}
-    PrintChange  (ostream& out) : Print < sesElem > (out) {}
-    ~PrintChange () {}
+    ChangePrinter  ()             : Printer < sesElem > ()    {}
+    ChangePrinter  (ostream& out) : Printer < sesElem > (out) {}
+    ~ChangePrinter () {}
     void operator() (const sesElem& se) const {
       switch (se.second.type) {
       case SES_ADD:
@@ -99,21 +99,21 @@ namespace dtl {
    * unfiend format element printer class template
    */
   template <typename sesElem>
-  class PrintUniHunk
+  class UniHunkPrinter
   {
   public :
-    PrintUniHunk  ()             : out_(cout) {}
-    PrintUniHunk  (ostream& out) : out_(out)  {}
-    ~PrintUniHunk () {}
+    UniHunkPrinter  ()             : out_(cout) {}
+    UniHunkPrinter  (ostream& out) : out_(out)  {}
+    ~UniHunkPrinter () {}
     void operator() (const uniHunk< sesElem >& hunk) const {
       out_ << "@@"
            << " -"  << hunk.a << "," << hunk.b
            << " +"  << hunk.c << "," << hunk.d
            << " @@" << endl;
       
-      for_each(hunk.common[0].begin(), hunk.common[0].end(), PrintCommon< sesElem >());
-      for_each(hunk.change.begin(),    hunk.change.end(),    PrintChange< sesElem >());
-      for_each(hunk.common[1].begin(), hunk.common[1].end(), PrintCommon< sesElem >());
+      for_each(hunk.common[0].begin(), hunk.common[0].end(), CommonPrinter< sesElem >());
+      for_each(hunk.change.begin(),    hunk.change.end(),    ChangePrinter< sesElem >());
+      for_each(hunk.common[1].begin(), hunk.common[1].end(), CommonPrinter< sesElem >());
     }
   private :
     ostream& out_;
@@ -134,4 +134,4 @@ namespace dtl {
   };
 }
 
-#endif // DTL_FUNCTOR_H
+#endif // DTL_FUNCTORS_H

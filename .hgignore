@@ -4,6 +4,7 @@ unistrdiff
 strdiff
 strdiff3
 intdiff
+uintdiff
 intdiff3
 strdiff3_test
 patch
@@ -18,7 +19,7 @@ GRTAGS
 GSYMS
 GTAGS
 TAGS
-
+dtl_test
 syntax: regexp
 
 ^\#

@@ -1,5 +1,5 @@
 /**
- dtl-1.03 -- Diff Template Library
+ dtl-1.04 -- Diff Template Library
  
  In short, Diff Template Library is distributed under so called "BSD license",
  
@@ -64,6 +64,7 @@ namespace dtl {
     elem csepa2;
     elem csepaend;
   public :
+    Diff3 () {}
     Diff3 (sequence& a, sequence& b, sequence& c) : A(a), B(b), C(c), 
                                                     diff_ba(b, a), diff_bc(b, c), 
                                                     conflict(false) {} 

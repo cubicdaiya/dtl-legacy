@@ -1,5 +1,5 @@
 /**
- dtl-1.03 -- Diff Template Library
+ dtl-1.04 -- Diff Template Library
  
  In short, Diff Template Library is distributed under so called "BSD license",
  
@@ -77,6 +77,8 @@ namespace dtl {
     uniHunkVec uniHunks;
     Compare<elem> cmp;
   public :
+    Diff () {}
+
     Diff (sequence& a, sequence& b) : A(a), B(b) {
       init();
     }
@@ -274,7 +276,7 @@ namespace dtl {
      */
     void printSES () const {
       sesElemVec ses_v = ses.getSequence();
-      for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
+      for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >());
     }
 
     /**
@@ -282,21 +284,21 @@ namespace dtl {
      */
     static void printSES (Ses< elem >& s) {
       sesElemVec ses_v = s.getSequence();
-      for_each(ses_v.begin(), ses_v.end(), PrintChange< sesElem >());
+      for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >());
     }
 
     /**
      * print difference between A and B with the format such as Unified Format
      */
     void printUnifiedFormat () const {
-      for_each(uniHunks.begin(), uniHunks.end(), PrintUniHunk< sesElem >());
+      for_each(uniHunks.begin(), uniHunks.end(), UniHunkPrinter< sesElem >());
     }
     
     /**
      * print unified format difference with gived unified format hunks
      */
     static void printUnifiedFormat (uniHunkVec& hunks) {
-      for_each(hunks.begin(), hunks.end(), PrintUniHunk< sesElem >());
+      for_each(hunks.begin(), hunks.end(), UniHunkPrinter< sesElem >());
     }
 
     /**
@@ -306,19 +308,20 @@ namespace dtl {
       sesElemVec common[2];
       sesElemVec change;
       sesElemVec ses_v = ses.getSequence();
-      int l_cnt  = 1;
-      int length = distance(ses_v.begin(), ses_v.end());
-      int middle = 0;
+      int l_cnt        = 1;
+      int length       = distance(ses_v.begin(), ses_v.end());
+      uint middle      = 0;
       bool isMiddle, isAfter;
-      isMiddle = isAfter = false;
       elem e;
       elemInfo einfo;
       int a, b, c, d;         // @@ -a,b +c,d @@
       int inc_dec_count = 0;
-      a = b = c = d = 0;
       uniHunk<sesElem> hunk;
       sesElemVec adds;
       sesElemVec deletes;
+
+      isMiddle = isAfter = false;
+      a = b = c = d = 0;
 
       for (sesElemVec_iter it=ses_v.begin();it!=ses_v.end();++it, ++l_cnt) {
         e = it->first;
@@ -384,8 +387,8 @@ namespace dtl {
         // compose unified format hunk
         if (isAfter && !change.empty()) {
           sesElemVec_iter cit = it;
-          int cnt = 0;
-          for (int i=0;i<DTL_SEPARATE_SIZE;++i, ++cit) {
+          uint cnt = 0;
+          for (int i=0;i<(int)DTL_SEPARATE_SIZE;++i, ++cit) {
             if (cit->second.type == SES_COMMON) {
               ++cnt;
             }
@@ -400,7 +403,7 @@ namespace dtl {
             rotate(common[0].begin(), 
                    common[0].begin() + c0size - DTL_SEPARATE_SIZE, 
                    common[0].end());
-            for (int i=0;i<c0size-DTL_SEPARATE_SIZE;++i) {
+            for (int i=0;i<c0size-(int)DTL_SEPARATE_SIZE;++i) {
               common[0].pop_back();
             }
             a += c0size - DTL_SEPARATE_SIZE;

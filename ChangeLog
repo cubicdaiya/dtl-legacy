@@ -1,4 +1,12 @@
 
+2009-12-01 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* add test programs with googletest
+
+	* add sample of diff(uintdiff)
+
+	* 1.04 released
+
 2009-10-02 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* add function getLcsVec
