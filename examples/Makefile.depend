@@ -17,9 +17,6 @@ strdiff.o: strdiff.cpp ../src/dtl.hpp ../src/variables.hpp \
 strdiff3.o: strdiff3.cpp ../src/dtl.hpp ../src/variables.hpp \
  ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp \
  ../src/Diff.hpp ../src/Diff3.hpp common.hpp
-strdiff3_test.o: strdiff3_test.cpp ../src/dtl.hpp ../src/variables.hpp \
- ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp \
- ../src/Diff.hpp ../src/Diff3.hpp
 uintdiff.o: uintdiff.cpp ../src/dtl.hpp ../src/variables.hpp \
  ../src/functors.hpp ../src/Sequence.hpp ../src/Lcs.hpp ../src/Ses.hpp \
  ../src/Diff.hpp ../src/Diff3.hpp
