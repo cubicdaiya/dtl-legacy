@@ -2,14 +2,7 @@
 #ifndef INTDIFFTEST
 #define INTDIFFTEST
 
-#include <gtest/gtest.h>
-#include <string>
-#include <vector>
-#include <utility>
-#include "../src/dtl.hpp"
-
-using namespace std;
-using namespace dtl;
+#include "dtl_test_common.hpp"
 
 class IntDiffTest : public ::testing::Test
 {
@@ -68,5 +61,100 @@ protected :
   void TearDown () {}
   
 };
+
+/**
+ * IntDiffTest
+ * check list is following
+ * - editdistance
+ * - LCS
+ * - SES
+ */
+TEST_F (IntDiffTest, diff_test0) {
+  EXPECT_EQ(0, cases[0].diff.getEditDistance());
+
+  EXPECT_TRUE(cases[0].lcs_v.empty());
+
+  ASSERT_TRUE(cases[0].ses_seq.empty());
+}
+
+TEST_F (IntDiffTest, diff_test1) {
+  EXPECT_EQ(1,       cases[1].diff.getEditDistance());
+
+  EXPECT_TRUE(cases[1].lcs_v.empty());
+
+  ASSERT_EQ(1,       cases[1].ses_seq[0].first);
+  ASSERT_EQ(SES_ADD, cases[1].ses_seq[0].second.type);
+}
+
+TEST_F (IntDiffTest, diff_test2) {
+  EXPECT_EQ(1,          cases[2].diff.getEditDistance());
+
+  EXPECT_TRUE(cases[2].lcs_v.empty());
+
+  ASSERT_EQ(1,          cases[2].ses_seq[0].first);
+  ASSERT_EQ(SES_DELETE, cases[2].ses_seq[0].second.type);
+}
+
+TEST_F (IntDiffTest, diff_test3) {
+  EXPECT_EQ(8,          cases[3].diff.getEditDistance());
+
+  EXPECT_EQ(3,          cases[3].lcs_v[0]);
+  EXPECT_EQ(4,          cases[3].lcs_v[1]);
+  EXPECT_EQ(5,          cases[3].lcs_v[2]);
+  EXPECT_EQ(7,          cases[3].lcs_v[3]);
+  EXPECT_EQ(9,          cases[3].lcs_v[4]);
+
+  ASSERT_EQ(1,          cases[3].ses_seq[0].first);
+  ASSERT_EQ(2,          cases[3].ses_seq[1].first);
+  ASSERT_EQ(3,          cases[3].ses_seq[2].first);
+  ASSERT_EQ(5,          cases[3].ses_seq[3].first);
+  ASSERT_EQ(1,          cases[3].ses_seq[4].first);
+  ASSERT_EQ(4,          cases[3].ses_seq[5].first);
+  ASSERT_EQ(5,          cases[3].ses_seq[6].first);
+  ASSERT_EQ(6,          cases[3].ses_seq[7].first);
+  ASSERT_EQ(1,          cases[3].ses_seq[8].first);
+  ASSERT_EQ(7,          cases[3].ses_seq[9].first);
+  ASSERT_EQ(8,          cases[3].ses_seq[10].first);
+  ASSERT_EQ(9,          cases[3].ses_seq[11].first);
+  ASSERT_EQ(6,          cases[3].ses_seq[12].first);
+  ASSERT_EQ(10,         cases[3].ses_seq[13].first);
+  ASSERT_EQ(SES_DELETE, cases[3].ses_seq[0].second.type);
+  ASSERT_EQ(SES_DELETE, cases[3].ses_seq[1].second.type);
+  ASSERT_EQ(SES_COMMON, cases[3].ses_seq[2].second.type);
+  ASSERT_EQ(SES_ADD,    cases[3].ses_seq[3].second.type);
+  ASSERT_EQ(SES_ADD,    cases[3].ses_seq[4].second.type);
+  ASSERT_EQ(SES_COMMON, cases[3].ses_seq[5].second.type);
+  ASSERT_EQ(SES_COMMON, cases[3].ses_seq[6].second.type);
+  ASSERT_EQ(SES_DELETE, cases[3].ses_seq[7].second.type);
+  ASSERT_EQ(SES_ADD,    cases[3].ses_seq[8].second.type);
+  ASSERT_EQ(SES_COMMON, cases[3].ses_seq[9].second.type);
+  ASSERT_EQ(SES_DELETE, cases[3].ses_seq[10].second.type);
+  ASSERT_EQ(SES_COMMON, cases[3].ses_seq[11].second.type);
+  ASSERT_EQ(SES_ADD,    cases[3].ses_seq[12].second.type);
+  ASSERT_EQ(SES_COMMON, cases[3].ses_seq[13].second.type);
+}
+
+TEST_F (IntDiffTest, diff_test4) {
+  EXPECT_EQ(4,          cases[4].diff.getEditDistance());
+
+  EXPECT_EQ(3,          cases[4].lcs_v[0]);
+  EXPECT_EQ(4,          cases[4].lcs_v[1]);
+  EXPECT_EQ(5,          cases[4].lcs_v[2]);
+  
+  ASSERT_EQ(1,          cases[4].ses_seq[0].first);
+  ASSERT_EQ(2,          cases[4].ses_seq[1].first);
+  ASSERT_EQ(3,          cases[4].ses_seq[2].first);
+  ASSERT_EQ(5,          cases[4].ses_seq[3].first);
+  ASSERT_EQ(1,          cases[4].ses_seq[4].first);
+  ASSERT_EQ(4,          cases[4].ses_seq[5].first);
+  ASSERT_EQ(5,          cases[4].ses_seq[6].first);
+  ASSERT_EQ(SES_DELETE, cases[4].ses_seq[0].second.type);
+  ASSERT_EQ(SES_DELETE, cases[4].ses_seq[1].second.type);
+  ASSERT_EQ(SES_COMMON, cases[4].ses_seq[2].second.type);
+  ASSERT_EQ(SES_ADD,    cases[4].ses_seq[3].second.type);
+  ASSERT_EQ(SES_ADD,    cases[4].ses_seq[4].second.type);
+  ASSERT_EQ(SES_COMMON, cases[4].ses_seq[5].second.type);
+  ASSERT_EQ(SES_COMMON, cases[4].ses_seq[6].second.type);
+}
 
 #endif

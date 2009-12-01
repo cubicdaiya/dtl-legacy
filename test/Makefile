@@ -14,11 +14,11 @@ DEPENDENCY_FILE = Makefile.depend
 dtl_test : $(OBJS)
 	$(CPP) $(OBJS_FLAGS) $@ $(OBJS) $(LIBS)
 
-test :
+test : 
 	@./dtl_test
 
 clean :
-	${RM} *.o *~
+	${RM} *.o *~ dtl_test
 
 depend:
 	@echo "generating dependency file"
