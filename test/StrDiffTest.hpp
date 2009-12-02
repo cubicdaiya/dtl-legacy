@@ -77,6 +77,7 @@ protected :
  * - LCS
  * - SES
  * - Unified Format Difference
+ * - onOnlyEditDistance
  */
 
 TEST_F (StrDiffTest, diff_test0) {
