@@ -383,7 +383,6 @@ TEST_F (StrDiffTest, diff_test8) {
   ASSERT_EQ('b',               diff_cases[8].ses_seq[18].first);
   ASSERT_EQ('e',               diff_cases[8].ses_seq[19].first);
   ASSERT_EQ('d',               diff_cases[8].ses_seq[20].first);
-
   ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[0].second.type);
   ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[1].second.type);
   ASSERT_EQ(SES_ADD,           diff_cases[8].ses_seq[2].second.type);
@@ -435,7 +434,6 @@ TEST_F (StrDiffTest, diff_test8) {
   ASSERT_EQ('b',               diff_cases[8].hunk_v[1].change[2].first);
   ASSERT_EQ('e',               diff_cases[8].hunk_v[1].change[3].first);
   ASSERT_EQ('d',               diff_cases[8].hunk_v[1].change[4].first);
-
   ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[0].common[0][0].second.type);
   ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[0].common[0][1].second.type);
   ASSERT_EQ(SES_ADD,           diff_cases[8].hunk_v[0].change[0].second.type);
