@@ -45,14 +45,14 @@ protected :
   }
 
   void SetUp() {
-    diff_cases.push_back(createCase("abc",        "abd"));          // 0
-    diff_cases.push_back(createCase("acbdeacbed", "acebdabbabed")); // 1
-    diff_cases.push_back(createCase("abcdef",     "dacfea"));       // 2
-    diff_cases.push_back(createCase("abcbda",     "bdcaba"));       // 3
-    diff_cases.push_back(createCase("bokko",      "bokkko"));       // 4
-    diff_cases.push_back(createCase("",           ""));             // 5
-    diff_cases.push_back(createCase("a",          ""));             // 6
-    diff_cases.push_back(createCase("",           "b"));            // 7
+    diff_cases.push_back(createCase("abc",        "abd"));                              // 0
+    diff_cases.push_back(createCase("acbdeacbed", "acebdabbabed"));                     // 1
+    diff_cases.push_back(createCase("abcdef",     "dacfea"));                           // 2
+    diff_cases.push_back(createCase("abcbda",     "bdcaba"));                           // 3
+    diff_cases.push_back(createCase("bokko",      "bokkko"));                           // 4
+    diff_cases.push_back(createCase("",           ""));                                 // 5
+    diff_cases.push_back(createCase("a",          ""));                                 // 6
+    diff_cases.push_back(createCase("",           "b"));                                // 7
     
     only_editdis_cases.push_back(createCase("abc",        "abd",          true));       // 0
     only_editdis_cases.push_back(createCase("acbdeacbed", "acebdabbabed", true));       // 1
