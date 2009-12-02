@@ -62,12 +62,12 @@ protected :
     merge_cases.push_back(createCase("abcdfaa",       "abcdef",     "acdef",         "acdfaa"));           // 23
 
     // detect confliction test
-    detect_cases.push_back(createCase("adc",           "abc",        "aec",           ""));                 // 0
-    detect_cases.push_back(createCase("abqdcf",        "abcdef",     "abqqef",        ""));                 // 1
+    detect_cases.push_back(createCase("adc",           "abc",        "aec",           ""));                // 0
+    detect_cases.push_back(createCase("abqdcf",        "abcdef",     "abqqef",        ""));                // 1
     
     // specify confliction test
-    specify_cases.push_back(createCase("adc",           "abc",        "aec",          "a<d|b=e>c"));        // 0
-    specify_cases.push_back(createCase("abqdcf",        "abcdef",     "abqqef",       "ab<qd|cd=qq>ef"));   // 1
+    specify_cases.push_back(createCase("adc",          "abc",        "aec",           "a<d|b=e>c"));       // 0
+    specify_cases.push_back(createCase("abqdcf",       "abcdef",     "abqqef",        "ab<qd|cd=qq>ef"));  // 1
     
 
   }
