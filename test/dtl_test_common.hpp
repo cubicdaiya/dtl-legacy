@@ -20,4 +20,4 @@ using dtl::SES_DELETE;
 using dtl::elemInfo;
 using dtl::uniHunk;
 
-#endif
+#endif // DTL_TEST_COMMON
