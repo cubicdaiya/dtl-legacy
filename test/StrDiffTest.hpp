@@ -546,5 +546,4 @@ TEST_F (StrDiffTest, only_editdis_test8) {
   ASSERT_TRUE(only_editdis_cases[8].hunk_v.empty());
 }
 
-
-#endif
+#endif // STRDIFF_TEST

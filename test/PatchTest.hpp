@@ -89,4 +89,4 @@ TEST_F (PatchTest, patch_test7) {
   ASSERT_EQ(cases[7].B, cases[7].diff.uniPatch(cases[7].A));
 }
 
-#endif
+#endif // PATCH_TEST

@@ -221,4 +221,4 @@ TEST_F (StrDiff3Test, specify_confliction_test1) {
   ASSERT_EQ(specify_cases[1].S, specify_cases[27].diff3.getMergedSequence());
 }
 */
-#endif
+#endif // STRDIFF3_TEST
