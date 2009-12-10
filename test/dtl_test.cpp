@@ -1,3 +1,7 @@
+/**
+ * It is necessary to use googletest to run tests.
+ */
+
 #include <gtest/gtest.h>
 #include "StrDiffTest.hpp"
 #include "IntDiffTest.hpp"
