@@ -79,11 +79,11 @@ namespace dtl {
   public :
     Diff () {}
 
-    Diff (sequence& a, sequence& b) : A(a), B(b) {
+    Diff (const sequence& a, const sequence& b) : A(a), B(b) {
       init();
     }
 
-    Diff (sequence& a, sequence& b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
+    Diff (const sequence& a, const sequence& b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
       init();
     }
 
@@ -388,7 +388,7 @@ namespace dtl {
         if (isAfter && !change.empty()) {
           sesElemVec_iter cit = it;
           uint cnt = 0;
-          for (int i=0;i<(int)DTL_SEPARATE_SIZE;++i, ++cit) {
+          for (int i=0;i<((int)DTL_SEPARATE_SIZE) && (cit != ses_v.end());++i, ++cit) {
             if (cit->second.type == SES_COMMON) {
               ++cnt;
             }
