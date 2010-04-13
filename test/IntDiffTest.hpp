@@ -1,6 +1,6 @@
 
-#ifndef INTDIFFTEST
-#define INTDIFFTEST
+#ifndef INTDIFF_TEST
+#define INTDIFF_TEST
 
 #include "dtl_test_common.hpp"
 
@@ -157,4 +157,4 @@ TEST_F (IntDiffTest, diff_test4) {
   ASSERT_EQ(SES_COMMON, cases[4].ses_seq[6].second.type);
 }
 
-#endif
+#endif // INTDIFF_TEST

@@ -12,14 +12,14 @@ UINTDIFF_OBJS     = uintdiff.o
 INTDIFF3_OBJS     = intdiff3.o
 PATCH_OBJS        = patch.o common.o
 FPATCH_OBJS       = fpatch.o common.o
-ALL_OBJS          = strdiff strdiff3 unidiff unistrdiff intdiff uintdiff intdiff3 patch fpatch
+ALL_TARGETS       = strdiff strdiff3 unidiff unistrdiff intdiff uintdiff intdiff3 patch fpatch
 
 DEPENDENCY_FILE   = Makefile.depend
 
 .cpp.o:
 	$(CPP) $(CPPFLAGS) $<
 
-all : $(ALL_OBJS)
+all : $(ALL_TARGETS)
 
 strdiff : $(STRDIFF_OBJS)
 	$(CPP) $(OBJS_FLAGS) $@ $(STRDIFF_OBJS)
@@ -49,7 +49,7 @@ fpatch : $(FPATCH_OBJS)
 	$(CPP) $(OBJS_FLAGS) $@ $(FPATCH_OBJS)
 
 clean:
-	${RM} *.o *~ $(ALL_OBJS)
+	${RM} *.o *~ $(ALL_TARGETS)
 
 depend:
 	@echo "generating dependency file"

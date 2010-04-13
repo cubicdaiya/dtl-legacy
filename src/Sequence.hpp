@@ -1,9 +1,9 @@
 /**
- dtl-1.04 -- Diff Template Library
+ dtl-1.05 -- Diff Template Library
  
  In short, Diff Template Library is distributed under so called "BSD license",
  
- Copyright (c) 2008-2009 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+ Copyright (c) 2008-2010 Tatsuhiko Kubo <cubicdaiya@gmail.com>
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification,

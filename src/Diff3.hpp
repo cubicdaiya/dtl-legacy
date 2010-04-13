@@ -1,9 +1,9 @@
 /**
- dtl-1.04 -- Diff Template Library
+ dtl-1.05 -- Diff Template Library
  
  In short, Diff Template Library is distributed under so called "BSD license",
  
- Copyright (c) 2008-2009 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+ Copyright (c) 2008-2010 Tatsuhiko Kubo <cubicdaiya@gmail.com>
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification,
@@ -51,6 +51,7 @@ namespace dtl {
     typedef vector< sesElem > sesElemVec;
     typedef vector< elem > elemVec;
     typedef typename sesElemVec::iterator sesElemVec_iter;
+    typedef typename sequence::iterator sequence_iter;
   private:
     sequence A;
     sequence B;
@@ -65,9 +66,11 @@ namespace dtl {
     elem csepaend;
   public :
     Diff3 () {}
-    Diff3 (sequence& a, sequence& b, sequence& c) : A(a), B(b), C(c), 
-                                                    diff_ba(b, a), diff_bc(b, c), 
-                                                    conflict(false) {} 
+    Diff3 (const sequence& a, 
+           const sequence& b, 
+           const sequence& c) : A(a), B(b), C(c), 
+                                diff_ba(b, a), diff_bc(b, c), 
+                                conflict(false) {} 
 
     ~Diff3 () {}
     
@@ -206,7 +209,39 @@ namespace dtl {
     }
     
     void specifyConfliction () {
-      // not implement
+      sequence_iter a_it     = A.begin();
+      sequence_iter b_it     = B.begin();
+      sequence_iter c_it     = C.begin();
+      sequence_iter a_end    = A.end();
+      sequence_iter b_end    = B.end();
+      sequence_iter c_end    = C.end();
+      sesElemVec ses_ba_v    = diff_ba.getSes().getSequence();
+      sesElemVec ses_bc_v    = diff_bc.getSes().getSequence();
+      sesElemVec_iter ba_it  = ses_ba_v.begin();
+      sesElemVec_iter bc_it  = ses_bc_v.begin();
+      sesElemVec_iter ba_end = ses_ba_v.end();
+      sesElemVec_iter bc_end = ses_bc_v.end();
+      /*      
+      diff_ba.printSES();
+      std::cout << std::endl;
+      diff_bc.printSES();
+      
+      while (!isEnd(a_end, a_it) && 
+             !isEnd(b_end, b_it) &&
+             !isEnd(c_end, c_it)) {
+        
+        
+        
+      }
+      */
+    }
+    
+    bool isEnd (const sequence_iter& end, sequence_iter& it) const {
+      if (it == end) {
+        return true;
+      } else {
+        return false;
+      }
     }
     
     void forwardUntilEnd (const sesElemVec_iter& end, sesElemVec_iter& it) const {

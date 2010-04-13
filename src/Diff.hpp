@@ -1,9 +1,9 @@
 /**
- dtl-1.04 -- Diff Template Library
+ dtl-1.05 -- Diff Template Library
  
  In short, Diff Template Library is distributed under so called "BSD license",
  
- Copyright (c) 2008-2009 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+ Copyright (c) 2008-2010 Tatsuhiko Kubo <cubicdaiya@gmail.com>
  All rights reserved.
  
  Redistribution and use in source and binary forms, with or without modification,
@@ -79,11 +79,11 @@ namespace dtl {
   public :
     Diff () {}
 
-    Diff (sequence& a, sequence& b) : A(a), B(b) {
+    Diff (const sequence& a, const sequence& b) : A(a), B(b) {
       init();
     }
 
-    Diff (sequence& a, sequence& b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
+    Diff (const sequence& a, const sequence& b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
       init();
     }
 
@@ -222,7 +222,7 @@ namespace dtl {
     /**
      * compose Longest Common Subsequence and Shortest Edit Script.
      * The algorithm implemented here is based on "An O(NP) Sequence Comparison Algorithm"
-     * by described by Sun Wu, Udi Manber and Gene Myers
+     * described by Sun Wu, Udi Manber and Gene Myers
      */
     void compose() {
 
@@ -388,7 +388,7 @@ namespace dtl {
         if (isAfter && !change.empty()) {
           sesElemVec_iter cit = it;
           uint cnt = 0;
-          for (int i=0;i<(int)DTL_SEPARATE_SIZE;++i, ++cit) {
+          for (int i=0;i<((int)DTL_SEPARATE_SIZE) && (cit != ses_v.end());++i, ++cit) {
             if (cit->second.type == SES_COMMON) {
               ++cnt;
             }
