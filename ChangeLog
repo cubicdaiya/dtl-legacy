@@ -1,7 +1,11 @@
 
-2010-xx-xx Tatsuhiko Kubo <cubicdaiya@gmail.com>
+2010-04-13 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
-	* 1.05 released
+	* constructors takes referenced parameter
+
+        * fixed seg fault bug (http://code.google.com/p/dtl-cpp/issues/detail?id=2)
+
+        * 1.05 released
 
 2009-12-01 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
