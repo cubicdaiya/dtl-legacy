@@ -453,13 +453,7 @@ namespace dtl {
     }
     
     int snake(int k, int above, int below) {
-      int r;
-      if (above > below) {
-        r = path[k-1+offset];
-      } else {
-        r = path[k+1+offset];
-      }
-
+      int r = above > below ? path[k-1+offset] : path[k+1+offset];
       int y = max(above, below);
       int x = y - k;
       while (x < M && y < N && cmp.impl(A[x], B[y])) {
