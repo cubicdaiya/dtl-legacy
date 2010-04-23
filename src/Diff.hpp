@@ -283,7 +283,7 @@ namespace dtl {
     }
 
     /**
-     * print difference with gived SES
+     * print difference with given SES
      */
     static void printSES (Ses< elem >& s) {
       sesElemVec ses_v = s.getSequence();
@@ -298,7 +298,7 @@ namespace dtl {
     }
     
     /**
-     * print unified format difference with gived unified format hunks
+     * print unified format difference with given unified format hunks
      */
     static void printUnifiedFormat (uniHunkVec& hunks) {
       for_each(hunks.begin(), hunks.end(), UniHunkPrinter< sesElem >());
