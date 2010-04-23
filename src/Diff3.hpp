@@ -52,6 +52,7 @@ namespace dtl {
     typedef vector< elem > elemVec;
     typedef typename sesElemVec::iterator sesElemVec_iter;
     typedef typename sequence::iterator sequence_iter;
+    typedef typename elemVec::iterator elemVec_iter;
   private:
     sequence A;
     sequence B;
@@ -132,15 +133,11 @@ namespace dtl {
       sesElemVec_iter bc_it  = ses_bc_v.begin();
       sesElemVec_iter ba_end = ses_ba_v.end();
       sesElemVec_iter bc_end = ses_bc_v.end();
-      bool is_ba_end         = false;
-      bool is_bc_end         = false;
-      while (ba_it != ba_end || bc_it != ba_end) {
-        setEndFlag(ba_end, ba_it, is_ba_end);
-        setEndFlag(bc_end, bc_it, is_bc_end);
-        if (is_ba_end || is_bc_end) break;
+      
+      while (!isEnd(ba_end, ba_it) || !isEnd(bc_end, bc_it)) {
         while (true) {
-          if (   ba_it != ba_end
-              && bc_it != bc_end
+          if (   !isEnd(ba_end, ba_it)
+              && !isEnd(bc_end, bc_it)
               && ba_it->first == bc_it->first 
               && ba_it->second.type == SES_COMMON 
               && bc_it->second.type == SES_COMMON) {
@@ -148,24 +145,26 @@ namespace dtl {
           } else {
             break;
           }
-          if      (ba_it != ba_end) seq.push_back(ba_it->first);
-          else if (bc_it != bc_end) seq.push_back(bc_it->first);
+          if      (!isEnd(ba_end, ba_it)) seq.push_back(ba_it->first);
+          else if (!isEnd(bc_end, bc_it)) seq.push_back(bc_it->first);
           forwardUntilEnd(ba_end, ba_it);
           forwardUntilEnd(bc_end, bc_it);
         }
-        setEndFlag(ba_end, ba_it, is_ba_end);
-        setEndFlag(bc_end, bc_it, is_bc_end);
-        if (is_ba_end || is_bc_end) break;
-        if (ba_it->second.type == SES_COMMON && bc_it->second.type == SES_DELETE) {
+        if (isEnd(ba_end, ba_it) || isEnd(bc_end, bc_it)) break;
+        if (   ba_it->second.type == SES_COMMON 
+            && bc_it->second.type == SES_DELETE) {
           forwardUntilEnd(ba_end, ba_it);
           forwardUntilEnd(bc_end, bc_it);
-        } else if (ba_it->second.type == SES_COMMON && bc_it->second.type == SES_ADD) {
+        } else if (   ba_it->second.type == SES_COMMON 
+                   && bc_it->second.type == SES_ADD) {
           seq.push_back(bc_it->first);
           forwardUntilEnd(bc_end, bc_it);
-        } else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_COMMON) {
+        } else if (   ba_it->second.type == SES_DELETE 
+                   && bc_it->second.type == SES_COMMON) {
           forwardUntilEnd(ba_end, ba_it);
           forwardUntilEnd(bc_end, bc_it);
-        } else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_DELETE) {
+        } else if (   ba_it->second.type == SES_DELETE 
+                   && bc_it->second.type == SES_DELETE) {
           if (ba_it->first == bc_it->first) {
             forwardUntilEnd(ba_end, ba_it);
             forwardUntilEnd(bc_end, bc_it);
@@ -174,18 +173,22 @@ namespace dtl {
             conflict = true;
             return B;
           }
-        } else if (ba_it->second.type == SES_DELETE && bc_it->second.type == SES_ADD) {
+        } else if (   ba_it->second.type == SES_DELETE 
+                   && bc_it->second.type == SES_ADD) {
           // conflict
           conflict = true;
           return B;
-        } else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_COMMON) {
+        } else if (   ba_it->second.type == SES_ADD 
+                   && bc_it->second.type == SES_COMMON) {
           seq.push_back(ba_it->first);
           forwardUntilEnd(ba_end, ba_it);
-        } else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_DELETE) {
+        } else if (   ba_it->second.type == SES_ADD 
+                   && bc_it->second.type == SES_DELETE) {
           // conflict
           conflict = true;
           return B;
-        } else if (ba_it->second.type == SES_ADD && bc_it->second.type == SES_ADD) {
+        } else if (   ba_it->second.type == SES_ADD 
+                   && bc_it->second.type == SES_ADD) {
           if (ba_it->first == bc_it->first) {
             seq.push_back(ba_it->first);
             forwardUntilEnd(ba_end, ba_it);
@@ -198,9 +201,9 @@ namespace dtl {
         }
       }
 
-      if (is_ba_end) {
+      if (isEnd(ba_end, ba_it)) {
         addDecentSequence(bc_end, bc_it, seq);
-      } else if (is_bc_end) {
+      } else if (isEnd(bc_end, bc_it)) {
         addDecentSequence(ba_end, ba_it, seq);
       }
 
@@ -209,47 +212,17 @@ namespace dtl {
     }
     
     void specifyConfliction () {
-      sequence_iter a_it     = A.begin();
-      sequence_iter b_it     = B.begin();
-      sequence_iter c_it     = C.begin();
-      sequence_iter a_end    = A.end();
-      sequence_iter b_end    = B.end();
-      sequence_iter c_end    = C.end();
-      sesElemVec ses_ba_v    = diff_ba.getSes().getSequence();
-      sesElemVec ses_bc_v    = diff_bc.getSes().getSequence();
-      sesElemVec_iter ba_it  = ses_ba_v.begin();
-      sesElemVec_iter bc_it  = ses_bc_v.begin();
-      sesElemVec_iter ba_end = ses_ba_v.end();
-      sesElemVec_iter bc_end = ses_bc_v.end();
-      /*      
-      diff_ba.printSES();
-      std::cout << std::endl;
-      diff_bc.printSES();
       
-      while (!isEnd(a_end, a_it) && 
-             !isEnd(b_end, b_it) &&
-             !isEnd(c_end, c_it)) {
-        
-        
-        
-      }
-      */
     }
     
-    bool isEnd (const sequence_iter& end, sequence_iter& it) const {
-      if (it == end) {
-        return true;
-      } else {
-        return false;
-      }
+    template <typename T_end, typename T_iter>
+    bool inline isEnd (const T_end& end, T_iter& it) const {
+      return it == end ? true : false;
     }
     
-    void forwardUntilEnd (const sesElemVec_iter& end, sesElemVec_iter& it) const {
+    template <typename T_end, typename T_iter>
+    void inline forwardUntilEnd (const T_end& end, T_iter& it) const {
       if (it != end) ++it;
-    }
-
-    void setEndFlag (const sesElemVec_iter& end, sesElemVec_iter& it, bool& b) const {
-      if (it == end) b = true;
     }
 
     void addDecentSequence (const sesElemVec_iter& end, sesElemVec_iter& it, elemVec& seq) const {
