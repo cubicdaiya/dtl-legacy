@@ -79,11 +79,14 @@ namespace dtl {
   public :
     Diff () {}
 
-    Diff (const sequence& a, const sequence& b) : A(a), B(b) {
+    Diff (const sequence& a, 
+          const sequence& b) : A(a), B(b) {
       init();
     }
 
-    Diff (const sequence& a, const sequence& b, Compare< elem >& comp) : A(a), B(b), cmp(comp) {
+    Diff (const sequence& a, 
+          const sequence& b, 
+          Compare< elem >& comp) : A(a), B(b), cmp(comp) {
       init();
     }
 
