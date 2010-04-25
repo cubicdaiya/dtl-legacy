@@ -216,18 +216,6 @@ namespace dtl {
       sequence_iter a_end        = A.end();
       sequence_iter b_end        = B.end();
       sequence_iter c_end        = C.end();
-      sesElemVec ses_ba_v        = diff_ba.getSes().getSequence();
-      sesElemVec ses_bc_v        = diff_bc.getSes().getSequence();
-      sesElemVec_iter ses_ba_it  = ses_ba_v.begin();
-      sesElemVec_iter ses_bc_it  = ses_bc_v.begin();
-      sesElemVec_iter ses_ba_end = ses_ba_v.end();
-      sesElemVec_iter ses_bc_end = ses_bc_v.end();
-      elemVec lcs_ba_v           = diff_ba.getLcsVec();
-      elemVec lcs_bc_v           = diff_bc.getLcsVec();
-      elemVec_iter lcs_ba_it     = lcs_ba_v.begin();
-      elemVec_iter lcs_bc_it     = lcs_ba_v.begin();
-      elemVec_iter lcs_ba_end    = lcs_ba_v.end();
-      elemVec_iter lcs_bc_end    = lcs_ba_v.end();
       elemVec elem_common;
       elemVec elem_conf1;
       elemVec elem_conf2;
