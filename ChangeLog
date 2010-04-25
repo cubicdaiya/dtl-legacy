@@ -1,4 +1,10 @@
 
+2010-05-01 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* add specifyConfliction
+
+	* 1.06 released
+
 2010-04-13 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* constructors takes referenced parameter

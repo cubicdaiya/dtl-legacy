@@ -30,45 +30,49 @@ protected :
     ct.S = s;
     ct.diff3 = Diff3< elem, sequence >(a, b, c);
     ct.diff3.compose();
-    ct.diff3.setConflictSeparators('<', '|', '=', '>');
+    ct.diff3.setConflictSeparators('<', '|', '>');
     return ct;
   }
   
   void SetUp() {
     // merge test
-    merge_cases.push_back(createCase("ab",            "b",          "bc",            "abc"));              // 0
-    merge_cases.push_back(createCase("bc",            "b",          "ab",            "abc"));              // 1
-    merge_cases.push_back(createCase("qqqabc",        "abc",        "abcdef",        "qqqabcdef"));        // 2
-    merge_cases.push_back(createCase("abcdef",        "abc",        "qqqabc",        "qqqabcdef"));        // 3
-    merge_cases.push_back(createCase("aaacccbbb",     "aaabbb",     "aaabbbqqq",     "aaacccbbbqqq"));     // 4
-    merge_cases.push_back(createCase("aaabbbqqq",     "aaabbb",     "aaacccbbb",     "aaacccbbbqqq"));     // 5
-    merge_cases.push_back(createCase("aeaacccbbb",    "aaabbb",     "aaabbbqqq",     "aeaacccbbbqqq"));    // 6
-    merge_cases.push_back(createCase("aaabbbqqq",     "aaabbb",     "aeaacccbbb",    "aeaacccbbbqqq"));    // 7
-    merge_cases.push_back(createCase("aeaacccbbb",    "aaabbb",     "aaabebbqqq",    "aeaacccbebbqqq"));   // 8
-    merge_cases.push_back(createCase("aaabebbqqq",    "aaabbb",     "aeaacccbbb",    "aeaacccbebbqqq"));   // 9
-    merge_cases.push_back(createCase("aaacccbbb",     "aaabbb",     "aeaabbbqqq",    "aeaacccbbbqqq"));    // 10
-    merge_cases.push_back(createCase("aeaabbbqqq",    "aaabbb",     "aaacccbbb",     "aeaacccbbbqqq"));    // 11
-    merge_cases.push_back(createCase("aaacccbbb",     "aaabbb",     "aaabeebbeeqqq", "aaacccbeebbeeqqq")); // 12
-    merge_cases.push_back(createCase("aaabeebbeeqqq", "aaabbb",     "aaacccbbb",     "aaacccbeebbeeqqq")); // 13
-    merge_cases.push_back(createCase("aiueo",         "aeo",        "aeKokaki",      "aiueKokaki"));       // 14
-    merge_cases.push_back(createCase("aeKokaki",      "aeo",        "aiueo",         "aiueKokaki"));       // 15
-    merge_cases.push_back(createCase("1234567390",    "1234567890", "1239567890",    "1239567390"));       // 16
-    merge_cases.push_back(createCase("1239567890",    "1234567890", "1234567390",    "1239567390"));       // 17
-    merge_cases.push_back(createCase("qabcdef",       "abcdef",     "ab",            "qab"));              // 18
-    merge_cases.push_back(createCase("ab",            "abcdef",     "qabcdef",       "qab"));              // 19
-    merge_cases.push_back(createCase("abcdf",         "abcdef",     "acdef",         "acdf"));             // 20
-    merge_cases.push_back(createCase("acdef",         "abcdef",     "abcdf",         "acdf"));             // 21
-    merge_cases.push_back(createCase("acdef",         "abcdef",     "abcdfaa",       "acdfaa"));           // 22
-    merge_cases.push_back(createCase("abcdfaa",       "abcdef",     "acdef",         "acdfaa"));           // 23
+    merge_cases.push_back(createCase("ab",            "b",             "bc",           "abc"));              // 0
+    merge_cases.push_back(createCase("bc",            "b",             "ab",           "abc"));              // 1
+    merge_cases.push_back(createCase("qqqabc",        "abc",           "abcdef",       "qqqabcdef"));        // 2
+    merge_cases.push_back(createCase("abcdef",        "abc",           "qqqabc",       "qqqabcdef"));        // 3
+    merge_cases.push_back(createCase("aaacccbbb",     "aaabbb",        "aaabbbqqq",    "aaacccbbbqqq"));     // 4
+    merge_cases.push_back(createCase("aaabbbqqq",     "aaabbb",        "aaacccbbb",    "aaacccbbbqqq"));     // 5
+    merge_cases.push_back(createCase("aeaacccbbb",    "aaabbb",        "aaabbbqqq",    "aeaacccbbbqqq"));    // 6
+    merge_cases.push_back(createCase("aaabbbqqq",     "aaabbb",        "aeaacccbbb",   "aeaacccbbbqqq"));    // 7
+    merge_cases.push_back(createCase("aeaacccbbb",    "aaabbb",        "aaabebbqqq",   "aeaacccbebbqqq"));   // 8
+    merge_cases.push_back(createCase("aaabebbqqq",    "aaabbb",        "aeaacccbbb",   "aeaacccbebbqqq"));   // 9
+    merge_cases.push_back(createCase("aaacccbbb",     "aaabbb",        "aeaabbbqqq",   "aeaacccbbbqqq"));    // 10
+    merge_cases.push_back(createCase("aeaabbbqqq",    "aaabbb",        "aaacccbbb",    "aeaacccbbbqqq"));    // 11
+    merge_cases.push_back(createCase("aaacccbbb",     "aaabbb",        "aaabeebbeeqqq","aaacccbeebbeeqqq")); // 12
+    merge_cases.push_back(createCase("aaabeebbeeqqq", "aaabbb",        "aaacccbbb",    "aaacccbeebbeeqqq")); // 13
+    merge_cases.push_back(createCase("aiueo",         "aeo",           "aeKokaki",     "aiueKokaki"));       // 14
+    merge_cases.push_back(createCase("aeKokaki",      "aeo",           "aiueo",        "aiueKokaki"));       // 15
+    merge_cases.push_back(createCase("1234567390",    "1234567890",    "1239567890",   "1239567390"));       // 16
+    merge_cases.push_back(createCase("1239567890",    "1234567890",    "1234567390",   "1239567390"));       // 17
+    merge_cases.push_back(createCase("qabcdef",       "abcdef",        "ab",           "qab"));              // 18
+    merge_cases.push_back(createCase("ab",            "abcdef",        "qabcdef",      "qab"));              // 19
+    merge_cases.push_back(createCase("abcdf",         "abcdef",        "acdef",        "acdf"));             // 20
+    merge_cases.push_back(createCase("acdef",         "abcdef",        "abcdf",        "acdf"));             // 21
+    merge_cases.push_back(createCase("acdef",         "abcdef",        "abcdfaa",      "acdfaa"));           // 22
+    merge_cases.push_back(createCase("abcdfaa",       "abcdef",        "acdef",        "acdfaa"));           // 23
 
     // detect confliction test
-    detect_cases.push_back(createCase("adc",           "abc",        "aec",           ""));                // 0
-    detect_cases.push_back(createCase("abqdcf",        "abcdef",     "abqqef",        ""));                // 1
+    detect_cases.push_back(createCase("adc",           "abc",          "aec",          ""));                 // 0
+    detect_cases.push_back(createCase("abqdcf",        "abcdef",       "abqqef",       ""));                 // 1
     
     // specify confliction test
-    specify_cases.push_back(createCase("adc",          "abc",        "aec",           "a<d|b=e>c"));       // 0
-    specify_cases.push_back(createCase("abqdcf",       "abcdef",     "abqqef",        "ab<qd|cd=qq>ef"));  // 1
-    
+    specify_cases.push_back(createCase("adc",          "abc",          "aec",          "a<d|e>c"));          // 0
+    specify_cases.push_back(createCase("abqdcf",       "abcdef",       "abqqef",       "ab<qdc|qqe>f"));     // 1
+    specify_cases.push_back(createCase("abqdcfzzzadc", "abcdefzzzabc", "abqqefzzzaec",
+                                       "ab<qdc|qqe>fzzza<d|e>c"));                                           // 2
+    //abqdcfadc abcdefzzzabc abqqefzezzaec        
+    specify_cases.push_back(createCase("abqdcfadc", "abcdefzzzabc",    "abqqefzezzaec",
+                                       "ab<qdc|qqe>f<adc|zezzaec>"));                                        // 3
 
   }
   
@@ -210,15 +214,24 @@ TEST_F (StrDiff3Test, detect_confliction_test1) {
   ASSERT_FALSE(detect_cases[1].diff3.merge());
 }
 
-/*
 TEST_F (StrDiff3Test, specify_confliction_test0) {
   ASSERT_FALSE(specify_cases[0].diff3.merge());
-  ASSERT_EQ(specify_cases[0].S, specify_cases[26].diff3.getMergedSequence());
+  ASSERT_EQ(specify_cases[0].S, specify_cases[0].diff3.getMergedSequence());
 }
 
 TEST_F (StrDiff3Test, specify_confliction_test1) {
   ASSERT_FALSE(specify_cases[1].diff3.merge());
-  ASSERT_EQ(specify_cases[1].S, specify_cases[27].diff3.getMergedSequence());
+  ASSERT_EQ(specify_cases[1].S, specify_cases[1].diff3.getMergedSequence());
 }
-*/
+
+TEST_F (StrDiff3Test, specify_confliction_test2) {
+  ASSERT_FALSE(specify_cases[2].diff3.merge());
+  ASSERT_EQ(specify_cases[2].S, specify_cases[2].diff3.getMergedSequence());
+}
+
+TEST_F (StrDiff3Test, specify_confliction_test3) {
+  ASSERT_FALSE(specify_cases[3].diff3.merge());
+  ASSERT_EQ(specify_cases[3].S, specify_cases[3].diff3.getMergedSequence());
+}
+
 #endif // STRDIFF3_TEST

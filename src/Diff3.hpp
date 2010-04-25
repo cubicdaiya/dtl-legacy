@@ -1,5 +1,5 @@
 /**
- dtl-1.05 -- Diff Template Library
+ dtl-1.06 -- Diff Template Library
  
  In short, Diff Template Library is distributed under so called "BSD license",
  
@@ -62,8 +62,7 @@ namespace dtl {
     Diff< elem, sequence > diff_bc;
     bool conflict;
     elem csepabegin;
-    elem csepa1;
-    elem csepa2;
+    elem csepa;
     elem csepaend;
   public :
     Diff3 () {}
@@ -79,10 +78,9 @@ namespace dtl {
       return conflict;
     }
     
-    void setConflictSeparators (elem begin, elem sepa1, elem sepa2, elem end) {
+    void setConflictSeparators (const elem begin, const elem sepa,const elem end) {
       csepabegin = begin;
-      csepa1     = sepa1;
-      csepa2     = sepa2;
+      csepa      = sepa;
       csepaend   = end;
     }
 
@@ -115,7 +113,7 @@ namespace dtl {
     }
 
     /**
-     * compose two kind of difference
+     * compose differences
      */
     void compose () {
       diff_ba.compose();
@@ -136,11 +134,11 @@ namespace dtl {
       
       while (!isEnd(ba_end, ba_it) || !isEnd(bc_end, bc_it)) {
         while (true) {
-          if (   !isEnd(ba_end, ba_it)
-              && !isEnd(bc_end, bc_it)
-              && ba_it->first == bc_it->first 
-              && ba_it->second.type == SES_COMMON 
-              && bc_it->second.type == SES_COMMON) {
+          if (!isEnd(ba_end, ba_it)            && 
+              !isEnd(bc_end, bc_it)            &&
+              ba_it->first == bc_it->first     && 
+              ba_it->second.type == SES_COMMON && 
+              bc_it->second.type == SES_COMMON) {
             // do nothing
           } else {
             break;
@@ -155,16 +153,16 @@ namespace dtl {
             && bc_it->second.type == SES_DELETE) {
           forwardUntilEnd(ba_end, ba_it);
           forwardUntilEnd(bc_end, bc_it);
-        } else if (   ba_it->second.type == SES_COMMON 
-                   && bc_it->second.type == SES_ADD) {
+        } else if (ba_it->second.type == SES_COMMON && 
+                   bc_it->second.type == SES_ADD) {
           seq.push_back(bc_it->first);
           forwardUntilEnd(bc_end, bc_it);
-        } else if (   ba_it->second.type == SES_DELETE 
-                   && bc_it->second.type == SES_COMMON) {
+        } else if (ba_it->second.type == SES_DELETE && 
+                   bc_it->second.type == SES_COMMON) {
           forwardUntilEnd(ba_end, ba_it);
           forwardUntilEnd(bc_end, bc_it);
-        } else if (   ba_it->second.type == SES_DELETE 
-                   && bc_it->second.type == SES_DELETE) {
+        } else if (ba_it->second.type == SES_DELETE && 
+                   bc_it->second.type == SES_DELETE) {
           if (ba_it->first == bc_it->first) {
             forwardUntilEnd(ba_end, ba_it);
             forwardUntilEnd(bc_end, bc_it);
@@ -173,22 +171,22 @@ namespace dtl {
             conflict = true;
             return B;
           }
-        } else if (   ba_it->second.type == SES_DELETE 
-                   && bc_it->second.type == SES_ADD) {
+        } else if (ba_it->second.type == SES_DELETE && 
+                   bc_it->second.type == SES_ADD) {
           // conflict
           conflict = true;
           return B;
-        } else if (   ba_it->second.type == SES_ADD 
-                   && bc_it->second.type == SES_COMMON) {
+        } else if (ba_it->second.type == SES_ADD && 
+                   bc_it->second.type == SES_COMMON) {
           seq.push_back(ba_it->first);
           forwardUntilEnd(ba_end, ba_it);
-        } else if (   ba_it->second.type == SES_ADD 
-                   && bc_it->second.type == SES_DELETE) {
+        } else if (ba_it->second.type == SES_ADD && 
+                   bc_it->second.type == SES_DELETE) {
           // conflict
           conflict = true;
           return B;
-        } else if (   ba_it->second.type == SES_ADD 
-                   && bc_it->second.type == SES_ADD) {
+        } else if (ba_it->second.type == SES_ADD && 
+                   bc_it->second.type == SES_ADD) {
           if (ba_it->first == bc_it->first) {
             seq.push_back(ba_it->first);
             forwardUntilEnd(ba_end, ba_it);
@@ -212,7 +210,103 @@ namespace dtl {
     }
     
     void specifyConfliction () {
+      sequence_iter a_it         = A.begin();
+      sequence_iter b_it         = B.begin();
+      sequence_iter c_it         = C.begin();
+      sequence_iter a_end        = A.end();
+      sequence_iter b_end        = B.end();
+      sequence_iter c_end        = C.end();
+      sesElemVec ses_ba_v        = diff_ba.getSes().getSequence();
+      sesElemVec ses_bc_v        = diff_bc.getSes().getSequence();
+      sesElemVec_iter ses_ba_it  = ses_ba_v.begin();
+      sesElemVec_iter ses_bc_it  = ses_bc_v.begin();
+      sesElemVec_iter ses_ba_end = ses_ba_v.end();
+      sesElemVec_iter ses_bc_end = ses_bc_v.end();
+      elemVec lcs_ba_v           = diff_ba.getLcsVec();
+      elemVec lcs_bc_v           = diff_bc.getLcsVec();
+      elemVec_iter lcs_ba_it     = lcs_ba_v.begin();
+      elemVec_iter lcs_bc_it     = lcs_ba_v.begin();
+      elemVec_iter lcs_ba_end    = lcs_ba_v.end();
+      elemVec_iter lcs_bc_end    = lcs_ba_v.end();
+      elemVec elem_common;
+      elemVec elem_conf1;
+      elemVec elem_conf2;
+      elemVec seq_vec;
+      bool is_common;
+      elemVec elem_common_end_vec;
+
+      is_common = false;
+    SPECIFY :
+      while (!isEnd(a_end, a_it) ||
+             !isEnd(b_end, b_it) ||
+             !isEnd(c_end, c_it)) {
+        if (*b_it == *a_it && *b_it == *c_it) {
+          if (!is_common && b_it != B.begin()) {
+            if (a_it != A.end()) elem_common_end_vec.push_back(*a_it);
+            forwardUntilEnd(a_end, a_it);
+            forwardUntilEnd(b_end, b_it);
+            forwardUntilEnd(c_end, c_it);
+            break;
+          }
+          if (a_it != A.end()) elem_common.push_back(*a_it);
+          is_common = true;
+        } else if (*b_it == *a_it && *b_it != *c_it) {
+          if (is_common) {
+            elem_conf1.push_back(csepabegin);
+            elem_conf2.push_back(csepa);
+          }
+          if (b_it != B.end()) elem_conf1.push_back(*b_it);
+          if (c_it != C.end()) elem_conf2.push_back(*c_it);
+          is_common = false;
+        } else if (*b_it == *c_it && *b_it != *a_it) {
+          if (is_common) {
+            elem_conf1.push_back(csepabegin);
+            elem_conf2.push_back(csepa);
+          }
+          if (a_it != A.end()) elem_conf1.push_back(*a_it);
+          if (c_it != C.end()) elem_conf2.push_back(*c_it);
+          is_common = false;
+        } else if (*b_it != *a_it && *b_it != *c_it) {
+          if (is_common) {
+            elem_conf1.push_back(csepabegin);
+            elem_conf2.push_back(csepa);
+          }
+          if (a_it != A.end()) elem_conf1.push_back(*a_it);
+          if (c_it != C.end()) elem_conf2.push_back(*c_it);
+          is_common = false;
+        }
+        forwardUntilEnd(a_end, a_it);
+        forwardUntilEnd(b_end, b_it);
+        forwardUntilEnd(c_end, c_it);
+      }
       
+      joinElemVec(seq_vec, elem_common);
+      joinElemVec(seq_vec, elem_conf1);
+      joinElemVec(seq_vec, elem_conf2);
+      if (!elem_conf1.empty() && !elem_conf2.empty()) seq_vec.push_back(csepaend);
+      joinElemVec(seq_vec, elem_common_end_vec);
+
+      if (!isEnd(a_end, a_it) &&
+          !isEnd(b_end, b_it) &&
+          !isEnd(c_end, c_it)) {
+        elem_common.clear();
+        elem_common_end_vec.clear();
+        elem_conf1.clear();
+        elem_conf2.clear();
+        is_common = true;
+        goto SPECIFY;
+      }
+      
+      sequence mergedSeq(seq_vec.begin(), seq_vec.end());
+      S = mergedSeq;
+    }
+
+    void inline joinElemVec (elemVec& s1, elemVec& s2) const {
+      if (!s2.empty()) {
+        for (elemVec_iter vit=s2.begin();vit!=s2.end();++vit) {
+          s1.push_back(*vit);
+        }
+      }
     }
     
     template <typename T_end, typename T_iter>
