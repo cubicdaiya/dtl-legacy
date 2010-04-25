@@ -565,7 +565,7 @@ namespace dtl {
     /**
      * join ses vectors
      */
-    void joinSesVec (sesElemVec& s1, sesElemVec& s2) const {
+    void inline joinSesVec (sesElemVec& s1, sesElemVec& s2) const {
       if (!s2.empty()) {
         for (sesElemVec_iter vit=s2.begin();vit!=s2.end();++vit) {
           s1.push_back(*vit);
