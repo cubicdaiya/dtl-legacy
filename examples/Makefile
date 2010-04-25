@@ -8,11 +8,10 @@ STRDIFF3_OBJS     = strdiff3.o common.o
 UNIDIFF_OBJS      = unidiff.o common.o
 UNISTRDIFF_OBJS   = unistrdiff.o common.o
 INTDIFF_OBJS      = intdiff.o
-UINTDIFF_OBJS     = uintdiff.o
 INTDIFF3_OBJS     = intdiff3.o
 PATCH_OBJS        = patch.o common.o
 FPATCH_OBJS       = fpatch.o common.o
-ALL_TARGETS       = strdiff strdiff3 unidiff unistrdiff intdiff uintdiff intdiff3 patch fpatch
+ALL_TARGETS       = strdiff strdiff3 unidiff unistrdiff intdiff intdiff3 patch fpatch
 
 DEPENDENCY_FILE   = Makefile.depend
 
@@ -35,9 +34,6 @@ unistrdiff : $(UNISTRDIFF_OBJS)
 
 intdiff : $(INTDIFF_OBJS)
 	$(CPP) $(OBJS_FLAGS) $@ $(INTDIFF_OBJS)
-
-uintdiff : $(UINTDIFF_OBJS)
-	$(CPP) $(OBJS_FLAGS) $@ $(UINTDIFF_OBJS)
 
 intdiff3 : $(INTDIFF3_OBJS)
 	$(CPP) $(OBJS_FLAGS) $@ $(INTDIFF3_OBJS)
