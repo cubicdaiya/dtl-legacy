@@ -225,6 +225,10 @@ namespace dtl {
 
       is_common = false;
     SPECIFY :
+      elem_common.clear();
+      elem_common_end_vec.clear();
+      elem_conf1.clear();
+      elem_conf2.clear();
       while (!isEnd(a_end, a_it) ||
              !isEnd(b_end, b_it) ||
              !isEnd(c_end, c_it)) {
@@ -254,6 +258,7 @@ namespace dtl {
           if (a_it != A.end()) elem_conf1.push_back(*a_it);
           if (c_it != C.end()) elem_conf2.push_back(*c_it);
           is_common = false;
+          if (a_it == a_end && c_it == c_end) break;
         } else if (*b_it != *a_it && *b_it != *c_it) {
           if (is_common) {
             elem_conf1.push_back(csepabegin);
@@ -262,6 +267,7 @@ namespace dtl {
           if (a_it != A.end()) elem_conf1.push_back(*a_it);
           if (c_it != C.end()) elem_conf2.push_back(*c_it);
           is_common = false;
+          if (a_it == a_end && c_it == c_end) break;
         }
         forwardUntilEnd(a_end, a_it);
         forwardUntilEnd(b_end, b_it);
@@ -274,13 +280,40 @@ namespace dtl {
       if (!elem_conf1.empty() && !elem_conf2.empty()) seq_vec.push_back(csepaend);
       joinElemVec(seq_vec, elem_common_end_vec);
 
-      if (!isEnd(a_end, a_it) &&
-          !isEnd(b_end, b_it) &&
-          !isEnd(c_end, c_it)) {
-        elem_common.clear();
-        elem_common_end_vec.clear();
-        elem_conf1.clear();
-        elem_conf2.clear();
+      if (isEnd(a_end, a_it) &&
+          isEnd(b_end, b_it) &&
+          isEnd(c_end, c_it)) {
+        // do nothing
+      } else if (!isEnd(a_end, a_it) &&
+                 isEnd(b_end, b_it) &&
+                 isEnd(c_end, c_it)) {
+        addSpecifiedSequence(a_end, a_it, seq_vec, b_it, b_end, false);
+        is_common = true;
+        goto SPECIFY;
+      } else if (isEnd(a_end,  a_it) &&
+                 !isEnd(b_end, b_it) &&
+                 isEnd(c_end,  c_it)) {
+        addSpecifiedSequence(b_end, b_it, seq_vec, b_it, b_end, false);
+      } else if (isEnd(a_end, a_it) &&
+                 isEnd(b_end, b_it) &&
+                 !isEnd(c_end, c_it)) {
+        addSpecifiedSequence(c_end, c_it, seq_vec, b_it, b_end, false);
+      } else if (isEnd(a_end,  a_it) &&
+                 !isEnd(b_end, b_it) &&
+                 !isEnd(c_end, c_it)) {
+        addSpecifiedSequence(c_end, c_it, seq_vec, b_it, b_end, true);
+        addSpecifiedSequence(b_end, b_it, seq_vec, b_it, b_end, false);
+      } else if (!isEnd(a_end, a_it) &&
+                 isEnd(b_end, b_it) &&
+                 !isEnd(c_end, c_it)) {
+        is_common = true;
+        goto SPECIFY;
+      } else if (!isEnd(a_end, a_it) &&
+                 !isEnd(b_end, b_it) &&
+                 isEnd(c_end, c_it)) {
+        addSpecifiedSequence(a_end, a_it, seq_vec, b_it, b_end, true);
+        addSpecifiedSequence(b_end, b_it, seq_vec, b_it, b_end, false);
+      } else {
         is_common = true;
         goto SPECIFY;
       }
@@ -297,22 +330,32 @@ namespace dtl {
       }
     }
     
-    template <typename T_end, typename T_iter>
-    bool inline isEnd (const T_end& end, T_iter& it) const {
+    template <typename T_iter>
+    bool inline isEnd (T_iter& end, T_iter& it) const {
       return it == end ? true : false;
     }
     
-    template <typename T_end, typename T_iter>
-    void inline forwardUntilEnd (const T_end& end, T_iter& it) const {
-      if (it != end) ++it;
+    template <typename T_iter>
+    void inline forwardUntilEnd (T_iter& end, T_iter& it) const {
+      if (!isEnd(end, it)) ++it;
     }
 
-    void addDecentSequence (const sesElemVec_iter& end, sesElemVec_iter& it, elemVec& seq) const {
-      while (it != end) {
+    void inline addDecentSequence (sesElemVec_iter& end, sesElemVec_iter& it, elemVec& seq) const {
+      while (!isEnd(end, it)) {
         if (it->second.type == SES_ADD) seq.push_back(it->first);
         ++it;
       }      
     }
+
+    void inline addSpecifiedSequence(sequence_iter& end, sequence_iter& it, elemVec& seq, 
+                                     sequence_iter& b_it, sequence_iter& b_end, bool is_forward_b) const {
+      while (!isEnd(end, it)) {
+        seq.push_back(*it);
+        ++it;
+        if (is_forward_b) forwardUntilEnd(b_end, b_it);
+      }
+    }
+
   };
 }
 
