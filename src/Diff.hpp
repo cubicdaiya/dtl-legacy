@@ -551,7 +551,7 @@ namespace dtl {
     /**
      * record odd sequence to ses
      */
-    void recordOddSequence (int idx, int length, sequence_const_iter it, const edit_t et) {
+    void inline recordOddSequence (int idx, int length, sequence_const_iter it, const edit_t et) {
       while(idx < length){
         ses.addSequence(*it, idx, 0, et);
         ++it;
@@ -573,7 +573,7 @@ namespace dtl {
       }      
     }
 
-    bool isReverse () const {
+    bool inline isReverse () const {
       return reverse;
     }
   };
