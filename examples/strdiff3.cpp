@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
     if (!diff3.merge()) {
         cerr << "conflict." << endl;
         cout << diff3.getMergedSequence() << endl;
-        return -1;
+        return 0;
     }
     cout << "result:" << diff3.getMergedSequence() << endl;
     
