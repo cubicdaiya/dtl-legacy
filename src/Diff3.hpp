@@ -88,7 +88,9 @@ namespace dtl {
             return S;
         }
         
-        // merge changes B and C to A
+        /**
+         * merge changes B and C to A
+         */
         bool merge () {
             if (diff_ba.getEditDistance() == 0) {   // A == B
                 if (diff_bc.getEditDistance() == 0) { // A == B == C
@@ -121,6 +123,9 @@ namespace dtl {
         }
         
     private :
+        /**
+         * merge implementation
+         */
         sequence merge_ () {
             elemVec seq;
             Ses< elem > ses_ba     = diff_ba.getSes();
@@ -209,6 +214,9 @@ namespace dtl {
             return mergedSeq;
         }
         
+        /**
+         * specify the confliction points
+         */
         void specifyConfliction () {
             sequence_iter a_it         = A.begin();
             sequence_iter b_it         = B.begin();
@@ -322,6 +330,9 @@ namespace dtl {
             S = mergedSeq;
         }
         
+        /**
+         * join elem vectors
+         */
         void inline joinElemVec (elemVec& s1, elemVec& s2) const {
             if (!s2.empty()) {
                 for (elemVec_iter vit=s2.begin();vit!=s2.end();++vit) {
@@ -330,16 +341,25 @@ namespace dtl {
             }
         }
         
+        /**
+         * check sequence is end
+         */
         template <typename T_iter>
         bool inline isEnd (T_iter& end, T_iter& it) const {
             return it == end ? true : false;
         }
         
+        /**
+         * increment iterator until iterator is end
+         */
         template <typename T_iter>
         void inline forwardUntilEnd (T_iter& end, T_iter& it) const {
             if (!isEnd(end, it)) ++it;
         }
         
+        /**
+         * add elements which SES's type is ADD
+         */
         void inline addDecentSequence (sesElemVec_iter& end, sesElemVec_iter& it, elemVec& seq) const {
             while (!isEnd(end, it)) {
                 if (it->second.type == SES_ADD) seq.push_back(it->first);
@@ -347,6 +367,9 @@ namespace dtl {
             }      
         }
         
+        /**
+         * add confliction specified sequence
+         */
         void inline addSpecifiedSequence(sequence_iter& end, sequence_iter& it, elemVec& seq, 
                                          sequence_iter& b_it, sequence_iter& b_end, bool is_forward_b) const {
             while (!isEnd(end, it)) {

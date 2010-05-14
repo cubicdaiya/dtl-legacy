@@ -433,6 +433,9 @@ namespace dtl {
             }
         }
     private :
+        /**
+         * initialize
+         */
         void init () {
             M = distance(A.begin(), A.end());
             N = distance(B.begin(), B.end());
@@ -452,6 +455,9 @@ namespace dtl {
             fp               = NULL;
         }
         
+        /**
+         * search shortest path and record the path
+         */
         int snake(int k, int above, int below) {
             int r = above > below ? path[k-1+offset] : path[k+1+offset];
             int y = max(above, below);
@@ -573,6 +579,9 @@ namespace dtl {
             }      
         }
         
+        /**
+         * check sequence is replaced each other
+         */
         bool inline isReverse () const {
             return reverse;
         }
