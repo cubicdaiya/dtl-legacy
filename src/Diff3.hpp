@@ -92,20 +92,20 @@ namespace dtl {
          * merge changes B and C to A
          */
         bool merge () {
-            if (diff_ba.getEditDistance() == 0) {   // A == B
+            if (diff_ba.getEditDistance() == 0) {     // A == B
                 if (diff_bc.getEditDistance() == 0) { // A == B == C
                     S = B;
                     return true;
                 }
                 S = C;
                 return true;
-            } else {                                // A != B
+            } else {                                  // A != B
                 if (diff_bc.getEditDistance() == 0) { // A != B == C
                     S = A;                              
                     return true;
                 } else {                              // A != B != C
                     S = merge_();
-                    if (isConflict()) {                 // conflict occured
+                    if (isConflict()) {               // conflict occured
                         specifyConfliction();
                         return false;
                     }
