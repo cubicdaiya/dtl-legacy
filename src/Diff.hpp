@@ -255,7 +255,10 @@ namespace dtl {
             editPathCordinates epc(0);
             
             // only recoding editdistance
-            if (onlyEditDistance) return;
+            if (onlyEditDistance) {
+                delete[] this->fp;
+                return;
+            }
             
             while(r != -1){
                 cordinate.x = pathCordinates[r].x;
