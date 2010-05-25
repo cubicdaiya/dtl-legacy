@@ -14,7 +14,7 @@ DEPENDENCY_FILE = Makefile.depend
 dtl_test : $(OBJS)
 	$(CPP) $(OBJS_FLAGS) $@ $(OBJS) $(LIBS)
 
-test : dtl_test
+check : dtl_test
 	@./dtl_test
 
 clean :
