@@ -20,6 +20,7 @@ GSYMS
 GTAGS
 TAGS
 dtl_test
+.sconsign.dblite
 syntax: regexp
 
 ^\#
