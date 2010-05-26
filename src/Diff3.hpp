@@ -268,7 +268,7 @@ namespace dtl {
                     is_common = false;
                     if (a_it == a_end && c_it == c_end) break;
                 } else if (*b_it != *a_it && *b_it != *c_it) {
-                    if (is_common) {
+                    if (is_common || b_it == B.begin()) {
                         elem_conf1.push_back(csepabegin);
                         elem_conf2.push_back(csepa);
                     }
@@ -283,9 +283,17 @@ namespace dtl {
             }
             
             joinElemVec(seq_vec, elem_common);
+            if (elem_conf1[0] == csepabegin && elem_conf1.size() == 1) {
+                elem_conf1.clear();
+                elem_conf2 = elemVec(elem_conf2.begin() + 1, elem_conf2.end());
+            }
             joinElemVec(seq_vec, elem_conf1);
             joinElemVec(seq_vec, elem_conf2);
-            if (!elem_conf1.empty() && !elem_conf2.empty()) seq_vec.push_back(csepaend);
+
+            if ((!elem_conf1.empty() && !elem_conf2.empty())) {
+                seq_vec.push_back(csepaend);
+            }
+
             joinElemVec(seq_vec, elem_common_end_vec);
             
             if (isEnd(a_end, a_it) &&
