@@ -309,7 +309,7 @@ namespace dtl {
             } else if (isEnd(a_end,  a_it) &&
                        !isEnd(b_end, b_it) &&
                        isEnd(c_end,  c_it)) {
-                addSpecifiedSequence(b_end, b_it, seq_vec, b_it, b_end, false);
+                // do nothing
             } else if (isEnd(a_end, a_it) &&
                        isEnd(b_end, b_it) &&
                        !isEnd(c_end, c_it)) {

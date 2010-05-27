@@ -76,6 +76,8 @@ protected :
         specify_cases.push_back(createCase("pbc",          "abc",          "qbc",          "<p|q>bc"));          // 5
         specify_cases.push_back(createCase("pdc",          "abc",          "qbc",          "<pd|qb>c"));         // 6
         specify_cases.push_back(createCase("abcdef",       "abcdefg",      "abcdefhe",     "abcdefhe"));         // 7
+        
+        specify_cases.push_back(createCase("abcdefqqqq",   "abcdefgzzzzzzzzzzz", "abcdefggggg", "abcdef<qqqq|ggggg>")); // 8
     }
     
     void TearDown () {}
@@ -254,6 +256,11 @@ TEST_F (StrDiff3Test, specify_confliction_test6) {
 TEST_F (StrDiff3Test, specify_confliction_test7) {
     ASSERT_FALSE(specify_cases[7].diff3.merge());
     ASSERT_EQ(specify_cases[7].S, specify_cases[7].diff3.getMergedSequence());
+}
+
+TEST_F (StrDiff3Test, specify_confliction_test8) {
+    ASSERT_FALSE(specify_cases[8].diff3.merge());
+    ASSERT_EQ(specify_cases[8].S, specify_cases[8].diff3.getMergedSequence());
 }
 
 #endif // STRDIFF3_TEST
