@@ -12,5 +12,5 @@ targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'],
 
 for target in targets:
     objs = targets[target]
-    env.Program(target, targets[target])
+    env.Program(target, objs)
 
