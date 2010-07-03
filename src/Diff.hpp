@@ -159,7 +159,6 @@ namespace dtl {
                 joinSesVec(shunk, it->change);
                 joinSesVec(shunk, it->common[1]);
                 it->a += inc_dec_total;
-                if (loop != 0) ++lstIt_t;
                 lstIt = lstIt_t;
                 while (seq_lnum++ < it->a && longer_seq_lnum++ < N) {
                     ++cit;

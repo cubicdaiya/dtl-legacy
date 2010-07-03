@@ -37,6 +37,8 @@ protected :
         cases.push_back(createCase("",           ""));             // 5
         cases.push_back(createCase("a",          ""));             // 6
         cases.push_back(createCase("",           "b"));            // 7
+        cases.push_back(createCase("abcdefq3wefarhgorequgho4euhfteowauhfwehogfewrquhoi23hroewhoahfotrhguoiewahrgqqabcdef",
+                                   "3abcdef4976fd86ouofita67t85r876e5e746578tgliuhopoqqabcdef")); // 8
     }
     
     void TearDown () {}
@@ -87,6 +89,11 @@ TEST_F (PatchTest, patch_test6) {
 TEST_F (PatchTest, patch_test7) {
     ASSERT_EQ(cases[7].B, cases[7].diff.patch(cases[7].A));
     ASSERT_EQ(cases[7].B, cases[7].diff.uniPatch(cases[7].A));
+}
+
+TEST_F (PatchTest, patch_test8) {
+    ASSERT_EQ(cases[8].B, cases[8].diff.patch(cases[8].A));
+    ASSERT_EQ(cases[8].B, cases[8].diff.uniPatch(cases[8].A));
 }
 
 #endif // PATCH_TEST
