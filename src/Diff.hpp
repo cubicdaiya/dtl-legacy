@@ -60,12 +60,12 @@ namespace dtl {
     private :
         sequence A;
         sequence B;
-        int M;
-        int N;
-        int delta;
-        int offset;
-        int *fp;
-        int editDistance;
+        long M;
+        long N;
+        long delta;
+        long offset;
+        long *fp;
+        long editDistance;
         Lcs< elem > lcs;
         Ses< elem > ses;
         editPath path;
@@ -92,7 +92,7 @@ namespace dtl {
         
         ~Diff() {}
         
-        int getEditDistance () const {
+        long getEditDistance () const {
             return editDistance;
         }
         
@@ -150,10 +150,10 @@ namespace dtl {
             elemList_iter lstIt   = seqLst.begin();
             elemList_iter lstIt_t = seqLst.begin();
             sequence_iter cit     = seq.begin();
-            int inc_dec_total     = 0;
-            int seq_lnum          = 1;
-            int longer_seq_lnum   = 1;
-            int loop              = 0;
+            long inc_dec_total     = 0;
+            long seq_lnum          = 1;
+            long longer_seq_lnum   = 1;
+            long loop              = 0;
             for (uniHunkVec_iter it=uniHunks.begin();it!=uniHunks.end();++it, ++loop) {
                 joinSesVec(shunk, it->common[0]);
                 joinSesVec(shunk, it->change);
@@ -230,26 +230,26 @@ namespace dtl {
             
             if (isHuge()) pathCordinates.reserve(MAX_CORDINATES_SIZE + 50000);
             
-            int p = -1;
-            int size = M + N + 3;
-            fp = new int[size];
+            long p = -1;
+            long size = M + N + 3;
+            fp = new long[size];
             fill(&fp[0], &fp[size], -1);
             path = editPath(size);
             fill(path.begin(), path.end(), -1);
         ONP:
             do {
                 ++p;
-                for (int k=-p;k<=delta-1;++k) {
+                for (long k=-p;k<=delta-1;++k) {
                     fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
                 }
-                for (int k=delta+p;k>=delta+1;--k) {
+                for (long k=delta+p;k>=delta+1;--k) {
                     fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
                 }
                 fp[delta+offset] = snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset]);
             } while (fp[delta+offset] != N && pathCordinates.size() < MAX_CORDINATES_SIZE);
             
             editDistance += delta + 2 * p;
-            int r = path[delta+offset];
+            long r = path[delta+offset];
             P cordinate;
             editPathCordinates epc(0);
             
@@ -312,15 +312,15 @@ namespace dtl {
         void composeUnifiedHunks () {
             sesElemVec common[2];
             sesElemVec change;
-            sesElemVec ses_v = ses.getSequence();
-            int l_cnt        = 1;
-            int length       = distance(ses_v.begin(), ses_v.end());
-            uint middle      = 0;
+            sesElemVec ses_v  = ses.getSequence();
+            long l_cnt        = 1;
+            long length       = distance(ses_v.begin(), ses_v.end());
+            long middle       = 0;
             bool isMiddle, isAfter;
             elem e;
             elemInfo einfo;
-            int a, b, c, d;         // @@ -a,b +c,d @@
-            int inc_dec_count = 0;
+            long a, b, c, d;         // @@ -a,b +c,d @@
+            long inc_dec_count = 0;
             uniHunk<sesElem> hunk;
             sesElemVec adds;
             sesElemVec deletes;
@@ -359,7 +359,7 @@ namespace dtl {
                 case SES_COMMON :
                     ++b;++d;
                     if (common[1].empty() && adds.empty() && deletes.empty() && change.empty()) {
-                        if (common[0].size() < DTL_CONTEXT_SIZE) {
+                        if (common[0].size() < (size_t)DTL_CONTEXT_SIZE) {
                             if (a == 0 && c == 0) {
                                 a = einfo.beforeIdx;
                                 c = einfo.afterIdx;
@@ -392,8 +392,8 @@ namespace dtl {
                 // compose unified format hunk
                 if (isAfter && !change.empty()) {
                     sesElemVec_iter cit = it;
-                    uint cnt = 0;
-                    for (int i=0;i<((int)DTL_SEPARATE_SIZE) && (cit != ses_v.end());++i, ++cit) {
+                    long cnt = 0;
+                    for (long i=0;i<DTL_SEPARATE_SIZE && (cit != ses_v.end());++i, ++cit) {
                         if (cit->second.type == SES_COMMON) {
                             ++cnt;
                         }
@@ -403,12 +403,12 @@ namespace dtl {
                         isAfter = false;
                         continue;
                     }
-                    if (common[0].size() >= DTL_SEPARATE_SIZE) {
-                        int c0size = common[0].size();
+                    if (common[0].size() >= (size_t)DTL_SEPARATE_SIZE) {
+                        long c0size = common[0].size();
                         rotate(common[0].begin(), 
                                common[0].begin() + c0size - DTL_SEPARATE_SIZE, 
                                common[0].end());
-                        for (int i=0;i<c0size-(int)DTL_SEPARATE_SIZE;++i) {
+                        for (long i=0;i<c0size - DTL_SEPARATE_SIZE;++i) {
                             common[0].pop_back();
                         }
                         a += c0size - DTL_SEPARATE_SIZE;
@@ -460,10 +460,10 @@ namespace dtl {
         /**
          * search shortest path and record the path
          */
-        int snake(int k, int above, int below) {
-            int r = above > below ? path[k-1+offset] : path[k+1+offset];
-            int y = max(above, below);
-            int x = y - k;
+        long snake(long k, long above, long below) {
+            long r = above > below ? path[k-1+offset] : path[k+1+offset];
+            long y = max(above, below);
+            long x = y - k;
             while (x < M && y < N && cmp.impl(A[x], B[y])) {
                 ++x;++y;
             }
@@ -483,12 +483,12 @@ namespace dtl {
         bool recordSequence (editPathCordinates& v) {
             sequence_const_iter x(A.begin());
             sequence_const_iter y(B.begin());
-            int x_idx, y_idx;   // line number for Unified Format
-            int px_idx, py_idx; // cordinates
-            int size = v.size() - 1;
+            long x_idx, y_idx;   // line number for Unified Format
+            long px_idx, py_idx; // cordinates
+            long size = v.size() - 1;
             x_idx  = y_idx  = 1;
             px_idx = py_idx = 0;
-            for (int i=size;i>=0;--i) {
+            for (long i=size;i>=0;--i) {
                 while(px_idx < v[i].x || py_idx < v[i].y) {
                     if (v[i].y - v[i].x > py_idx - px_idx) {
                         if (!isReverse()) {
@@ -510,7 +510,6 @@ namespace dtl {
                         ++px_idx;
                     } else {             // Common
                         lcs.addSequence(*x);
-                        lcs.addLcsSequence(*x, x_idx, y_idx);
                         ses.addSequence(*x, x_idx, y_idx, SES_COMMON);
                         ++x;
                         ++y;
@@ -546,9 +545,9 @@ namespace dtl {
                 N        = distance(B.begin(), B.end());
                 delta    = N - M;
                 offset   = M + 1;
-                int size = M + N + 3;
+                long size = M + N + 3;
                 delete[] fp;
-                fp = new int[size];
+                fp = new long[size];
                 fill(&fp[0], &fp[size], -1);
                 fill(path.begin(), path.end(), -1);
                 return false;
@@ -559,7 +558,7 @@ namespace dtl {
         /**
          * record odd sequence to ses
          */
-        void inline recordOddSequence (int idx, int length, sequence_const_iter it, const edit_t et) {
+        void inline recordOddSequence (long idx, long length, sequence_const_iter it, const edit_t et) {
             while(idx < length){
                 ses.addSequence(*it, idx, 0, et);
                 ++it;

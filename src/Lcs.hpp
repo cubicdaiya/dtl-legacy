@@ -46,22 +46,9 @@ namespace dtl {
     template <typename elem>
     class Lcs : public Sequence< elem >
     {
-    private :
-        typedef vector< idxLcs< elem > > lcsSequence;
-        lcsSequence lcsSeq;
     public :
         Lcs ()  {}
         ~Lcs () {}
-        void addLcsSequence (elem e, int a_idx, int b_idx) {
-            idxLcs<elem> ie;
-            ie.e = e;
-            ie.a_idx = a_idx;
-            ie.b_idx = b_idx;
-            lcsSeq.push_back(ie);
-        }
-        lcsSequence getLcsSequence () const {
-            return lcsSeq;
-        }
     };
 }
 

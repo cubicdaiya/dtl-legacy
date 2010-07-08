@@ -61,11 +61,6 @@ namespace dtl {
     using std::max;
     
     /**
-     * typedef
-     */
-    typedef unsigned int uint;
-    
-    /**
      * type of edit for SES
      */
     typedef int edit_t;
@@ -84,29 +79,29 @@ namespace dtl {
      * info for Unified Format
      */
     typedef struct eleminfo {
-        int      beforeIdx;           // index of prev sequence
-        int      afterIdx;            // index of after sequence
+        long      beforeIdx;           // index of prev sequence
+        long      afterIdx;            // index of after sequence
         edit_t   type;                // type of edit(Add, Delete, Common)
     } elemInfo;
     
-    const uint DTL_SEPARATE_SIZE = 3;
-    const uint DTL_CONTEXT_SIZE  = 3;
+    const long DTL_SEPARATE_SIZE = 3;
+    const long DTL_CONTEXT_SIZE  = 3;
     
     /**
      * cordinate for registering route
      */
     typedef struct Point {
-        int x;                         // x cordinate
-        int y;                         // y cordinate
-        int k;                         // vertex
+        long x;                         // x cordinate
+        long y;                         // y cordinate
+        long k;                         // vertex
     } P;
     
     /**
      * limit of cordinate size
      */
-    const unsigned int MAX_CORDINATES_SIZE = 2000000;
+    const unsigned long MAX_CORDINATES_SIZE = 2000000UL;
     
-    typedef vector< int > editPath;
+    typedef vector< long > editPath;
     typedef vector< P >   editPathCordinates;
     
     /**
@@ -114,21 +109,12 @@ namespace dtl {
      */
     template <typename sesElem>
     struct uniHunk {
-        int a, b, c, d;              // @@ -a,b +c,d @@
+        long a, b, c, d;              // @@ -a,b +c,d @@
         vector< sesElem > common[2]; // anteroposterior commons on changes
         vector< sesElem > change;    // changes
-        int inc_dec_count;           // count of increace and decrease
+        long inc_dec_count;           // count of increace and decrease
     };
     
-    /**
-     * lcs with index
-     */
-    template <typename elem>
-    struct idxLcs {
-        elem e;                      // element of lcs
-        int a_idx;                   // prev index of element
-        int b_idx;                   // after index of element
-    };
 }
 
 #endif // DTL_VARIABLES_H
