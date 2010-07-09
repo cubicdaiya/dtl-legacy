@@ -79,29 +79,29 @@ namespace dtl {
      * info for Unified Format
      */
     typedef struct eleminfo {
-        long      beforeIdx;           // index of prev sequence
-        long      afterIdx;            // index of after sequence
+        long long      beforeIdx;           // index of prev sequence
+        long long      afterIdx;            // index of after sequence
         edit_t   type;                // type of edit(Add, Delete, Common)
     } elemInfo;
     
-    const long DTL_SEPARATE_SIZE = 3;
-    const long DTL_CONTEXT_SIZE  = 3;
+    const long long DTL_SEPARATE_SIZE = 3;
+    const long long DTL_CONTEXT_SIZE  = 3;
     
     /**
      * cordinate for registering route
      */
     typedef struct Point {
-        long x;                         // x cordinate
-        long y;                         // y cordinate
-        long k;                         // vertex
+        long long x;                         // x cordinate
+        long long y;                         // y cordinate
+        long long k;                         // vertex
     } P;
     
     /**
      * limit of cordinate size
      */
-    const unsigned long MAX_CORDINATES_SIZE = 2000000UL;
+    const unsigned long long MAX_CORDINATES_SIZE = 2000000;
     
-    typedef vector< long > editPath;
+    typedef vector< long long > editPath;
     typedef vector< P >   editPathCordinates;
     
     /**
@@ -109,10 +109,10 @@ namespace dtl {
      */
     template <typename sesElem>
     struct uniHunk {
-        long a, b, c, d;              // @@ -a,b +c,d @@
+        long long a, b, c, d;              // @@ -a,b +c,d @@
         vector< sesElem > common[2]; // anteroposterior commons on changes
         vector< sesElem > change;    // changes
-        long inc_dec_count;           // count of increace and decrease
+        long long inc_dec_count;           // count of increace and decrease
     };
     
 }

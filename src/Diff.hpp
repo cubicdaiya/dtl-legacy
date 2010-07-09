@@ -60,12 +60,12 @@ namespace dtl {
     private :
         sequence A;
         sequence B;
-        long M;
-        long N;
-        long delta;
-        long offset;
-        long *fp;
-        long editDistance;
+        long long M;
+        long long N;
+        long long delta;
+        long long offset;
+        long long *fp;
+        long long editDistance;
         Lcs< elem > lcs;
         Ses< elem > ses;
         editPath path;
@@ -92,7 +92,7 @@ namespace dtl {
         
         ~Diff() {}
         
-        long getEditDistance () const {
+        long long getEditDistance () const {
             return editDistance;
         }
         
@@ -150,10 +150,10 @@ namespace dtl {
             elemList_iter lstIt   = seqLst.begin();
             elemList_iter lstIt_t = seqLst.begin();
             sequence_iter cit     = seq.begin();
-            long inc_dec_total     = 0;
-            long seq_lnum          = 1;
-            long longer_seq_lnum   = 1;
-            long loop              = 0;
+            long long inc_dec_total     = 0;
+            long long seq_lnum          = 1;
+            long long longer_seq_lnum   = 1;
+            long long loop              = 0;
             for (uniHunkVec_iter it=uniHunks.begin();it!=uniHunks.end();++it, ++loop) {
                 joinSesVec(shunk, it->common[0]);
                 joinSesVec(shunk, it->change);
@@ -230,26 +230,26 @@ namespace dtl {
             
             if (isHuge()) pathCordinates.reserve(MAX_CORDINATES_SIZE + 50000);
             
-            long p = -1;
-            long size = M + N + 3;
-            fp = new long[size];
+            long long p = -1;
+            long long size = M + N + 3;
+            fp = new long long[size];
             fill(&fp[0], &fp[size], -1);
             path = editPath(size);
             fill(path.begin(), path.end(), -1);
         ONP:
             do {
                 ++p;
-                for (long k=-p;k<=delta-1;++k) {
+                for (long long k=-p;k<=delta-1;++k) {
                     fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
                 }
-                for (long k=delta+p;k>=delta+1;--k) {
+                for (long long k=delta+p;k>=delta+1;--k) {
                     fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
                 }
                 fp[delta+offset] = snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset]);
             } while (fp[delta+offset] != N && pathCordinates.size() < MAX_CORDINATES_SIZE);
             
             editDistance += delta + 2 * p;
-            long r = path[delta+offset];
+            long long r = path[delta+offset];
             P cordinate;
             editPathCordinates epc(0);
             
@@ -313,14 +313,14 @@ namespace dtl {
             sesElemVec common[2];
             sesElemVec change;
             sesElemVec ses_v  = ses.getSequence();
-            long l_cnt        = 1;
-            long length       = distance(ses_v.begin(), ses_v.end());
-            long middle       = 0;
+            long long l_cnt   = 1;
+            long long length  = distance(ses_v.begin(), ses_v.end());
+            long long middle  = 0;
             bool isMiddle, isAfter;
             elem e;
             elemInfo einfo;
-            long a, b, c, d;         // @@ -a,b +c,d @@
-            long inc_dec_count = 0;
+            long long a, b, c, d;         // @@ -a,b +c,d @@
+            long long inc_dec_count = 0;
             uniHunk<sesElem> hunk;
             sesElemVec adds;
             sesElemVec deletes;
@@ -359,7 +359,7 @@ namespace dtl {
                 case SES_COMMON :
                     ++b;++d;
                     if (common[1].empty() && adds.empty() && deletes.empty() && change.empty()) {
-                        if (common[0].size() < (size_t)DTL_CONTEXT_SIZE) {
+                        if ((long long)common[0].size() < DTL_CONTEXT_SIZE) {
                             if (a == 0 && c == 0) {
                                 a = einfo.beforeIdx;
                                 c = einfo.afterIdx;
@@ -392,8 +392,8 @@ namespace dtl {
                 // compose unified format hunk
                 if (isAfter && !change.empty()) {
                     sesElemVec_iter cit = it;
-                    long cnt = 0;
-                    for (long i=0;i<DTL_SEPARATE_SIZE && (cit != ses_v.end());++i, ++cit) {
+                    long long cnt = 0;
+                    for (long long i=0;i<DTL_SEPARATE_SIZE && (cit != ses_v.end());++i, ++cit) {
                         if (cit->second.type == SES_COMMON) {
                             ++cnt;
                         }
@@ -403,12 +403,12 @@ namespace dtl {
                         isAfter = false;
                         continue;
                     }
-                    if (common[0].size() >= (size_t)DTL_SEPARATE_SIZE) {
-                        long c0size = common[0].size();
+                    if ((long long)common[0].size() >= DTL_SEPARATE_SIZE) {
+                        long long c0size = (long long)common[0].size();
                         rotate(common[0].begin(), 
                                common[0].begin() + c0size - DTL_SEPARATE_SIZE, 
                                common[0].end());
-                        for (long i=0;i<c0size - DTL_SEPARATE_SIZE;++i) {
+                        for (long long i=0;i<c0size - DTL_SEPARATE_SIZE;++i) {
                             common[0].pop_back();
                         }
                         a += c0size - DTL_SEPARATE_SIZE;
@@ -460,15 +460,15 @@ namespace dtl {
         /**
          * search shortest path and record the path
          */
-        long snake(long k, long above, long below) {
-            long r = above > below ? path[k-1+offset] : path[k+1+offset];
-            long y = max(above, below);
-            long x = y - k;
+        long long snake(long long k, long long above, long long below) {
+            long long r = above > below ? path[k-1+offset] : path[k+1+offset];
+            long long y = max(above, below);
+            long long x = y - k;
             while (x < M && y < N && cmp.impl(A[x], B[y])) {
                 ++x;++y;
             }
             
-            path[k+offset] = pathCordinates.size();
+            path[k+offset] = (long long)pathCordinates.size();
             if (!onlyEditDistance) {
                 P p;
                 p.x = x;p.y = y;p.k = r;
@@ -483,12 +483,12 @@ namespace dtl {
         bool recordSequence (editPathCordinates& v) {
             sequence_const_iter x(A.begin());
             sequence_const_iter y(B.begin());
-            long x_idx, y_idx;   // line number for Unified Format
-            long px_idx, py_idx; // cordinates
-            long size = v.size() - 1;
+            long long x_idx, y_idx;   // line number for Unified Format
+            long long px_idx, py_idx; // cordinates
+            long long size = (long long)v.size() - 1;
             x_idx  = y_idx  = 1;
             px_idx = py_idx = 0;
-            for (long i=size;i>=0;--i) {
+            for (long long i=size;i>=0;--i) {
                 while(px_idx < v[i].x || py_idx < v[i].y) {
                     if (v[i].y - v[i].x > py_idx - px_idx) {
                         if (!isReverse()) {
@@ -545,9 +545,9 @@ namespace dtl {
                 N        = distance(B.begin(), B.end());
                 delta    = N - M;
                 offset   = M + 1;
-                long size = M + N + 3;
+                long long size = M + N + 3;
                 delete[] fp;
-                fp = new long[size];
+                fp = new long long[size];
                 fill(&fp[0], &fp[size], -1);
                 fill(path.begin(), path.end(), -1);
                 return false;
@@ -558,7 +558,7 @@ namespace dtl {
         /**
          * record odd sequence to ses
          */
-        void inline recordOddSequence (long idx, long length, sequence_const_iter it, const edit_t et) {
+        void inline recordOddSequence (long long idx, long long length, sequence_const_iter it, const edit_t et) {
             while(idx < length){
                 ses.addSequence(*it, idx, 0, et);
                 ++it;
