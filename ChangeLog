@@ -1,4 +1,18 @@
 
+2010-07-11 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* fixes potential risk on 64bit environment(size of 'int' and size of 'size_t')
+
+	* add scons
+
+	* fixed specifyConfliction's bug
+
+	* fixed memory leak when onlyEditDistance is true
+
+	* change indent size from 2 to 4
+
+	* 1.07 released
+
 2010-05-01 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* add specifyConfliction
