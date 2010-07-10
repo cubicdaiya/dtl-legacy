@@ -75,7 +75,7 @@ namespace dtl {
         }
         
         using Sequence< elem >::addSequence;
-        void addSequence (elem e, int beforeIdx, int afterIdx, const edit_t type) {
+        void addSequence (elem e, long long beforeIdx, long long afterIdx, const edit_t type) {
             elemInfo info;
             info.beforeIdx = beforeIdx;
             info.afterIdx  = afterIdx;

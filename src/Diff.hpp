@@ -60,10 +60,10 @@ namespace dtl {
     private :
         sequence A;
         sequence B;
-        long long M;
-        long long N;
-        long long delta;
-        long long offset;
+        size_t M;
+        size_t N;
+        size_t delta;
+        size_t offset;
         long long *fp;
         long long editDistance;
         Lcs< elem > lcs;
@@ -160,7 +160,7 @@ namespace dtl {
                 joinSesVec(shunk, it->common[1]);
                 it->a += inc_dec_total;
                 lstIt = lstIt_t;
-                while (seq_lnum++ < it->a && longer_seq_lnum++ < N) {
+                while (seq_lnum++ < it->a && longer_seq_lnum++ < (long long)N) {
                     ++cit;
                     if (lstIt != seqLst.end()) ++lstIt;
                 }
@@ -231,24 +231,23 @@ namespace dtl {
             if (isHuge()) pathCordinates.reserve(MAX_CORDINATES_SIZE + 50000);
             
             long long p = -1;
-            long long size = M + N + 3;
-            fp = new long long[size];
-            fill(&fp[0], &fp[size], -1);
-            path = editPath(size);
+            fp = new long long[M + N + 3];
+            fill(&fp[0], &fp[M + N + 3], -1);
+            path = editPath(M + N + 3);
             fill(path.begin(), path.end(), -1);
         ONP:
             do {
                 ++p;
-                for (long long k=-p;k<=delta-1;++k) {
+                for (long long k=-p;k<=(long long)delta-1;++k) {
                     fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
                 }
-                for (long long k=delta+p;k>=delta+1;--k) {
+                for (long long k=(long long)delta+p;k>=(long long)delta+1;--k) {
                     fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
                 }
-                fp[delta+offset] = snake(delta, fp[delta-1+offset]+1, fp[delta+1+offset]);
-            } while (fp[delta+offset] != N && pathCordinates.size() < MAX_CORDINATES_SIZE);
+                fp[delta+offset] = snake((long long)delta, fp[delta-1+offset]+1, fp[delta+1+offset]);
+            } while (fp[delta+offset] != (long long)N && pathCordinates.size() < MAX_CORDINATES_SIZE);
             
-            editDistance += delta + 2 * p;
+            editDistance += (long long)delta + 2 * p;
             long long r = path[delta+offset];
             P cordinate;
             editPathCordinates epc(0);
@@ -260,10 +259,10 @@ namespace dtl {
             }
             
             while(r != -1){
-                cordinate.x = pathCordinates[r].x;
-                cordinate.y = pathCordinates[r].y;
+                cordinate.x = pathCordinates[(size_t)r].x;
+                cordinate.y = pathCordinates[(size_t)r].y;
                 epc.push_back(cordinate);
-                r = pathCordinates[r].k;
+                r = pathCordinates[(size_t)r].k;
             }
             
             // record Longest Common Subsequence & Shortest Edit Script
@@ -461,14 +460,14 @@ namespace dtl {
          * search shortest path and record the path
          */
         long long snake(long long k, long long above, long long below) {
-            long long r = above > below ? path[k-1+offset] : path[k+1+offset];
+            long long r = above > below ? path[(size_t)k-1+offset] : path[(size_t)k+1+offset];
             long long y = max(above, below);
             long long x = y - k;
-            while (x < M && y < N && cmp.impl(A[x], B[y])) {
+            while ((size_t)x < M && (size_t)y < N && cmp.impl(A[(size_t)x], B[(size_t)y])) {
                 ++x;++y;
             }
             
-            path[k+offset] = (long long)pathCordinates.size();
+            path[(size_t)k+offset] = (long long)pathCordinates.size();
             if (!onlyEditDistance) {
                 P p;
                 p.x = x;p.y = y;p.k = r;
@@ -485,10 +484,9 @@ namespace dtl {
             sequence_const_iter y(B.begin());
             long long x_idx, y_idx;   // line number for Unified Format
             long long px_idx, py_idx; // cordinates
-            long long size = (long long)v.size() - 1;
             x_idx  = y_idx  = 1;
             px_idx = py_idx = 0;
-            for (long long i=size;i>=0;--i) {
+            for (size_t i=v.size()-1;i>=0;--i) {
                 while(px_idx < v[i].x || py_idx < v[i].y) {
                     if (v[i].y - v[i].x > py_idx - px_idx) {
                         if (!isReverse()) {
@@ -519,9 +517,10 @@ namespace dtl {
                         ++py_idx;
                     }
                 }
+                if (i == 0) break;
             }
             
-            if (x_idx > M && y_idx > N) {
+            if (x_idx > (long long)M && y_idx > (long long)N) {
                 // all recording success
             } else {
                 // unserious difference
@@ -545,10 +544,9 @@ namespace dtl {
                 N        = distance(B.begin(), B.end());
                 delta    = N - M;
                 offset   = M + 1;
-                long long size = M + N + 3;
                 delete[] fp;
-                fp = new long long[size];
-                fill(&fp[0], &fp[size], -1);
+                fp = new long long[M + N + 3];
+                fill(&fp[0], &fp[M + N + 3], -1);
                 fill(path.begin(), path.end(), -1);
                 return false;
             }
