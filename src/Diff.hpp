@@ -405,7 +405,7 @@ namespace dtl {
                     if ((long long)common[0].size() >= DTL_SEPARATE_SIZE) {
                         long long c0size = (long long)common[0].size();
                         rotate(common[0].begin(), 
-                               common[0].begin() + c0size - DTL_SEPARATE_SIZE, 
+                               common[0].begin() + (size_t)c0size - DTL_SEPARATE_SIZE, 
                                common[0].end());
                         for (long long i=0;i<c0size - DTL_SEPARATE_SIZE;++i) {
                             common[0].pop_back();
@@ -536,8 +536,8 @@ namespace dtl {
                 }
                 
                 // decent difference
-                sequence A_(A.begin() + x_idx - 1, A.end());
-                sequence B_(B.begin() + y_idx - 1, B.end());
+                sequence A_(A.begin() + (size_t)x_idx - 1, A.end());
+                sequence B_(B.begin() + (size_t)y_idx - 1, B.end());
                 A        = A_;
                 B        = B_;
                 M        = distance(A.begin(), A.end());
