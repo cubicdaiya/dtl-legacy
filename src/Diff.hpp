@@ -47,35 +47,35 @@ namespace dtl {
     template <typename elem, typename sequence>
     class Diff
     {
-        typedef pair< elem, elemInfo > sesElem;
-        typedef vector< sesElem > sesElemVec;
-        typedef vector< uniHunk< sesElem > > uniHunkVec;
-        typedef list< elem > elemList;
-        typedef vector< elem > elemVec;
-        typedef typename uniHunkVec::iterator uniHunkVec_iter;
-        typedef typename sesElemVec::iterator sesElemVec_iter;
-        typedef typename elemList::iterator elemList_iter;
-        typedef typename sequence::iterator sequence_iter;
+        typedef pair< elem, elemInfo >            sesElem;
+        typedef vector< sesElem >                 sesElemVec;
+        typedef vector< uniHunk< sesElem > >      uniHunkVec;
+        typedef list< elem >                      elemList;
+        typedef vector< elem >                    elemVec;
+        typedef typename uniHunkVec::iterator     uniHunkVec_iter;
+        typedef typename sesElemVec::iterator     sesElemVec_iter;
+        typedef typename elemList::iterator       elemList_iter;
+        typedef typename sequence::iterator       sequence_iter;
         typedef typename sequence::const_iterator sequence_const_iter;
     private :
-        sequence A;
-        sequence B;
-        size_t M;
-        size_t N;
-        size_t delta;
-        size_t offset;
-        long long *fp;
-        long long editDistance;
-        Lcs< elem > lcs;
-        Ses< elem > ses;
-        editPath path;
+        sequence           A;
+        sequence           B;
+        size_t             M;
+        size_t             N;
+        size_t             delta;
+        size_t             offset;
+        long long          *fp;
+        long long          editDistance;
+        Lcs< elem >        lcs;
+        Ses< elem >        ses;
+        editPath           path;
         editPathCordinates pathCordinates;
-        bool reverse;
-        bool huge;
-        bool unserious;
-        bool onlyEditDistance;
-        uniHunkVec uniHunks;
-        Compare<elem> cmp;
+        bool               reverse;
+        bool               huge;
+        bool               unserious;
+        bool               onlyEditDistance;
+        uniHunkVec         uniHunks;
+        Compare<elem>      cmp;
     public :
         Diff () {}
         
@@ -144,16 +144,16 @@ namespace dtl {
          * patching with Unified Format Hunks
          */
         sequence uniPatch (sequence seq) {
-            elemList seqLst(seq.begin(), seq.end());
-            sesElemVec shunk;
+            elemList        seqLst(seq.begin(), seq.end());
+            sesElemVec      shunk;
             sesElemVec_iter vsesIt;
-            elemList_iter lstIt   = seqLst.begin();
-            elemList_iter lstIt_t = seqLst.begin();
-            sequence_iter cit     = seq.begin();
-            long long inc_dec_total     = 0;
-            long long seq_lnum          = 1;
-            long long longer_seq_lnum   = 1;
-            long long loop              = 0;
+            elemList_iter   lstIt           = seqLst.begin();
+            elemList_iter   lstIt_t         = seqLst.begin();
+            sequence_iter   cit             = seq.begin();
+            long long       inc_dec_total   = 0;
+            long long       seq_lnum        = 1;
+            long long       longer_seq_lnum = 1;
+            long long       loop            = 0;
             for (uniHunkVec_iter it=uniHunks.begin();it!=uniHunks.end();++it, ++loop) {
                 joinSesVec(shunk, it->common[0]);
                 joinSesVec(shunk, it->change);
@@ -198,9 +198,9 @@ namespace dtl {
          * patching with Shortest Edit Script
          */
         sequence patch (sequence seq) const {
-            sesElemVec sesSeq = ses.getSequence();
-            elemList seqLst(seq.begin(), seq.end());
-            elemList_iter lstIt = seqLst.begin();
+            sesElemVec    sesSeq = ses.getSequence();
+            elemList      seqLst(seq.begin(), seq.end());
+            elemList_iter lstIt  = seqLst.begin();
             for (sesElemVec_iter sesIt=sesSeq.begin();sesIt!=sesSeq.end();++sesIt) {
                 switch (sesIt->second.type) {
                 case SES_ADD :
@@ -311,15 +311,15 @@ namespace dtl {
         void composeUnifiedHunks () {
             sesElemVec common[2];
             sesElemVec change;
-            sesElemVec ses_v  = ses.getSequence();
-            long long l_cnt   = 1;
-            long long length  = distance(ses_v.begin(), ses_v.end());
-            long long middle  = 0;
-            bool isMiddle, isAfter;
-            elem e;
-            elemInfo einfo;
-            long long a, b, c, d;         // @@ -a,b +c,d @@
-            long long inc_dec_count = 0;
+            sesElemVec ses_v         = ses.getSequence();
+            long long  l_cnt         = 1;
+            long long  length        = distance(ses_v.begin(), ses_v.end());
+            long long  middle        = 0;
+            bool       isMiddle, isAfter;
+            elem       e;
+            elemInfo   einfo;
+            long long  a, b, c, d; // @@ -a,b +c,d @@
+            long long  inc_dec_count = 0;
             uniHunk<sesElem> hunk;
             sesElemVec adds;
             sesElemVec deletes;
@@ -391,7 +391,7 @@ namespace dtl {
                 // compose unified format hunk
                 if (isAfter && !change.empty()) {
                     sesElemVec_iter cit = it;
-                    long long cnt = 0;
+                    long long       cnt = 0;
                     for (long long i=0;i<DTL_SEPARATE_SIZE && (cit != ses_v.end());++i, ++cit) {
                         if (cit->second.type == SES_COMMON) {
                             ++cnt;

@@ -47,12 +47,12 @@ namespace dtl {
     template <typename elem, typename sequence>
     class Diff3
     {
-        typedef pair< elem, elemInfo > sesElem;
-        typedef vector< sesElem > sesElemVec;
-        typedef vector< elem > elemVec;
+        typedef pair< elem, elemInfo >        sesElem;
+        typedef vector< sesElem >             sesElemVec;
+        typedef vector< elem >                elemVec;
         typedef typename sesElemVec::iterator sesElemVec_iter;
-        typedef typename sequence::iterator sequence_iter;
-        typedef typename elemVec::iterator elemVec_iter;
+        typedef typename sequence::iterator   sequence_iter;
+        typedef typename elemVec::iterator    elemVec_iter;
     private:
         sequence A;
         sequence B;
@@ -60,10 +60,10 @@ namespace dtl {
         sequence S;
         Diff< elem, sequence > diff_ba;
         Diff< elem, sequence > diff_bc;
-        bool conflict;
-        elem csepabegin;
-        elem csepa;
-        elem csepaend;
+        bool     conflict;
+        elem     csepabegin;
+        elem     csepa;
+        elem     csepaend;
     public :
         Diff3 () {}
         Diff3 (const sequence& a, 
@@ -127,15 +127,15 @@ namespace dtl {
          * merge implementation
          */
         sequence merge_ () {
-            elemVec seq;
-            Ses< elem > ses_ba     = diff_ba.getSes();
-            Ses< elem > ses_bc     = diff_bc.getSes();
-            sesElemVec ses_ba_v    = ses_ba.getSequence();
-            sesElemVec ses_bc_v    = ses_bc.getSequence();
-            sesElemVec_iter ba_it  = ses_ba_v.begin();
-            sesElemVec_iter bc_it  = ses_bc_v.begin();
-            sesElemVec_iter ba_end = ses_ba_v.end();
-            sesElemVec_iter bc_end = ses_bc_v.end();
+            elemVec         seq;
+            Ses< elem >     ses_ba   = diff_ba.getSes();
+            Ses< elem >     ses_bc   = diff_bc.getSes();
+            sesElemVec      ses_ba_v = ses_ba.getSequence();
+            sesElemVec      ses_bc_v = ses_bc.getSequence();
+            sesElemVec_iter ba_it    = ses_ba_v.begin();
+            sesElemVec_iter bc_it    = ses_bc_v.begin();
+            sesElemVec_iter ba_end   = ses_ba_v.end();
+            sesElemVec_iter bc_end   = ses_bc_v.end();
             
             while (!isEnd(ba_end, ba_it) || !isEnd(bc_end, bc_it)) {
                 while (true) {
@@ -218,18 +218,18 @@ namespace dtl {
          * specify the confliction points
          */
         void specifyConfliction () {
-            sequence_iter a_it         = A.begin();
-            sequence_iter b_it         = B.begin();
-            sequence_iter c_it         = C.begin();
-            sequence_iter a_end        = A.end();
-            sequence_iter b_end        = B.end();
-            sequence_iter c_end        = C.end();
-            elemVec elem_common;
-            elemVec elem_conf1;
-            elemVec elem_conf2;
-            elemVec seq_vec;
-            bool is_common;
-            elemVec elem_common_end_vec;
+            sequence_iter a_it  = A.begin();
+            sequence_iter b_it  = B.begin();
+            sequence_iter c_it  = C.begin();
+            sequence_iter a_end = A.end();
+            sequence_iter b_end = B.end();
+            sequence_iter c_end = C.end();
+            elemVec       elem_common;
+            elemVec       elem_conf1;
+            elemVec       elem_conf2;
+            elemVec       seq_vec;
+            bool          is_common;
+            elemVec       elem_common_end_vec;
             
             is_common = false;
         SPECIFY :

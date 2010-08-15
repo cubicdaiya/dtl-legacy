@@ -79,9 +79,9 @@ namespace dtl {
      * info for Unified Format
      */
     typedef struct eleminfo {
-        long long      beforeIdx;           // index of prev sequence
-        long long      afterIdx;            // index of after sequence
-        edit_t   type;                // type of edit(Add, Delete, Common)
+        long long beforeIdx;           // index of prev sequence
+        long long afterIdx;            // index of after sequence
+        edit_t    type;                // type of edit(Add, Delete, Common)
     } elemInfo;
     
     const long long DTL_SEPARATE_SIZE = 3;
@@ -102,17 +102,17 @@ namespace dtl {
     const unsigned long long MAX_CORDINATES_SIZE = 2000000;
     
     typedef vector< long long > editPath;
-    typedef vector< P >   editPathCordinates;
+    typedef vector< P >         editPathCordinates;
     
     /**
      * Structure of Unified Format Hunk
      */
     template <typename sesElem>
     struct uniHunk {
-        long long a, b, c, d;              // @@ -a,b +c,d @@
+        long long a, b, c, d;        // @@ -a,b +c,d @@
         vector< sesElem > common[2]; // anteroposterior commons on changes
         vector< sesElem > change;    // changes
-        long long inc_dec_count;           // count of increace and decrease
+        long long inc_dec_count;     // count of increace and decrease
     };
     
 }

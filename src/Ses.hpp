@@ -48,7 +48,7 @@ namespace dtl {
     {
     private :
         typedef pair< elem, elemInfo > sesElem;
-        typedef vector< sesElem > sesElemVec;
+        typedef vector< sesElem >      sesElemVec;
     public :
         
         Ses () : onlyAdd(true), onlyDelete(true), onlyCopy(true) { }
@@ -103,9 +103,9 @@ namespace dtl {
         }
     private :
         sesElemVec sequence;
-        bool onlyAdd;
-        bool onlyDelete;
-        bool onlyCopy;
+        bool       onlyAdd;
+        bool       onlyDelete;
+        bool       onlyCopy;
     };
 }
 
