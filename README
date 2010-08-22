@@ -26,7 +26,7 @@ How to
 
 If you use this library, you may include dtl.hpp only.
 
-#include "src/dtl.hpp"
+#include "dtl/dtl.hpp"
 
 If you want to know in more detail, please see the following URL.
 
