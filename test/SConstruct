@@ -1,8 +1,4 @@
-
-
 env = Environment(CCFLAGS='-Wall -O2', LIBS='gtest')
-ret = env.Program('dtl_test', ['dtl_test.cpp'])
-env.AddPostAction(ret, './' + ret[0].path)
-env.Alias('check', ret)
-env.AlwaysBuild(ret)
-
+test = env.Program('dtl_test', ['dtl_test.cpp'], LIBS='gtest')
+test_alias = env.Alias('check', test, test[0].abspath)
+env.AlwaysBuild(test_alias)
