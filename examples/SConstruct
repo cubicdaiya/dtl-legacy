@@ -1,10 +1,10 @@
 env = Environment(CCFLAGS='-Wall -O2')
 targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'],
             'intdiff'    : ['intdiff.cpp'],
-            'strdiff3'   : ['strdiff3.cpp',   'common.cpp'],
-            'intdiff3'   : ['intdiff3.cpp',   'common.cpp'],
             'unidiff'    : ['unidiff.cpp',    'common.cpp'],
             'unistrdiff' : ['unistrdiff.cpp', 'common.cpp'],
+            'strdiff3'   : ['strdiff3.cpp',   'common.cpp'],
+            'intdiff3'   : ['intdiff3.cpp'],
             'patch'      : ['patch.cpp',      'common.cpp'],
             'fpatch'     : ['fpatch.cpp',     'common.cpp']
             }
