@@ -1,4 +1,3 @@
-
 env = Environment(CCFLAGS='-Wall -O2')
 targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'],
             'intdiff'    : ['intdiff.cpp'],
@@ -10,7 +9,4 @@ targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'],
             'fpatch'     : ['fpatch.cpp',     'common.cpp']
             }
 
-for target in targets:
-    objs = targets[target]
-    env.Program(target, objs)
-
+[ env.Program(target, targets[target]) for target in targets ]

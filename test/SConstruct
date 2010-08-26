@@ -1,4 +1,4 @@
 env = Environment(CCFLAGS='-Wall -O2', LIBS='gtest')
-test = env.Program('dtl_test', ['dtl_test.cpp'], LIBS='gtest')
+test = env.Program('dtl_test', ['dtl_test.cpp'])
 test_alias = env.Alias('check', test, test[0].abspath)
 env.AlwaysBuild(test_alias)
