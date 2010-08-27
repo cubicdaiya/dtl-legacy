@@ -1,4 +1,4 @@
-env = Environment(CCFLAGS='-Wall -O2')
+env = Environment(CCFLAGS='-Wall -O2', CPPPATH='..')
 targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'],
             'intdiff'    : ['intdiff.cpp'],
             'unidiff'    : ['unidiff.cpp',    'common.cpp'],

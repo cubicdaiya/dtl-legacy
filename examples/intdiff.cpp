@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <vector>
-#include "../dtl/dtl.hpp"
+#include <dtl/dtl.hpp>
 
 using namespace std;
 

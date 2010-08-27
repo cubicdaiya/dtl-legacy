@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 #include <utility>
-#include "../dtl/dtl.hpp"
+#include <dtl/dtl.hpp>
 
 using std::string;
 using std::vector;
