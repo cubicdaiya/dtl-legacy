@@ -15,7 +15,7 @@ protected :
     typedef struct case_t {
         sequence A;
         sequence B;
-        Diff< elem, sequence > diff;
+        size_t editdis;
         elemVec lcs_v;
         sesElemVec ses_seq;
     } case_t;
@@ -27,10 +27,11 @@ protected :
         case_t c;
         c.A = a;
         c.B = b;
-        c.diff = Diff< elem, sequence >(a, b);
-        c.diff.compose();
-        c.lcs_v = c.diff.getLcsVec();
-        c.ses_seq = c.diff.getSes().getSequence();    
+        Diff< elem, sequence > diff(a, b);
+        diff.compose();
+        c.editdis = diff.getEditDistance();
+        c.lcs_v   = diff.getLcsVec();
+        c.ses_seq = diff.getSes().getSequence();    
         return c;
     }
     
@@ -70,7 +71,7 @@ protected :
  * - SES
  */
 TEST_F (IntDiffTest, diff_test0) {
-    EXPECT_EQ(0, cases[0].diff.getEditDistance());
+    EXPECT_EQ(0, cases[0].editdis);
     
     EXPECT_TRUE(cases[0].lcs_v.empty());
     
@@ -78,7 +79,7 @@ TEST_F (IntDiffTest, diff_test0) {
 }
 
 TEST_F (IntDiffTest, diff_test1) {
-    EXPECT_EQ(1,       cases[1].diff.getEditDistance());
+    EXPECT_EQ(1,       cases[1].editdis);
     
     EXPECT_TRUE(cases[1].lcs_v.empty());
     
@@ -87,7 +88,7 @@ TEST_F (IntDiffTest, diff_test1) {
 }
 
 TEST_F (IntDiffTest, diff_test2) {
-    EXPECT_EQ(1,          cases[2].diff.getEditDistance());
+    EXPECT_EQ(1,          cases[2].editdis);
     
     EXPECT_TRUE(cases[2].lcs_v.empty());
     
@@ -96,7 +97,7 @@ TEST_F (IntDiffTest, diff_test2) {
 }
 
 TEST_F (IntDiffTest, diff_test3) {
-    EXPECT_EQ(8,          cases[3].diff.getEditDistance());
+    EXPECT_EQ(8,          cases[3].editdis);
     
     EXPECT_EQ(3,          cases[3].lcs_v[0]);
     EXPECT_EQ(4,          cases[3].lcs_v[1]);
@@ -135,7 +136,7 @@ TEST_F (IntDiffTest, diff_test3) {
 }
 
 TEST_F (IntDiffTest, diff_test4) {
-    EXPECT_EQ(4,          cases[4].diff.getEditDistance());
+    EXPECT_EQ(4,          cases[4].editdis);
     
     EXPECT_EQ(3,          cases[4].lcs_v[0]);
     EXPECT_EQ(4,          cases[4].lcs_v[1]);

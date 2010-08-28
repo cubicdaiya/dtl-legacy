@@ -14,6 +14,7 @@ using std::pair;
 
 using dtl::Diff;
 using dtl::Diff3;
+using dtl::Compare;
 using dtl::SES_COMMON;
 using dtl::SES_ADD;
 using dtl::SES_DELETE;

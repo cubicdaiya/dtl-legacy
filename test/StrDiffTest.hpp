@@ -1,22 +1,23 @@
-
 #ifndef STRDIFF_TEST
 #define STRDIFF_TEST
 
 #include "dtl_test_common.hpp"
+#include "comparators.hpp"
 
 class StrDiffTest : public ::testing::Test
 {
+public :
 protected :
     typedef char elem;
     typedef string sequence;
     typedef pair< elem, elemInfo > sesElem;
     typedef vector< elem > elemVec;
     typedef vector< sesElem > sesElemVec;
-    typedef vector < uniHunk< sesElem > > uniHunkVec;
+    typedef vector< uniHunk< sesElem > > uniHunkVec;
     typedef struct case_t {
         sequence A;
         sequence B;
-        Diff< elem, sequence > diff;
+        size_t editdis;
         elemVec lcs_v;
         sequence lcs_s;
         sesElemVec ses_seq;
@@ -26,44 +27,51 @@ protected :
     
     caseVec diff_cases;
     caseVec only_editdis_cases;
+    caseVec custom_cases;
     
+    template < typename comparator >
     case_t createCase (sequence a, sequence b, bool onlyEditdis = false) {
         case_t c;
+        comparator comp;
         c.A = a;
         c.B = b;
-        c.diff = Diff< elem, sequence >(a, b);
+        Diff< elem, sequence, comparator > diff(a, b, comp);
         if (onlyEditdis) {
-            c.diff.onOnlyEditDistance();
+            diff.onOnlyEditDistance();
         }
-        c.diff.compose();
-        c.diff.composeUnifiedHunks();
-        elemVec lcs_v = c.diff.getLcsVec();
+        diff.compose();
+        diff.composeUnifiedHunks();
+        c.editdis     = diff.getEditDistance();
+        elemVec lcs_v = diff.getLcsVec();
         c.lcs_s       = sequence(lcs_v.begin(), lcs_v.end());
-        c.ses_seq     = c.diff.getSes().getSequence();
-        c.hunk_v      = c.diff.getUniHunks();
+        c.ses_seq     = diff.getSes().getSequence();
+        c.hunk_v      = diff.getUniHunks();
+        diff.printSES();
         return c;
     }
     
     void SetUp() {
-        diff_cases.push_back(createCase("abc",               "abd"));                                      // 0
-        diff_cases.push_back(createCase("acbdeacbed",        "acebdabbabed"));                             // 1
-        diff_cases.push_back(createCase("abcdef",            "dacfea"));                                   // 2
-        diff_cases.push_back(createCase("abcbda",            "bdcaba"));                                   // 3
-        diff_cases.push_back(createCase("bokko",             "bokkko"));                                   // 4
-        diff_cases.push_back(createCase("",                  ""));                                         // 5
-        diff_cases.push_back(createCase("a",                 ""));                                         // 6
-        diff_cases.push_back(createCase("",                  "b"));                                        // 7
-        diff_cases.push_back(createCase("acbdeaqqqqqqqcbed", "acebdabbqqqqqqqabed"));                      // 8
+        diff_cases.push_back(createCase< Compare< elem > >("abc",               "abd"));                       // 0
+        diff_cases.push_back(createCase< Compare< elem > >("acbdeacbed",        "acebdabbabed"));              // 1
+        diff_cases.push_back(createCase< Compare< elem > >("abcdef",            "dacfea"));                    // 2
+        diff_cases.push_back(createCase< Compare< elem > >("abcbda",            "bdcaba"));                    // 3
+        diff_cases.push_back(createCase< Compare< elem > >("bokko",             "bokkko"));                    // 4
+        diff_cases.push_back(createCase< Compare< elem > >("",                  ""));                          // 5
+        diff_cases.push_back(createCase< Compare< elem > >("a",                 ""));                          // 6
+        diff_cases.push_back(createCase< Compare< elem > >("",                  "b"));                         // 7
+        diff_cases.push_back(createCase< Compare< elem > >("acbdeaqqqqqqqcbed", "acebdabbqqqqqqqabed"));       // 8
         
-        only_editdis_cases.push_back(createCase("abc",                "abd",                 true));       // 0
-        only_editdis_cases.push_back(createCase("acbdeacbed",         "acebdabbabed",        true));       // 1
-        only_editdis_cases.push_back(createCase("abcdef",             "dacfea",              true));       // 2
-        only_editdis_cases.push_back(createCase("abcbda",             "bdcaba",              true));       // 3
-        only_editdis_cases.push_back(createCase("bokko",              "bokkko",              true));       // 4
-        only_editdis_cases.push_back(createCase("",                   "",                    true));       // 5
-        only_editdis_cases.push_back(createCase("a",                  "",                    true));       // 6
-        only_editdis_cases.push_back(createCase("",                   "b",                   true));       // 7
-        only_editdis_cases.push_back(createCase("acbdeaqqqqqqqcbed",  "acebdabbqqqqqqqabed", true));       // 8
+        only_editdis_cases.push_back(createCase< Compare< elem > >("abc",                "abd",                 true)); // 0
+        only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeacbed",         "acebdabbabed",        true)); // 1
+        only_editdis_cases.push_back(createCase< Compare< elem > >("abcdef",             "dacfea",              true)); // 2
+        only_editdis_cases.push_back(createCase< Compare< elem > >("abcbda",             "bdcaba",              true)); // 3
+        only_editdis_cases.push_back(createCase< Compare< elem > >("bokko",              "bokkko",              true)); // 4
+        only_editdis_cases.push_back(createCase< Compare< elem > >("",                   "",                    true)); // 5
+        only_editdis_cases.push_back(createCase< Compare< elem > >("a",                  "",                    true)); // 6
+        only_editdis_cases.push_back(createCase< Compare< elem > >("",                   "b",                   true)); // 7
+        only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeaqqqqqqqcbed",  "acebdabbqqqqqqqabed", true)); // 8
+
+        custom_cases.push_back(createCase< CaseInsensitive >("abc", "Abc")); // 0
     }
     
     void TearDown () {}
@@ -82,7 +90,7 @@ protected :
 
 TEST_F (StrDiffTest, diff_test0) {
     
-    EXPECT_EQ(2,          diff_cases[0].diff.getEditDistance());
+    EXPECT_EQ(2,          diff_cases[0].editdis);
     
     EXPECT_EQ("ab",       diff_cases[0].lcs_s);
     
@@ -111,7 +119,7 @@ TEST_F (StrDiffTest, diff_test0) {
 }
 
 TEST_F (StrDiffTest, diff_test1) {
-    EXPECT_EQ(6,          diff_cases[1].diff.getEditDistance());
+    EXPECT_EQ(6,          diff_cases[1].editdis);
     
     EXPECT_EQ("acbdabed", diff_cases[1].lcs_s);
     
@@ -180,7 +188,7 @@ TEST_F (StrDiffTest, diff_test1) {
 }
 
 TEST_F (StrDiffTest, diff_test2) {
-    EXPECT_EQ(6,          diff_cases[2].diff.getEditDistance());
+    EXPECT_EQ(6,          diff_cases[2].editdis);
     
     EXPECT_EQ("acf",      diff_cases[2].lcs_s);
     
@@ -231,7 +239,7 @@ TEST_F (StrDiffTest, diff_test2) {
 }
 
 TEST_F (StrDiffTest, diff_test3) {
-    EXPECT_EQ(4,          diff_cases[3].diff.getEditDistance());
+    EXPECT_EQ(4,          diff_cases[3].editdis);
     
     EXPECT_EQ("bcba",     diff_cases[3].lcs_s);
     
@@ -277,7 +285,7 @@ TEST_F (StrDiffTest, diff_test3) {
 }
 
 TEST_F (StrDiffTest, diff_test4) {
-    EXPECT_EQ(1,          diff_cases[4].diff.getEditDistance());
+    EXPECT_EQ(1,          diff_cases[4].editdis);
     
     EXPECT_EQ("bokko",    diff_cases[4].lcs_s);
     
@@ -312,7 +320,7 @@ TEST_F (StrDiffTest, diff_test4) {
 }
 
 TEST_F (StrDiffTest, diff_test5) {
-    EXPECT_EQ(0,  diff_cases[5].diff.getEditDistance());
+    EXPECT_EQ(0,  diff_cases[5].editdis);
     
     EXPECT_EQ("", diff_cases[5].lcs_s);
     
@@ -322,7 +330,7 @@ TEST_F (StrDiffTest, diff_test5) {
 }
 
 TEST_F (StrDiffTest, diff_test6) {
-    EXPECT_EQ(1,          diff_cases[6].diff.getEditDistance());
+    EXPECT_EQ(1,          diff_cases[6].editdis);
     
     EXPECT_EQ("",         diff_cases[6].lcs_s);
     
@@ -340,7 +348,7 @@ TEST_F (StrDiffTest, diff_test6) {
 }
 
 TEST_F (StrDiffTest, diff_test7) {
-    EXPECT_EQ(1,       diff_cases[7].diff.getEditDistance());
+    EXPECT_EQ(1,       diff_cases[7].editdis);
     
     EXPECT_EQ("",      diff_cases[7].lcs_s);
     
@@ -358,7 +366,7 @@ TEST_F (StrDiffTest, diff_test7) {
 }
 
 TEST_F (StrDiffTest, diff_test8) {
-    EXPECT_EQ(6,                 diff_cases[8].diff.getEditDistance());
+    EXPECT_EQ(6,                 diff_cases[8].editdis);
     
     EXPECT_EQ("acbdaqqqqqqqbed", diff_cases[8].lcs_s);
     
@@ -457,7 +465,7 @@ TEST_F (StrDiffTest, diff_test8) {
 }
 
 TEST_F (StrDiffTest, only_editdis_test0) {
-    EXPECT_EQ(2,       only_editdis_cases[0].diff.getEditDistance());
+    EXPECT_EQ(2,       only_editdis_cases[0].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[0].lcs_s);
     
@@ -467,7 +475,7 @@ TEST_F (StrDiffTest, only_editdis_test0) {
 }
 
 TEST_F (StrDiffTest, only_editdis_test1) {
-    EXPECT_EQ(6,       only_editdis_cases[1].diff.getEditDistance());
+    EXPECT_EQ(6,       only_editdis_cases[1].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[1].lcs_s);
     
@@ -477,7 +485,7 @@ TEST_F (StrDiffTest, only_editdis_test1) {
 }
 
 TEST_F (StrDiffTest, only_editdis_test2) {
-    EXPECT_EQ(6,       only_editdis_cases[2].diff.getEditDistance());
+    EXPECT_EQ(6,       only_editdis_cases[2].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[2].lcs_s);
     
@@ -487,7 +495,7 @@ TEST_F (StrDiffTest, only_editdis_test2) {
 }
 
 TEST_F (StrDiffTest, only_editdis_test3) {
-    EXPECT_EQ(4,       only_editdis_cases[3].diff.getEditDistance());
+    EXPECT_EQ(4,       only_editdis_cases[3].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[3].lcs_s);
     
@@ -497,7 +505,7 @@ TEST_F (StrDiffTest, only_editdis_test3) {
 }
 
 TEST_F (StrDiffTest, only_editdis_test4) {
-    EXPECT_EQ(1,       only_editdis_cases[4].diff.getEditDistance());
+    EXPECT_EQ(1,       only_editdis_cases[4].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[4].lcs_s);
     
@@ -507,7 +515,7 @@ TEST_F (StrDiffTest, only_editdis_test4) {
 }
 
 TEST_F (StrDiffTest, only_editdis_test5) {
-    EXPECT_EQ(0,       only_editdis_cases[5].diff.getEditDistance());
+    EXPECT_EQ(0,       only_editdis_cases[5].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[5].lcs_s);
     
@@ -517,7 +525,7 @@ TEST_F (StrDiffTest, only_editdis_test5) {
 }
 
 TEST_F (StrDiffTest, only_editdis_test6) {
-    EXPECT_EQ(1,       only_editdis_cases[6].diff.getEditDistance());
+    EXPECT_EQ(1,       only_editdis_cases[6].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[6].lcs_s);
     
@@ -527,7 +535,7 @@ TEST_F (StrDiffTest, only_editdis_test6) {
 }
 
 TEST_F (StrDiffTest, only_editdis_test7) {
-    EXPECT_EQ(1,       only_editdis_cases[7].diff.getEditDistance());
+    EXPECT_EQ(1,       only_editdis_cases[7].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[7].lcs_s);
     
@@ -537,7 +545,7 @@ TEST_F (StrDiffTest, only_editdis_test7) {
 }
 
 TEST_F (StrDiffTest, only_editdis_test8) {
-    EXPECT_EQ(6,       only_editdis_cases[8].diff.getEditDistance());
+    EXPECT_EQ(6,       only_editdis_cases[8].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[8].lcs_s);
     
@@ -545,5 +553,18 @@ TEST_F (StrDiffTest, only_editdis_test8) {
     
     ASSERT_TRUE(only_editdis_cases[8].hunk_v.empty());
 }
+
+TEST_F (StrDiffTest, custom_comparator_test0) {
+    EXPECT_EQ(0,     custom_cases[0].editdis);
+    
+    EXPECT_EQ("Abc", custom_cases[0].lcs_s);
+
+    ASSERT_EQ('A',   custom_cases[0].ses_seq[0].first);
+    ASSERT_EQ('b',   custom_cases[0].ses_seq[1].first);
+    ASSERT_EQ('c',   custom_cases[0].ses_seq[2].first);
+    
+    ASSERT_TRUE(custom_cases[0].hunk_v.empty());
+}
+
 
 #endif // STRDIFF_TEST
