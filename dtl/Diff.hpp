@@ -44,7 +44,7 @@ namespace dtl {
      * diff class template
      * sequence must support random_access_iterator.
      */
-    template <typename elem, typename sequence>
+    template <typename elem, typename sequence, typename comparator = Compare<elem> >
     class Diff
     {
         typedef pair< elem, elemInfo >            sesElem;
@@ -75,7 +75,7 @@ namespace dtl {
         bool               unserious;
         bool               onlyEditDistance;
         uniHunkVec         uniHunks;
-        Compare<elem>      cmp;
+        comparator         cmp;
     public :
         Diff () {}
         
@@ -86,7 +86,7 @@ namespace dtl {
         
         Diff (const sequence& a, 
               const sequence& b, 
-              Compare< elem >& comp) : A(a), B(b), cmp(comp) {
+              const comparator& comp) : A(a), B(b), cmp(comp) {
             init();
         }
         
@@ -484,9 +484,10 @@ namespace dtl {
             sequence_const_iter y(B.begin());
             long long x_idx, y_idx;   // line number for Unified Format
             long long px_idx, py_idx; // cordinates
+            bool complete = false;
             x_idx  = y_idx  = 1;
             px_idx = py_idx = 0;
-            for (size_t i=v.size()-1;i>=0;--i) {
+            for (size_t i=v.size()-1;!complete;--i) {
                 while(px_idx < v[i].x || py_idx < v[i].y) {
                     if (v[i].y - v[i].x > py_idx - px_idx) {
                         if (!isReverse()) {
@@ -517,7 +518,7 @@ namespace dtl {
                         ++py_idx;
                     }
                 }
-                if (i == 0) break;
+                if (i == 0) complete = true;
             }
             
             if (x_idx > (long long)M && y_idx > (long long)N) {
