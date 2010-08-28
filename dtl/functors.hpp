@@ -128,7 +128,7 @@ namespace dtl {
     public :
         Compare () {}
         virtual ~Compare () {}
-        virtual bool impl (const elem& e1, const elem& e2) const {
+        virtual inline bool impl (const elem& e1, const elem& e2) const {
             return e1 == e2;
         }
     };
