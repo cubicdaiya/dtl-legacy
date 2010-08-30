@@ -46,7 +46,6 @@ protected :
         c.lcs_s       = sequence(lcs_v.begin(), lcs_v.end());
         c.ses_seq     = diff.getSes().getSequence();
         c.hunk_v      = diff.getUniHunks();
-        diff.printSES();
         return c;
     }
     
