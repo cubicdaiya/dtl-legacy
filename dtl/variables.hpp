@@ -126,7 +126,7 @@ namespace dtl {
     typedef typename elemList::iterator       elemList_iter;            \
     typedef typename sequence::iterator       sequence_iter;            \
     typedef typename sequence::const_iterator sequence_const_iter;      \
-    typedef typename elemVec::iterator    elemVec_iter;
+    typedef typename elemVec::iterator        elemVec_iter;
 
 
 } 

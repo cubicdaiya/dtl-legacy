@@ -300,20 +300,20 @@ namespace dtl {
          * compose Unified Format Hunks from Shortest Edit Script
          */
         void composeUnifiedHunks () {
-            sesElemVec common[2];
-            sesElemVec change;
-            sesElemVec ses_v         = ses.getSequence();
-            long long  l_cnt         = 1;
-            long long  length        = distance(ses_v.begin(), ses_v.end());
-            long long  middle        = 0;
-            bool       isMiddle, isAfter;
-            elem       e;
-            elemInfo   einfo;
-            long long  a, b, c, d; // @@ -a,b +c,d @@
-            long long  inc_dec_count = 0;
+            sesElemVec       common[2];
+            sesElemVec       change;
+            sesElemVec       ses_v  = ses.getSequence();
+            long long        l_cnt  = 1;
+            long long        length = distance(ses_v.begin(), ses_v.end());
+            long long        middle = 0;
+            bool             isMiddle, isAfter;
+            elem             e;
+            elemInfo         einfo;
+            long long        a, b, c, d;        // @@ -a,b +c,d @@
+            long long        inc_dec_count = 0;
             uniHunk<sesElem> hunk;
-            sesElemVec adds;
-            sesElemVec deletes;
+            sesElemVec       adds;
+            sesElemVec       deletes;
             
             isMiddle = isAfter = false;
             a = b = c = d = 0;

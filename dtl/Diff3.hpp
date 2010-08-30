@@ -53,12 +53,12 @@ namespace dtl {
         sequence               B;
         sequence               C;
         sequence               S;
+        Diff< elem, sequence > diff_ba;
+        Diff< elem, sequence > diff_bc;
         bool                   conflict;
         elem                   csepabegin;
         elem                   csepa;
         elem                   csepaend;
-        Diff< elem, sequence > diff_ba;
-        Diff< elem, sequence > diff_bc;
     public :
         Diff3 () {}
         Diff3 (const sequence& a, 
