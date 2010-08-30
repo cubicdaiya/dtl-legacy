@@ -3,7 +3,7 @@
 class PatchTest : public ::testing::Test
 {
 protected :
-    dtl_test_defs(char, string)
+    dtl_test_typedefs(char, string)
     typedef struct case_t {
         sequence A;
         sequence B;

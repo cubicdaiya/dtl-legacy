@@ -3,7 +3,7 @@
 class IntDiffTest : public ::testing::Test
 {
 protected :
-    dtl_test_defs(int, vector<int>)
+    dtl_test_typedefs(int, vector<int>)
     typedef struct case_t {
         sequence   A;
         sequence   B;

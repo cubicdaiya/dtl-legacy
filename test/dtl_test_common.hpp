@@ -21,13 +21,13 @@ using dtl::SES_DELETE;
 using dtl::elemInfo;
 using dtl::uniHunk;
 
-#define dtl_test_defs(e_type, seq_type)                             \
+#define dtl_test_typedefs(e_type, seq_type)                         \
     typedef e_type                       elem;                      \
     typedef seq_type                     sequence;                  \
     typedef pair< elem, elemInfo >       sesElem;                   \
     typedef vector< elem >               elemVec;                   \
     typedef vector< sesElem >            sesElemVec;                \
-    typedef vector< uniHunk< sesElem > > uniHunkVec;                \
+    typedef vector< uniHunk< sesElem > > uniHunkVec;
     
 
 #endif // DTL_TEST_COMMON
