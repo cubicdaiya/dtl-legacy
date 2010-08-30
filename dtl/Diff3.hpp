@@ -49,16 +49,16 @@ namespace dtl {
     {
     private:
         dtl_typedefs(elem, sequence)
-        sequence A;
-        sequence B;
-        sequence C;
-        sequence S;
+        sequence               A;
+        sequence               B;
+        sequence               C;
+        sequence               S;
+        bool                   conflict;
+        elem                   csepabegin;
+        elem                   csepa;
+        elem                   csepaend;
         Diff< elem, sequence > diff_ba;
         Diff< elem, sequence > diff_bc;
-        bool     conflict;
-        elem     csepabegin;
-        elem     csepa;
-        elem     csepaend;
     public :
         Diff3 () {}
         Diff3 (const sequence& a, 
