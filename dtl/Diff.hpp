@@ -47,17 +47,8 @@ namespace dtl {
     template <typename elem, typename sequence, typename comparator = Compare<elem> >
     class Diff
     {
-        typedef pair< elem, elemInfo >            sesElem;
-        typedef vector< sesElem >                 sesElemVec;
-        typedef vector< uniHunk< sesElem > >      uniHunkVec;
-        typedef list< elem >                      elemList;
-        typedef vector< elem >                    elemVec;
-        typedef typename uniHunkVec::iterator     uniHunkVec_iter;
-        typedef typename sesElemVec::iterator     sesElemVec_iter;
-        typedef typename elemList::iterator       elemList_iter;
-        typedef typename sequence::iterator       sequence_iter;
-        typedef typename sequence::const_iterator sequence_const_iter;
     private :
+        dtl_typedefs(elem, sequence)
         sequence           A;
         sequence           B;
         size_t             M;

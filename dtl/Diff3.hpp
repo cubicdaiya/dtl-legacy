@@ -47,13 +47,8 @@ namespace dtl {
     template <typename elem, typename sequence>
     class Diff3
     {
-        typedef pair< elem, elemInfo >        sesElem;
-        typedef vector< sesElem >             sesElemVec;
-        typedef vector< elem >                elemVec;
-        typedef typename sesElemVec::iterator sesElemVec_iter;
-        typedef typename sequence::iterator   sequence_iter;
-        typedef typename elemVec::iterator    elemVec_iter;
     private:
+        dtl_typedefs(elem, sequence)
         sequence A;
         sequence B;
         sequence C;

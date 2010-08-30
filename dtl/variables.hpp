@@ -115,6 +115,20 @@ namespace dtl {
         long long inc_dec_count;     // count of increace and decrease
     };
     
-}
+#define dtl_typedefs(elem, sequence)                                    \
+    typedef pair< elem, elemInfo >            sesElem;                  \
+    typedef vector< sesElem >                 sesElemVec;               \
+    typedef vector< uniHunk< sesElem > >      uniHunkVec;               \
+    typedef list< elem >                      elemList;                 \
+    typedef vector< elem >                    elemVec;                  \
+    typedef typename uniHunkVec::iterator     uniHunkVec_iter;          \
+    typedef typename sesElemVec::iterator     sesElemVec_iter;          \
+    typedef typename elemList::iterator       elemList_iter;            \
+    typedef typename sequence::iterator       sequence_iter;            \
+    typedef typename sequence::const_iterator sequence_const_iter;      \
+    typedef typename elemVec::iterator    elemVec_iter;
+
+
+} 
 
 #endif // DTL_VARIABLES_H
