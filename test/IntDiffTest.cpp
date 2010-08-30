@@ -1,26 +1,19 @@
-
-#ifndef INTDIFF_TEST
-#define INTDIFF_TEST
-
 #include "dtl_test_common.hpp"
 
 class IntDiffTest : public ::testing::Test
 {
 protected :
-    typedef int elem;
-    typedef vector< int > sequence;
-    typedef sequence elemVec;
-    typedef pair< elem, elemInfo > sesElem;
-    typedef vector< sesElem > sesElemVec;
+    dtl_test_defs(int, vector<int>)
     typedef struct case_t {
-        sequence A;
-        sequence B;
-        size_t editdis;
-        elemVec lcs_v;
+        sequence   A;
+        sequence   B;
+        size_t     editdis;
+        elemVec    lcs_v;
+        sequence   lcs_s;
         sesElemVec ses_seq;
+        uniHunkVec hunk_v;
     } case_t;
     typedef vector< case_t > caseVec;
-    
     caseVec cases;
     
     case_t createCase (sequence a, sequence b) {
@@ -157,5 +150,3 @@ TEST_F (IntDiffTest, diff_test4) {
     ASSERT_EQ(SES_COMMON, cases[4].ses_seq[5].second.type);
     ASSERT_EQ(SES_COMMON, cases[4].ses_seq[6].second.type);
 }
-
-#endif // INTDIFF_TEST

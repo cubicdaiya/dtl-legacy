@@ -1,14 +1,9 @@
-
-#ifndef STRDIFF3_TEST
-#define STRDIFF3_TEST
-
 #include "dtl_test_common.hpp"
 
 class StrDiff3Test : public ::testing::Test
 {
 protected :
-    typedef char elem;
-    typedef string sequence;
+    dtl_test_defs(char, string)
     typedef struct case_t {
         sequence A;
         sequence B;
@@ -262,5 +257,3 @@ TEST_F (StrDiff3Test, specify_confliction_test8) {
     ASSERT_FALSE(specify_cases[8].diff3.merge());
     ASSERT_EQ(specify_cases[8].S, specify_cases[8].diff3.getMergedSequence());
 }
-
-#endif // STRDIFF3_TEST

@@ -1,14 +1,9 @@
-
-#ifndef PATCH_TEST
-#define PATCH_TEST
-
 #include "dtl_test_common.hpp"
 
 class PatchTest : public ::testing::Test
 {
 protected :
-    typedef char elem;
-    typedef string sequence;
+    dtl_test_defs(char, string)
     typedef struct case_t {
         sequence A;
         sequence B;
@@ -95,5 +90,3 @@ TEST_F (PatchTest, patch_test8) {
     ASSERT_EQ(cases[8].B, cases[8].diff.patch(cases[8].A));
     ASSERT_EQ(cases[8].B, cases[8].diff.uniPatch(cases[8].A));
 }
-
-#endif // PATCH_TEST

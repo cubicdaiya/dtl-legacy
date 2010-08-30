@@ -1,25 +1,16 @@
-#ifndef STRDIFF_TEST
-#define STRDIFF_TEST
-
 #include "dtl_test_common.hpp"
 #include "comparators.hpp"
 
 class StrDiffTest : public ::testing::Test
 {
-public :
 protected :
-    typedef char elem;
-    typedef string sequence;
-    typedef pair< elem, elemInfo > sesElem;
-    typedef vector< elem > elemVec;
-    typedef vector< sesElem > sesElemVec;
-    typedef vector< uniHunk< sesElem > > uniHunkVec;
+    dtl_test_defs(char, string)
     typedef struct case_t {
-        sequence A;
-        sequence B;
-        size_t editdis;
-        elemVec lcs_v;
-        sequence lcs_s;
+        sequence   A;
+        sequence   B;
+        size_t     editdis;
+        elemVec    lcs_v;
+        sequence   lcs_s;
         sesElemVec ses_seq;
         uniHunkVec hunk_v;
     } case_t;
@@ -49,7 +40,7 @@ protected :
         return c;
     }
     
-    void SetUp() {
+    void SetUp(void) {
         diff_cases.push_back(createCase< Compare< elem > >("abc",               "abd"));                       // 0
         diff_cases.push_back(createCase< Compare< elem > >("acbdeacbed",        "acebdabbabed"));              // 1
         diff_cases.push_back(createCase< Compare< elem > >("abcdef",            "dacfea"));                    // 2
@@ -69,13 +60,15 @@ protected :
         only_editdis_cases.push_back(createCase< Compare< elem > >("a",                  "",                    true)); // 6
         only_editdis_cases.push_back(createCase< Compare< elem > >("",                   "b",                   true)); // 7
         only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeaqqqqqqqcbed",  "acebdabbqqqqqqqabed", true)); // 8
-
+        
         custom_cases.push_back(createCase< CaseInsensitive >("abc", "Abc")); // 0
     }
+    
     
     void TearDown () {}
     
 };
+
 
 /**
  * StrDiffTest
@@ -565,5 +558,3 @@ TEST_F (StrDiffTest, custom_comparator_test0) {
     ASSERT_TRUE(custom_cases[0].hunk_v.empty());
 }
 
-
-#endif // STRDIFF_TEST
