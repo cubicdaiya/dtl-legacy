@@ -1,6 +1,6 @@
 #include "dtl_test_common.hpp"
 
-class PatchTest : public ::testing::Test
+class Patchtest : public ::testing::Test
 {
 protected :
     dtl_test_typedefs(char, string)
@@ -41,52 +41,52 @@ protected :
 };
 
 /**
- * PatchTest
+ * Patchtest
  * check list is following
  * - patch function
  * - uniPatch function
  */
-TEST_F (PatchTest, patch_test0) {
+TEST_F (Patchtest, patch_test0) {
     ASSERT_EQ(cases[0].B, cases[0].diff.patch(cases[0].A));
     ASSERT_EQ(cases[0].B, cases[0].diff.uniPatch(cases[0].A));
 }
 
-TEST_F (PatchTest, patch_test1) {
+TEST_F (Patchtest, patch_test1) {
     ASSERT_EQ(cases[1].B, cases[1].diff.patch(cases[1].A));
     ASSERT_EQ(cases[1].B, cases[1].diff.uniPatch(cases[1].A));
 }
 
-TEST_F (PatchTest, patch_test2) {
+TEST_F (Patchtest, patch_test2) {
     ASSERT_EQ(cases[2].B, cases[2].diff.patch(cases[2].A));
     ASSERT_EQ(cases[2].B, cases[2].diff.uniPatch(cases[2].A));
 }
 
-TEST_F (PatchTest, patch_test3) {
+TEST_F (Patchtest, patch_test3) {
     ASSERT_EQ(cases[3].B, cases[3].diff.patch(cases[3].A));
     ASSERT_EQ(cases[3].B, cases[3].diff.uniPatch(cases[3].A));
 }
 
-TEST_F (PatchTest, patch_test4) {
+TEST_F (Patchtest, patch_test4) {
     ASSERT_EQ(cases[4].B, cases[4].diff.patch(cases[4].A));
     ASSERT_EQ(cases[4].B, cases[4].diff.uniPatch(cases[4].A));
 }
 
-TEST_F (PatchTest, patch_test5) {
+TEST_F (Patchtest, patch_test5) {
     ASSERT_EQ(cases[5].B, cases[5].diff.patch(cases[5].A));
     ASSERT_EQ(cases[5].B, cases[5].diff.uniPatch(cases[5].A));
 }
 
-TEST_F (PatchTest, patch_test6) {
+TEST_F (Patchtest, patch_test6) {
     ASSERT_EQ(cases[6].B, cases[6].diff.patch(cases[6].A));
     ASSERT_EQ(cases[6].B, cases[6].diff.uniPatch(cases[6].A));
 }
 
-TEST_F (PatchTest, patch_test7) {
+TEST_F (Patchtest, patch_test7) {
     ASSERT_EQ(cases[7].B, cases[7].diff.patch(cases[7].A));
     ASSERT_EQ(cases[7].B, cases[7].diff.uniPatch(cases[7].A));
 }
 
-TEST_F (PatchTest, patch_test8) {
+TEST_F (Patchtest, patch_test8) {
     ASSERT_EQ(cases[8].B, cases[8].diff.patch(cases[8].A));
     ASSERT_EQ(cases[8].B, cases[8].diff.uniPatch(cases[8].A));
 }

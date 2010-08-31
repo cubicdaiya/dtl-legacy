@@ -1,7 +1,7 @@
 #include "dtl_test_common.hpp"
 #include "comparators.hpp"
 
-class StrDiffTest : public ::testing::Test
+class Strdfifftest : public ::testing::Test
 {
 protected :
     dtl_test_typedefs(char, string)
@@ -71,7 +71,7 @@ protected :
 
 
 /**
- * StrDiffTest
+ * Strdfifftest
  * check list is following
  * - editdistance
  * - LCS
@@ -80,7 +80,7 @@ protected :
  * - onOnlyEditDistance
  */
 
-TEST_F (StrDiffTest, diff_test0) {
+TEST_F (Strdfifftest, diff_test0) {
     
     EXPECT_EQ(2,          diff_cases[0].editdis);
     
@@ -110,7 +110,7 @@ TEST_F (StrDiffTest, diff_test0) {
     ASSERT_TRUE(diff_cases[0].hunk_v[0].common[1].empty());
 }
 
-TEST_F (StrDiffTest, diff_test1) {
+TEST_F (Strdfifftest, diff_test1) {
     EXPECT_EQ(6,          diff_cases[1].editdis);
     
     EXPECT_EQ("acbdabed", diff_cases[1].lcs_s);
@@ -179,7 +179,7 @@ TEST_F (StrDiffTest, diff_test1) {
     ASSERT_TRUE(diff_cases[1].hunk_v[0].common[1].empty());
 }
 
-TEST_F (StrDiffTest, diff_test2) {
+TEST_F (Strdfifftest, diff_test2) {
     EXPECT_EQ(6,          diff_cases[2].editdis);
     
     EXPECT_EQ("acf",      diff_cases[2].lcs_s);
@@ -230,7 +230,7 @@ TEST_F (StrDiffTest, diff_test2) {
     
 }
 
-TEST_F (StrDiffTest, diff_test3) {
+TEST_F (Strdfifftest, diff_test3) {
     EXPECT_EQ(4,          diff_cases[3].editdis);
     
     EXPECT_EQ("bcba",     diff_cases[3].lcs_s);
@@ -276,7 +276,7 @@ TEST_F (StrDiffTest, diff_test3) {
     ASSERT_TRUE(diff_cases[3].hunk_v[0].common[1].empty());
 }
 
-TEST_F (StrDiffTest, diff_test4) {
+TEST_F (Strdfifftest, diff_test4) {
     EXPECT_EQ(1,          diff_cases[4].editdis);
     
     EXPECT_EQ("bokko",    diff_cases[4].lcs_s);
@@ -311,7 +311,7 @@ TEST_F (StrDiffTest, diff_test4) {
     ASSERT_TRUE(diff_cases[4].hunk_v[0].common[1].empty());
 }
 
-TEST_F (StrDiffTest, diff_test5) {
+TEST_F (Strdfifftest, diff_test5) {
     EXPECT_EQ(0,  diff_cases[5].editdis);
     
     EXPECT_EQ("", diff_cases[5].lcs_s);
@@ -321,7 +321,7 @@ TEST_F (StrDiffTest, diff_test5) {
     ASSERT_TRUE(diff_cases[5].hunk_v.empty());
 }
 
-TEST_F (StrDiffTest, diff_test6) {
+TEST_F (Strdfifftest, diff_test6) {
     EXPECT_EQ(1,          diff_cases[6].editdis);
     
     EXPECT_EQ("",         diff_cases[6].lcs_s);
@@ -339,7 +339,7 @@ TEST_F (StrDiffTest, diff_test6) {
     ASSERT_TRUE(diff_cases[6].hunk_v[0].common[1].empty());
 }
 
-TEST_F (StrDiffTest, diff_test7) {
+TEST_F (Strdfifftest, diff_test7) {
     EXPECT_EQ(1,       diff_cases[7].editdis);
     
     EXPECT_EQ("",      diff_cases[7].lcs_s);
@@ -357,7 +357,7 @@ TEST_F (StrDiffTest, diff_test7) {
     ASSERT_TRUE(diff_cases[7].hunk_v[0].common[1].empty());
 }
 
-TEST_F (StrDiffTest, diff_test8) {
+TEST_F (Strdfifftest, diff_test8) {
     EXPECT_EQ(6,                 diff_cases[8].editdis);
     
     EXPECT_EQ("acbdaqqqqqqqbed", diff_cases[8].lcs_s);
@@ -456,7 +456,7 @@ TEST_F (StrDiffTest, diff_test8) {
     ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[1].change[4].second.type);
 }
 
-TEST_F (StrDiffTest, only_editdis_test0) {
+TEST_F (Strdfifftest, only_editdis_test0) {
     EXPECT_EQ(2,       only_editdis_cases[0].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[0].lcs_s);
@@ -466,7 +466,7 @@ TEST_F (StrDiffTest, only_editdis_test0) {
     ASSERT_TRUE(only_editdis_cases[0].hunk_v.empty());
 }
 
-TEST_F (StrDiffTest, only_editdis_test1) {
+TEST_F (Strdfifftest, only_editdis_test1) {
     EXPECT_EQ(6,       only_editdis_cases[1].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[1].lcs_s);
@@ -476,7 +476,7 @@ TEST_F (StrDiffTest, only_editdis_test1) {
     ASSERT_TRUE(only_editdis_cases[1].hunk_v.empty());
 }
 
-TEST_F (StrDiffTest, only_editdis_test2) {
+TEST_F (Strdfifftest, only_editdis_test2) {
     EXPECT_EQ(6,       only_editdis_cases[2].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[2].lcs_s);
@@ -486,7 +486,7 @@ TEST_F (StrDiffTest, only_editdis_test2) {
     ASSERT_TRUE(only_editdis_cases[2].hunk_v.empty());
 }
 
-TEST_F (StrDiffTest, only_editdis_test3) {
+TEST_F (Strdfifftest, only_editdis_test3) {
     EXPECT_EQ(4,       only_editdis_cases[3].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[3].lcs_s);
@@ -496,7 +496,7 @@ TEST_F (StrDiffTest, only_editdis_test3) {
     ASSERT_TRUE(only_editdis_cases[3].hunk_v.empty());
 }
 
-TEST_F (StrDiffTest, only_editdis_test4) {
+TEST_F (Strdfifftest, only_editdis_test4) {
     EXPECT_EQ(1,       only_editdis_cases[4].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[4].lcs_s);
@@ -506,7 +506,7 @@ TEST_F (StrDiffTest, only_editdis_test4) {
     ASSERT_TRUE(only_editdis_cases[4].hunk_v.empty());
 }
 
-TEST_F (StrDiffTest, only_editdis_test5) {
+TEST_F (Strdfifftest, only_editdis_test5) {
     EXPECT_EQ(0,       only_editdis_cases[5].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[5].lcs_s);
@@ -516,7 +516,7 @@ TEST_F (StrDiffTest, only_editdis_test5) {
     ASSERT_TRUE(only_editdis_cases[5].hunk_v.empty());
 }
 
-TEST_F (StrDiffTest, only_editdis_test6) {
+TEST_F (Strdfifftest, only_editdis_test6) {
     EXPECT_EQ(1,       only_editdis_cases[6].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[6].lcs_s);
@@ -526,7 +526,7 @@ TEST_F (StrDiffTest, only_editdis_test6) {
     ASSERT_TRUE(only_editdis_cases[6].hunk_v.empty());
 }
 
-TEST_F (StrDiffTest, only_editdis_test7) {
+TEST_F (Strdfifftest, only_editdis_test7) {
     EXPECT_EQ(1,       only_editdis_cases[7].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[7].lcs_s);
@@ -536,7 +536,7 @@ TEST_F (StrDiffTest, only_editdis_test7) {
     ASSERT_TRUE(only_editdis_cases[7].hunk_v.empty());
 }
 
-TEST_F (StrDiffTest, only_editdis_test8) {
+TEST_F (Strdfifftest, only_editdis_test8) {
     EXPECT_EQ(6,       only_editdis_cases[8].editdis);
     
     EXPECT_EQ("",      only_editdis_cases[8].lcs_s);
@@ -546,7 +546,7 @@ TEST_F (StrDiffTest, only_editdis_test8) {
     ASSERT_TRUE(only_editdis_cases[8].hunk_v.empty());
 }
 
-TEST_F (StrDiffTest, custom_comparator_test0) {
+TEST_F (Strdfifftest, custom_comparator_test0) {
     EXPECT_EQ(0,     custom_cases[0].editdis);
     
     EXPECT_EQ("Abc", custom_cases[0].lcs_s);

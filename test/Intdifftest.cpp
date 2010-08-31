@@ -1,6 +1,6 @@
 #include "dtl_test_common.hpp"
 
-class IntDiffTest : public ::testing::Test
+class Intdifftest : public ::testing::Test
 {
 protected :
     dtl_test_typedefs(int, vector<int>)
@@ -57,13 +57,13 @@ protected :
 };
 
 /**
- * IntDiffTest
+ * Intdifftest
  * check list is following
  * - editdistance
  * - LCS
  * - SES
  */
-TEST_F (IntDiffTest, diff_test0) {
+TEST_F (Intdifftest, diff_test0) {
     EXPECT_EQ(0, cases[0].editdis);
     
     EXPECT_TRUE(cases[0].lcs_v.empty());
@@ -71,7 +71,7 @@ TEST_F (IntDiffTest, diff_test0) {
     ASSERT_TRUE(cases[0].ses_seq.empty());
 }
 
-TEST_F (IntDiffTest, diff_test1) {
+TEST_F (Intdifftest, diff_test1) {
     EXPECT_EQ(1,       cases[1].editdis);
     
     EXPECT_TRUE(cases[1].lcs_v.empty());
@@ -80,7 +80,7 @@ TEST_F (IntDiffTest, diff_test1) {
     ASSERT_EQ(SES_ADD, cases[1].ses_seq[0].second.type);
 }
 
-TEST_F (IntDiffTest, diff_test2) {
+TEST_F (Intdifftest, diff_test2) {
     EXPECT_EQ(1,          cases[2].editdis);
     
     EXPECT_TRUE(cases[2].lcs_v.empty());
@@ -89,7 +89,7 @@ TEST_F (IntDiffTest, diff_test2) {
     ASSERT_EQ(SES_DELETE, cases[2].ses_seq[0].second.type);
 }
 
-TEST_F (IntDiffTest, diff_test3) {
+TEST_F (Intdifftest, diff_test3) {
     EXPECT_EQ(8,          cases[3].editdis);
     
     EXPECT_EQ(3,          cases[3].lcs_v[0]);
@@ -128,7 +128,7 @@ TEST_F (IntDiffTest, diff_test3) {
     ASSERT_EQ(SES_COMMON, cases[3].ses_seq[13].second.type);
 }
 
-TEST_F (IntDiffTest, diff_test4) {
+TEST_F (Intdifftest, diff_test4) {
     EXPECT_EQ(4,          cases[4].editdis);
     
     EXPECT_EQ(3,          cases[4].lcs_v[0]);

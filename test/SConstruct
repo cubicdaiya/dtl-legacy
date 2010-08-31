@@ -1,6 +1,4 @@
-prog     = 'dtl_test'
-sources  = ['dtl_test.cpp', 'StrDiffTest.cpp', 'StrDiff3Test.cpp', 'IntDiffTest.cpp', 'PatchTest.cpp']
 env = Environment(CCFLAGS='-Wall -O2', LIBS='gtest', CPPPATH='..')
-test = env.Program(prog, sources)
+test = env.Program('dtl_test', Glob('*.cpp'))
 test_alias = env.Alias('check', test, test[0].abspath)
 env.AlwaysBuild(test_alias)
