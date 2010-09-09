@@ -24,16 +24,17 @@ protected :
     }
     
     void SetUp() {
-        cases.push_back(createCase("abc",        "abd"));          // 0
-        cases.push_back(createCase("acbdeacbed", "acebdabbabed")); // 1
-        cases.push_back(createCase("abcdef",     "dacfea"));       // 2
-        cases.push_back(createCase("abcbda",     "bdcaba"));       // 3
-        cases.push_back(createCase("bokko",      "bokkko"));       // 4
-        cases.push_back(createCase("",           ""));             // 5
-        cases.push_back(createCase("a",          ""));             // 6
-        cases.push_back(createCase("",           "b"));            // 7
+        cases.push_back(createCase("abc",           "abd"));           // 0
+        cases.push_back(createCase("acbdeacbed",    "acebdabbabed"));  // 1
+        cases.push_back(createCase("abcdef",        "dacfea"));        // 2
+        cases.push_back(createCase("abcbda",        "bdcaba"));        // 3
+        cases.push_back(createCase("bokko",         "bokkko"));        // 4
+        cases.push_back(createCase("",              ""));              // 5
+        cases.push_back(createCase("a",             ""));              // 6
+        cases.push_back(createCase("",              "b"));             // 7
         cases.push_back(createCase("abcdefq3wefarhgorequgho4euhfteowauhfwehogfewrquhoi23hroewhoahfotrhguoiewahrgqqabcdef",
                                    "3abcdef4976fd86ouofita67t85r876e5e746578tgliuhopoqqabcdef")); // 8
+        cases.push_back(createCase("abcqqqeqqqccc", "abdqqqeqqqddd")); // 9
     }
     
     void TearDown () {}
@@ -89,4 +90,9 @@ TEST_F (Patchtest, patch_test7) {
 TEST_F (Patchtest, patch_test8) {
     ASSERT_EQ(cases[8].B, cases[8].diff.patch(cases[8].A));
     ASSERT_EQ(cases[8].B, cases[8].diff.uniPatch(cases[8].A));
+}
+
+TEST_F (Patchtest, patch_test9) {
+    ASSERT_EQ(cases[9].B, cases[9].diff.patch(cases[9].A));
+    ASSERT_EQ(cases[9].B, cases[9].diff.uniPatch(cases[9].A));
 }

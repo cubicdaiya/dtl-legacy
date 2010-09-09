@@ -138,25 +138,19 @@ namespace dtl {
             elemList        seqLst(seq.begin(), seq.end());
             sesElemVec      shunk;
             sesElemVec_iter vsesIt;
-            elemList_iter   lstIt           = seqLst.begin();
-            elemList_iter   lstIt_t         = seqLst.begin();
-            sequence_iter   cit             = seq.begin();
-            long long       inc_dec_total   = 0;
-            long long       seq_lnum        = 1;
-            long long       longer_seq_lnum = 1;
-            long long       loop            = 0;
-            for (uniHunkVec_iter it=uniHunks.begin();it!=uniHunks.end();++it, ++loop) {
+            elemList_iter   lstIt         = seqLst.begin();
+            long long       inc_dec_total = 0;
+            long long       gap           = 1;
+            for (uniHunkVec_iter it=uniHunks.begin();it!=uniHunks.end();++it) {
                 joinSesVec(shunk, it->common[0]);
                 joinSesVec(shunk, it->change);
                 joinSesVec(shunk, it->common[1]);
-                it->a += inc_dec_total;
-                lstIt = lstIt_t;
-                while (seq_lnum++ < it->a && longer_seq_lnum++ < (long long)N) {
-                    ++cit;
-                    if (lstIt != seqLst.end()) ++lstIt;
-                }
-                lstIt_t = lstIt;
+                it->a         += inc_dec_total;
                 inc_dec_total += it->inc_dec_count;
+                for (long long i=0;i<it->a - gap;++i) {
+                    ++lstIt;
+                }
+                gap = it->a + it->b + it->inc_dec_count;
                 vsesIt = shunk.begin();
                 while (vsesIt!=shunk.end()) {
                     switch (vsesIt->second.type) {
@@ -174,6 +168,7 @@ namespace dtl {
                         }
                         break;
                     default :
+                        // no through
                         break;
                     }
                     ++vsesIt;
