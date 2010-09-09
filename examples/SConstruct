@@ -2,9 +2,9 @@
 env = Environment(CPPPATH='..')
 debug = ARGUMENTS.get('debug', 0)
 if int(debug):
-    env.Append(CCFLAGS = '-Wall -g')
+    env.Append(CPPFLAGS = '-Wall -g')
 else:
-    env.Append(CCFLAGS = '-Wall -O2')
+    env.Append(CPPFLAGS = '-Wall -O2')
 
 targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'],
             'intdiff'    : ['intdiff.cpp'],
