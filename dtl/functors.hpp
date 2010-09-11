@@ -47,8 +47,8 @@ namespace dtl {
     class Printer
     {
     public :
-        Printer ()             : out_(cout) {}
-        Printer (ostream& out) : out_(out)  {}
+        Printer ()                   : out_(cout) {}
+        Printer (const ostream& out) : out_(out)  {}
         virtual ~Printer () {}
         virtual void operator() (const sesElem& se) const = 0;
     protected :
@@ -62,8 +62,8 @@ namespace dtl {
     class CommonPrinter : public Printer < sesElem >
     {
     public :
-        CommonPrinter  ()             : Printer < sesElem > ()    {}
-        CommonPrinter  (ostream& out) : Printer < sesElem > (out) {}
+        CommonPrinter  ()                   : Printer < sesElem > ()    {}
+        CommonPrinter  (const ostream& out) : Printer < sesElem > (out) {}
         ~CommonPrinter () {}
         void operator() (const sesElem& se) const {
             this->out_ << SES_MARK_COMMON << se.first << endl;    
@@ -77,8 +77,8 @@ namespace dtl {
     class ChangePrinter : public Printer < sesElem >
     {
     public :
-        ChangePrinter  ()             : Printer < sesElem > ()    {}
-        ChangePrinter  (ostream& out) : Printer < sesElem > (out) {}
+        ChangePrinter  ()                   : Printer < sesElem > ()    {}
+        ChangePrinter  (const ostream& out) : Printer < sesElem > (out) {}
         ~ChangePrinter () {}
         void operator() (const sesElem& se) const {
             switch (se.second.type) {
