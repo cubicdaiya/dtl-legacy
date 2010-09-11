@@ -44,21 +44,21 @@ namespace dtl {
      * diff3 class template
      * sequence must support random_access_iterator.
      */
-    template <typename elem, typename sequence>
+    template <typename elem, typename sequence, typename comparator = Compare< elem > >
     class Diff3
     {
     private:
         dtl_typedefs(elem, sequence)
-        sequence               A;
-        sequence               B;
-        sequence               C;
-        sequence               S;
-        Diff< elem, sequence > diff_ba;
-        Diff< elem, sequence > diff_bc;
-        bool                   conflict;
-        elem                   csepabegin;
-        elem                   csepa;
-        elem                   csepaend;
+        sequence                           A;
+        sequence                           B;
+        sequence                           C;
+        sequence                           S;
+        Diff< elem, sequence, comparator > diff_ba;
+        Diff< elem, sequence, comparator > diff_bc;
+        bool                               conflict;
+        elem                               csepabegin;
+        elem                               csepa;
+        elem                               csepaend;
     public :
         Diff3 () {}
         Diff3 (const sequence& a, 
@@ -243,34 +243,34 @@ namespace dtl {
                         forwardUntilEnd(c_end, c_it);
                         break;
                     }
-                    if (a_it != A.end()) elem_common.push_back(*a_it);
+                    if (!isEnd(a_end, a_it)) elem_common.push_back(*a_it);
                     is_common = true;
                 } else if (*b_it == *a_it && *b_it != *c_it) {
                     if (is_common) {
                         elem_conf1.push_back(csepabegin);
                         elem_conf2.push_back(csepa);
                     }
-                    if (b_it != B.end()) elem_conf1.push_back(*b_it);
-                    if (c_it != C.end()) elem_conf2.push_back(*c_it);
+                    if (!isEnd(b_end, b_it)) elem_conf1.push_back(*b_it);
+                    if (!isEnd(c_end, c_it)) elem_conf2.push_back(*c_it);
                     is_common = false;
                 } else if (*b_it == *c_it && *b_it != *a_it) {
                     if (is_common) {
                         elem_conf1.push_back(csepabegin);
                         elem_conf2.push_back(csepa);
                     }
-                    if (a_it != A.end()) elem_conf1.push_back(*a_it);
-                    if (c_it != C.end()) elem_conf2.push_back(*c_it);
+                    if (!isEnd(a_end, a_it)) elem_conf1.push_back(*a_it);
+                    if (!isEnd(c_end, c_it)) elem_conf2.push_back(*c_it);
                     is_common = false;
-                    if (a_it == a_end && c_it == c_end) break;
+                    if (isEnd(a_end, a_it) && isEnd(c_end, c_it)) break;
                 } else if (*b_it != *a_it && *b_it != *c_it) {
                     if (is_common || b_it == B.begin()) {
                         elem_conf1.push_back(csepabegin);
                         elem_conf2.push_back(csepa);
                     }
-                    if (a_it != A.end()) elem_conf1.push_back(*a_it);
-                    if (c_it != C.end()) elem_conf2.push_back(*c_it);
+                    if (!isEnd(a_end, a_it)) elem_conf1.push_back(*a_it);
+                    if (!isEnd(c_end, c_it)) elem_conf2.push_back(*c_it);
                     is_common = false;
-                    if (a_it == a_end && c_it == c_end) break;
+                    if (isEnd(a_end, a_it) && isEnd(c_end, c_it)) break;
                 }
                 forwardUntilEnd(a_end, a_it);
                 forwardUntilEnd(b_end, b_it);
@@ -296,8 +296,8 @@ namespace dtl {
                 isEnd(c_end, c_it)) {
                 // do nothing
             } else if (!isEnd(a_end, a_it) &&
-                       isEnd(b_end, b_it) &&
-                       isEnd(c_end, c_it)) {
+                       isEnd(b_end,  b_it) &&
+                       isEnd(c_end,  c_it)) {
                 addSpecifiedSequence(a_end, a_it, seq_vec, b_it, b_end, false);
                 is_common = true;
                 goto SPECIFY;
@@ -305,8 +305,8 @@ namespace dtl {
                        !isEnd(b_end, b_it) &&
                        isEnd(c_end,  c_it)) {
                 // do nothing
-            } else if (isEnd(a_end, a_it) &&
-                       isEnd(b_end, b_it) &&
+            } else if (isEnd(a_end,  a_it) &&
+                       isEnd(b_end,  b_it) &&
                        !isEnd(c_end, c_it)) {
                 addSpecifiedSequence(c_end, c_it, seq_vec, b_it, b_end, false);
             } else if (isEnd(a_end,  a_it) &&
@@ -315,13 +315,13 @@ namespace dtl {
                 addSpecifiedSequence(c_end, c_it, seq_vec, b_it, b_end, true);
                 addSpecifiedSequence(b_end, b_it, seq_vec, b_it, b_end, false);
             } else if (!isEnd(a_end, a_it) &&
-                       isEnd(b_end, b_it) &&
+                       isEnd(b_end,  b_it) &&
                        !isEnd(c_end, c_it)) {
                 is_common = true;
                 goto SPECIFY;
             } else if (!isEnd(a_end, a_it) &&
                        !isEnd(b_end, b_it) &&
-                       isEnd(c_end, c_it)) {
+                       isEnd(c_end,  c_it)) {
                 addSpecifiedSequence(a_end, a_it, seq_vec, b_it, b_end, true);
                 addSpecifiedSequence(b_end, b_it, seq_vec, b_it, b_end, false);
             } else {
