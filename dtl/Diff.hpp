@@ -44,7 +44,7 @@ namespace dtl {
      * diff class template
      * sequence must support random_access_iterator.
      */
-    template <typename elem, typename sequence, typename comparator = Compare<elem> >
+    template <typename elem, typename sequence, typename comparator = Compare< elem > >
     class Diff
     {
     private :
