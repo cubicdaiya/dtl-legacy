@@ -348,7 +348,7 @@ namespace dtl {
          * check sequence is end
          */
         template <typename T_iter>
-        bool inline isEnd (T_iter& end, T_iter& it) const {
+        bool inline isEnd (const T_iter& end, const T_iter& it) const {
             return it == end ? true : false;
         }
         
@@ -356,14 +356,14 @@ namespace dtl {
          * increment iterator until iterator is end
          */
         template <typename T_iter>
-        void inline forwardUntilEnd (T_iter& end, T_iter& it) const {
+        void inline forwardUntilEnd (const T_iter& end, T_iter& it) const {
             if (!isEnd(end, it)) ++it;
         }
         
         /**
          * add elements which SES's type is ADD
          */
-        void inline addDecentSequence (sesElemVec_iter& end, sesElemVec_iter& it, elemVec& seq) const {
+        void inline addDecentSequence (const sesElemVec_iter& end, sesElemVec_iter& it, elemVec& seq) const {
             while (!isEnd(end, it)) {
                 if (it->second.type == SES_ADD) seq.push_back(it->first);
                 ++it;
@@ -373,8 +373,8 @@ namespace dtl {
         /**
          * add confliction specified sequence
          */
-        void inline addSpecifiedSequence(sequence_iter& end, sequence_iter& it, elemVec& seq, 
-                                         sequence_iter& b_it, sequence_iter& b_end, bool is_forward_b) const {
+        void inline addSpecifiedSequence(const sequence_iter& end, sequence_iter& it, elemVec& seq, 
+                                         sequence_iter& b_it, const sequence_iter& b_end, const bool is_forward_b) const {
             while (!isEnd(end, it)) {
                 seq.push_back(*it);
                 ++it;

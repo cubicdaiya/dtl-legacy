@@ -134,7 +134,7 @@ namespace dtl {
         /**
          * patching with Unified Format Hunks
          */
-        sequence uniPatch (sequence seq) {
+        sequence uniPatch (const sequence& seq) {
             elemList        seqLst(seq.begin(), seq.end());
             sesElemVec      shunk;
             sesElemVec_iter vsesIt;
@@ -183,7 +183,7 @@ namespace dtl {
         /**
          * patching with Shortest Edit Script
          */
-        sequence patch (sequence seq) const {
+        sequence patch (const sequence& seq) const {
             sesElemVec    sesSeq = ses.getSequence();
             elemList      seqLst(seq.begin(), seq.end());
             elemList_iter lstIt  = seqLst.begin();
@@ -272,7 +272,7 @@ namespace dtl {
         /**
          * print difference with given SES
          */
-        static void printSES (Ses< elem >& s) {
+        static void printSES (const Ses< elem >& s) {
             sesElemVec ses_v = s.getSequence();
             for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >());
         }
@@ -287,7 +287,7 @@ namespace dtl {
         /**
          * print unified format difference with given unified format hunks
          */
-        static void printUnifiedFormat (uniHunkVec& hunks) {
+        static void printUnifiedFormat (const uniHunkVec& hunks) {
             for_each(hunks.begin(), hunks.end(), UniHunkPrinter< sesElem >());
         }
         
@@ -465,7 +465,7 @@ namespace dtl {
         /**
          * record SES and LCS
          */
-        bool recordSequence (editPathCordinates& v) {
+        bool recordSequence (const editPathCordinates& v) {
             sequence_const_iter x(A.begin());
             sequence_const_iter y(B.begin());
             long long x_idx, y_idx;   // line number for Unified Format
