@@ -1,4 +1,16 @@
 
+2010-09-20 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* add parameter for Diff3's comparator
+
+	* fix the bug which uniPatch fails
+
+	* add debug option for examples
+
+	* divide test sources
+
+	* 1.09 released
+
 2010-08-29 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* fix the problem that comparator parameter is completely ignored.
@@ -6,6 +18,8 @@
 	* remove the warning 'comparison of unsigned expression >= 0 is always true' ( use -W )
 
 	* move directory 'src' to 'dtl'
+
+	* remove Makefile for examples and test
 
 	* 1.08 released
 
