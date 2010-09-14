@@ -224,9 +224,11 @@ namespace dtl {
             elemVec       elem_conf2;
             elemVec       seq_vec;
             bool          is_common;
+            bool          is_while_sepa;
             elemVec       elem_common_end_vec;
             
-            is_common = false;
+            is_common     = false;
+            is_while_sepa = false;
         SPECIFY :
             elem_common.clear();
             elem_common_end_vec.clear();
@@ -249,23 +251,26 @@ namespace dtl {
                     if (is_common) {
                         elem_conf1.push_back(csepabegin);
                         elem_conf2.push_back(csepa);
+                        is_while_sepa = true;
                     }
-                    if (!isEnd(b_end, b_it)) elem_conf1.push_back(*b_it);
+                    if (!isEnd(b_end, b_it) && b_it != B.begin()) elem_conf1.push_back(*b_it);
                     if (!isEnd(c_end, c_it)) elem_conf2.push_back(*c_it);
                     is_common = false;
                 } else if (*b_it == *c_it && *b_it != *a_it) {
                     if (is_common) {
                         elem_conf1.push_back(csepabegin);
                         elem_conf2.push_back(csepa);
+                        is_while_sepa = true;
                     }
                     if (!isEnd(a_end, a_it)) elem_conf1.push_back(*a_it);
-                    if (!isEnd(c_end, c_it)) elem_conf2.push_back(*c_it);
+                    if (!isEnd(c_end, c_it) && c_it != C.begin()) elem_conf2.push_back(*c_it);
                     is_common = false;
                     if (isEnd(a_end, a_it) && isEnd(c_end, c_it)) break;
                 } else if (*b_it != *a_it && *b_it != *c_it) {
                     if (is_common || b_it == B.begin()) {
                         elem_conf1.push_back(csepabegin);
                         elem_conf2.push_back(csepa);
+                        is_while_sepa = true;
                     }
                     if (!isEnd(a_end, a_it)) elem_conf1.push_back(*a_it);
                     if (!isEnd(c_end, c_it)) elem_conf2.push_back(*c_it);
@@ -278,7 +283,7 @@ namespace dtl {
             }
             
             joinElemVec(seq_vec, elem_common);
-            if (elem_conf1[0] == csepabegin && elem_conf1.size() == 1) {
+            if (elem_conf1.size() > 0 && elem_conf1[0] == csepabegin && elem_conf1.size() == 1) {
                 elem_conf1.clear();
                 elem_conf2 = elemVec(elem_conf2.begin() + 1, elem_conf2.end());
             }
@@ -286,7 +291,10 @@ namespace dtl {
             joinElemVec(seq_vec, elem_conf2);
 
             if ((!elem_conf1.empty() && !elem_conf2.empty())) {
-                seq_vec.push_back(csepaend);
+                if (is_while_sepa) {
+                    seq_vec.push_back(csepaend);
+                    is_while_sepa = false;
+                }
             }
 
             joinElemVec(seq_vec, elem_common_end_vec);

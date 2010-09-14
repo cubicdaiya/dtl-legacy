@@ -75,7 +75,9 @@ protected :
         specify_cases.push_back(createCase< Compare < elem > >("abcdef",       "abcdefg",      "abcdefhe",     "abcdefhe"));         // 7
         specify_cases.push_back(createCase< Compare < elem > >("abcdefqqqq",   "abcdefgzzzzzzzzzzz", "abcdefggggg", 
                                                                "abcdef<qqqq|ggggg>"));                                               // 8
-        
+        specify_cases.push_back(createCase< Compare < elem > >("abd",          "abc",          "ebz",          "eb<d|z>"));          // 9
+        specify_cases.push_back(createCase< Compare < elem > >("abd",          "ebc",          "ebz",          "ab<d|z>"));          // 10
+
         // use custom comparator
         custom_cases.push_back(createCase< CaseInsensitive >("abc", "abc", "abC", "abc"));
     }
@@ -261,6 +263,16 @@ TEST_F (Strdiff3test, specify_confliction_test7) {
 TEST_F (Strdiff3test, specify_confliction_test8) {
     ASSERT_FALSE(specify_cases[8].is_merge_success);
     ASSERT_EQ(specify_cases[8].S, specify_cases[8].merged_seq);
+}
+
+TEST_F (Strdiff3test, specify_confliction_test9) {
+    ASSERT_FALSE(specify_cases[9].is_merge_success);
+    ASSERT_EQ(specify_cases[9].S, specify_cases[9].merged_seq);
+}
+
+TEST_F (Strdiff3test, specify_confliction_test10) {
+    ASSERT_FALSE(specify_cases[10].is_merge_success);
+    ASSERT_EQ(specify_cases[10].S, specify_cases[10].merged_seq);
 }
 
 TEST_F (Strdiff3test, custom_comparator_test0) {
