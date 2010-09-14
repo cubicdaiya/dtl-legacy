@@ -1,6 +1,8 @@
 
 2010-09-20 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
+	* fix specifyConfliction's bug
+
 	* add parameter for Diff3's comparator
 
 	* fix the bug which uniPatch fails
