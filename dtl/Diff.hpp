@@ -445,7 +445,7 @@ namespace dtl {
         /**
          * search shortest path and record the path
          */
-        long long snake(long long k, long long above, long long below) {
+        long long snake(const long long& k, const long long& above, const long long& below) {
             long long r = above > below ? path[(size_t)k-1+offset] : path[(size_t)k+1+offset];
             long long y = max(above, below);
             long long x = y - k;
@@ -468,9 +468,9 @@ namespace dtl {
         bool recordSequence (const editPathCordinates& v) {
             sequence_const_iter x(A.begin());
             sequence_const_iter y(B.begin());
-            long long x_idx, y_idx;   // line number for Unified Format
-            long long px_idx, py_idx; // cordinates
-            bool complete = false;
+            long long           x_idx,  y_idx;  // line number for Unified Format
+            long long           px_idx, py_idx; // cordinates
+            bool                complete = false;
             x_idx  = y_idx  = 1;
             px_idx = py_idx = 0;
             for (size_t i=v.size()-1;!complete;--i) {
@@ -493,7 +493,7 @@ namespace dtl {
                         ++x;
                         ++x_idx;
                         ++px_idx;
-                    } else {             // Common
+                    } else {
                         lcs.addSequence(*x);
                         ses.addSequence(*x, x_idx, y_idx, SES_COMMON);
                         ++x;
