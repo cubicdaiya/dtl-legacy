@@ -283,7 +283,7 @@ namespace dtl {
             }
             
             joinElemVec(seq_vec, elem_common);
-            if (elem_conf1.size() > 0 && elem_conf1[0] == csepabegin && elem_conf1.size() == 1) {
+            if (!elem_conf1.empty() && elem_conf1[0] == csepabegin && elem_conf1.size() == 1) {
                 elem_conf1.clear();
                 elem_conf2 = elemVec(elem_conf2.begin() + 1, elem_conf2.end());
             }
