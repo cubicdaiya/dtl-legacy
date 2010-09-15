@@ -20,11 +20,11 @@ static void unifiedDiff (string fp1, string fp2);
 
 static void showStats (string fp1, string fp2) 
 {
-    const int MAX_LENGTH = 255;
-    time_t rawtime[2];
-    struct tm *timeinfo[2];
-    char time_format[] = "%Y-%m-%d %H:%M:%S %z";
-    struct stat st[2];
+    const int    MAX_LENGTH    = 255;
+    char         time_format[] = "%Y-%m-%d %H:%M:%S %z";
+    time_t       rawtime[2];
+    struct tm   *timeinfo[2];
+    struct stat  st[2];
     
     if (stat(fp1.c_str(), &st[0]) == -1) {
         cerr << "argv1 is invalid." << endl;
@@ -48,12 +48,14 @@ static void showStats (string fp1, string fp2)
 
 static void unifiedDiff (string fp1, string fp2) 
 {
-    typedef string elem;
-    typedef pair<elem, elemInfo> sesElem;
-    ifstream Aifs(fp1.c_str());
-    ifstream Bifs(fp2.c_str());
-    elem buf;
-    vector<elem> ALines, BLines;
+    typedef string                 elem;
+    typedef vector< elem >         sequence;
+    typedef pair< elem, elemInfo > sesElem;
+
+    ifstream      Aifs(fp1.c_str());
+    ifstream      Bifs(fp2.c_str());
+    elem          buf;
+    sequence      ALines, BLines;
     ostringstream ossLine, ossInfo;
     
     while(getline(Aifs, buf)){
@@ -63,7 +65,7 @@ static void unifiedDiff (string fp1, string fp2)
         BLines.push_back(buf);
     }
     
-    Diff<elem, vector<elem> > diff(ALines, BLines);
+    Diff< elem, sequence > diff(ALines, BLines);
     diff.onHuge();
     //diff.onUnserious();
     diff.compose();
@@ -89,7 +91,7 @@ int main(int argc, char *argv[])
     
     string s1(argv[1]);
     string s2(argv[2]);
-    bool fileExist = true;
+    bool   fileExist = true;
     
     if (!isFileExist(s1)) {
         cerr << s1 << " is invalid." << endl;

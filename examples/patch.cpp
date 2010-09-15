@@ -18,10 +18,11 @@ int main(int argc, char *argv[]) {
     
     typedef char elem;
     typedef string sequence;
+
     sequence A(argv[1]);
     sequence B(argv[2]);
     
-    Diff<elem, sequence> d(A, B);
+    Diff< elem, sequence > d(A, B);
     d.compose();
     
     sequence s1(A);

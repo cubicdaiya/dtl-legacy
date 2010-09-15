@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
     
     string A(argv[1]);
     string B(argv[2]);
-    bool fileExist = true;
+    bool   fileExist = true;
     
     if (!isFileExist(A)) {
         cerr << "file A does not exist" << endl;
@@ -38,10 +38,11 @@ int main(int argc, char *argv[]){
     
     typedef string elem;
     typedef vector<elem> sequence;
-    ifstream Aifs(A.c_str());
-    ifstream Bifs(B.c_str());
-    elem buf;
-    sequence ALines, BLines;
+
+    ifstream      Aifs(A.c_str());
+    ifstream      Bifs(B.c_str());
+    elem          buf;
+    sequence      ALines, BLines;
     ostringstream ossLine, ossInfo;
     
     while(getline(Aifs, buf)){

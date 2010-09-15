@@ -22,14 +22,17 @@ int main(int, char**){
     }
     cout << endl;
     
-    typedef int elem;
-    typedef vector<int> sequence;
+    typedef  int elem;
+    typedef  vector< int > sequence;
+
     sequence A(&a[0], &a[asiz]);
     sequence B(&b[0], &b[bsiz]);
     Diff< elem, sequence > d(A, B);
     d.compose();
+
     // editDistance
     cout << "editDistance:" << d.getEditDistance() << endl;
+
     // Longest Common Subsequence
     sequence lcs_v = d.getLcsVec();
     cout << "LCS: ";

@@ -17,6 +17,7 @@ int main(int argc, char *argv[]){
     
     typedef char elem;
     typedef string sequence;
+
     sequence A(argv[1]);
     sequence B(argv[2]);
     
@@ -29,7 +30,7 @@ int main(int argc, char *argv[]){
     
     // Longest Common Subsequence
     vector<elem> lcs_v = d.getLcsVec();
-    sequence lcs_s(lcs_v.begin(), lcs_v.end());
+    sequence     lcs_s(lcs_v.begin(), lcs_v.end());
     cout << "LCS:" << lcs_s << endl;
     
     // print Unified Format

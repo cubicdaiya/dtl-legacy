@@ -16,13 +16,14 @@ int main(int argc, char *argv[]){
         return -1;
     }
     
-    typedef char elem;
+    typedef char   elem;
     typedef string sequence;
+
     sequence A(argv[1]);
     sequence B(argv[2]);
     sequence C(argv[3]);
     
-    Diff3<elem, sequence> diff3(A, B, C);
+    Diff3< elem, sequence > diff3(A, B, C);
     diff3.compose();
     diff3.setConflictSeparators('<', '|', '>');
     if (!diff3.merge()) {
