@@ -56,7 +56,6 @@ static void unifiedDiff (string fp1, string fp2)
     ifstream      Bifs(fp2.c_str());
     elem          buf;
     sequence      ALines, BLines;
-    ostringstream ossLine, ossInfo;
     
     while(getline(Aifs, buf)){
         ALines.push_back(buf);
