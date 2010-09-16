@@ -264,33 +264,33 @@ namespace dtl {
         /**
          * print difference between A and B with SES
          */
-        void printSES () const {
+        void printSES (ostream& out = cout) const {
             sesElemVec ses_v = ses.getSequence();
-            for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >());
+            for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >(out));
         }
         
         /**
          * print difference with given SES
          */
-        static void printSES (const Ses< elem >& s) {
+        static void printSES (const Ses< elem >& s, ostream& out = cout) {
             sesElemVec ses_v = s.getSequence();
-            for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >());
+            for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >(out));
         }
         
         /**
          * print difference between A and B with the format such as Unified Format
          */
-        void printUnifiedFormat () const {
-            for_each(uniHunks.begin(), uniHunks.end(), UniHunkPrinter< sesElem >());
+        void printUnifiedFormat (ostream& out = cout) const {
+            for_each(uniHunks.begin(), uniHunks.end(), UniHunkPrinter< sesElem >(out));
         }
         
         /**
          * print unified format difference with given unified format hunks
          */
-        static void printUnifiedFormat (const uniHunkVec& hunks) {
-            for_each(hunks.begin(), hunks.end(), UniHunkPrinter< sesElem >());
+        static void printUnifiedFormat (const uniHunkVec& hunks, ostream& out = cout) {
+            for_each(hunks.begin(), hunks.end(), UniHunkPrinter< sesElem >(out));
         }
-        
+
         /**
          * compose Unified Format Hunks from Shortest Edit Script
          */
