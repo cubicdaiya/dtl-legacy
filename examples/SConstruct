@@ -1,5 +1,7 @@
 
-env = Environment(CPPPATH='..')
+# SConstruct for dtl examples
+
+env   = Environment(CPPPATH='..')
 debug = ARGUMENTS.get('debug', 'n')
 if debug == 'y' or debug == 'yes':
     env.Append(CPPFLAGS = '-Wall -g')
