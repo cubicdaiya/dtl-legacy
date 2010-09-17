@@ -13,59 +13,142 @@ protected :
         sequence   lcs_s;
         sesElemVec ses_seq;
         uniHunkVec hunk_v;
+        size_t     editdis_ses;
+        size_t     editdis_uni;
+        string     path_rses;
+        string     path_rhunks;
     } case_t;
     typedef vector< case_t > caseVec;
+    
+    enum type_diff { TYPE_DIFF_SES, TYPE_DIFF_UNI };
     
     caseVec diff_cases;
     caseVec only_editdis_cases;
     caseVec custom_cases;
     
     template < typename comparator >
-    case_t createCase (sequence a, sequence b, bool onlyEditdis = false) {
-        case_t c;
-        comparator comp;
-        c.A = a;
-        c.B = b;
-        Diff< elem, sequence, comparator > diff(a, b, comp);
+    case_t createCase (const sequence a, const sequence b, string test_name, bool onlyEditdis = false) {
+        case_t  c;
+        elemVec lcs_v;
+
+        Diff< elem, sequence, comparator > diff(a, b);
         if (onlyEditdis) {
             diff.onOnlyEditDistance();
         }
+
         diff.compose();
         diff.composeUnifiedHunks();
-        c.editdis     = diff.getEditDistance();
-        elemVec lcs_v = diff.getLcsVec();
-        c.lcs_s       = sequence(lcs_v.begin(), lcs_v.end());
-        c.ses_seq     = diff.getSes().getSequence();
-        c.hunk_v      = diff.getUniHunks();
+        lcs_v = diff.getLcsVec();
+
+        if (test_name != "") {
+            string path_lses   = create_path(test_name, TYPE_DIFF_SES);
+            string path_rses   = create_path(test_name, TYPE_DIFF_SES, true);
+            string path_lhunks = create_path(test_name, TYPE_DIFF_UNI);
+            string path_rhunks = create_path(test_name, TYPE_DIFF_UNI, true);
+            
+            create_file< comparator >(path_rses,   diff, TYPE_DIFF_SES);
+            create_file< comparator >(path_rhunks, diff, TYPE_DIFF_UNI);
+            
+            c.editdis_ses = cal_diff_uni(path_lses,   path_rses);
+            c.editdis_uni = cal_diff_uni(path_lhunks, path_rhunks);
+            c.path_rses   = path_rses;
+            c.path_rhunks = path_rhunks;
+        }
+
+        c.A       = a;
+        c.B       = b;
+        c.editdis = diff.getEditDistance();
+        c.lcs_s   = sequence(lcs_v.begin(), lcs_v.end());
+        c.ses_seq = diff.getSes().getSequence();
+        c.hunk_v  = diff.getUniHunks();
+        
         return c;
     }
     
     void SetUp(void) {
-        diff_cases.push_back(createCase< Compare< elem > >("abc",               "abd"));                       // 0
-        diff_cases.push_back(createCase< Compare< elem > >("acbdeacbed",        "acebdabbabed"));              // 1
-        diff_cases.push_back(createCase< Compare< elem > >("abcdef",            "dacfea"));                    // 2
-        diff_cases.push_back(createCase< Compare< elem > >("abcbda",            "bdcaba"));                    // 3
-        diff_cases.push_back(createCase< Compare< elem > >("bokko",             "bokkko"));                    // 4
-        diff_cases.push_back(createCase< Compare< elem > >("",                  ""));                          // 5
-        diff_cases.push_back(createCase< Compare< elem > >("a",                 ""));                          // 6
-        diff_cases.push_back(createCase< Compare< elem > >("",                  "b"));                         // 7
-        diff_cases.push_back(createCase< Compare< elem > >("acbdeaqqqqqqqcbed", "acebdabbqqqqqqqabed"));       // 8
+        diff_cases.push_back(createCase< Compare< elem > >("abc",               "abd",                 "diff_test0"));
+        diff_cases.push_back(createCase< Compare< elem > >("acbdeacbed",        "acebdabbabed",        "diff_test1"));
+        diff_cases.push_back(createCase< Compare< elem > >("abcdef",            "dacfea",              "diff_test2"));
+        diff_cases.push_back(createCase< Compare< elem > >("abcbda",            "bdcaba",              "diff_test3"));
+        diff_cases.push_back(createCase< Compare< elem > >("bokko",             "bokkko",              "diff_test4"));
+        diff_cases.push_back(createCase< Compare< elem > >("",                  "",                    "diff_test5"));
+        diff_cases.push_back(createCase< Compare< elem > >("a",                 "",                    "diff_test6"));
+        diff_cases.push_back(createCase< Compare< elem > >("",                  "b",                   "diff_test7"));
+        diff_cases.push_back(createCase< Compare< elem > >("acbdeaqqqqqqqcbed", "acebdabbqqqqqqqabed", "diff_test8"));
         
-        only_editdis_cases.push_back(createCase< Compare< elem > >("abc",                "abd",                 true)); // 0
-        only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeacbed",         "acebdabbabed",        true)); // 1
-        only_editdis_cases.push_back(createCase< Compare< elem > >("abcdef",             "dacfea",              true)); // 2
-        only_editdis_cases.push_back(createCase< Compare< elem > >("abcbda",             "bdcaba",              true)); // 3
-        only_editdis_cases.push_back(createCase< Compare< elem > >("bokko",              "bokkko",              true)); // 4
-        only_editdis_cases.push_back(createCase< Compare< elem > >("",                   "",                    true)); // 5
-        only_editdis_cases.push_back(createCase< Compare< elem > >("a",                  "",                    true)); // 6
-        only_editdis_cases.push_back(createCase< Compare< elem > >("",                   "b",                   true)); // 7
-        only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeaqqqqqqqcbed",  "acebdabbqqqqqqqabed", true)); // 8
+        only_editdis_cases.push_back(createCase< Compare< elem > >("abc",                "abd",                 "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeacbed",         "acebdabbabed",        "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("abcdef",             "dacfea",              "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("abcbda",             "bdcaba",              "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("bokko",              "bokkko",              "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("",                   "",                    "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("a",                  "",                    "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("",                   "b",                   "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeaqqqqqqqcbed",  "acebdabbqqqqqqqabed", "", true));
         
-        custom_cases.push_back(createCase< CaseInsensitive >("abc", "Abc")); // 0
+        custom_cases.push_back(createCase< CaseInsensitive >("abc", "Abc", ""));
     }
     
+    void TearDown () {
+        for_each(diff_cases.begin(), diff_cases.end(), Remover());
+    }
+private :
+
+    string create_path (const string& test_name, enum type_diff t, bool is_use_suffix = false) {
+        string ret;
+        switch (t) {
+        case TYPE_DIFF_SES:
+            ret = (string("ses")   + string("/") + string("strdiff") + string("/") + test_name);
+            break;
+        case TYPE_DIFF_UNI:
+            ret = (string("hunks") + string("/") + string("strdiff") + string("/") + test_name);
+            break;
+        }
+        ret += is_use_suffix ? "_" : "";
+        return ret;
+    }
     
-    void TearDown () {}
+    template < typename comparator >
+    void create_file (const string& path, Diff< elem, sequence, comparator >& diff, enum type_diff t) {
+        ofstream ofs;
+        ofs.open(path.c_str());
+        switch (t) {
+        case TYPE_DIFF_SES:
+            diff.printSES(ofs);
+            break;
+        case TYPE_DIFF_UNI:
+            diff.printUnifiedFormat(ofs);
+            break;
+        }
+        ofs.close();
+    }
+
+    size_t cal_diff_uni (const string& path_l, const string& path_r) {
+        string   buf;
+        ifstream lifs(path_l.c_str());
+        ifstream rifs(path_r.c_str());
+        vector< string > llines;
+        vector< string > rlines;
+        while (getline(lifs, buf)) {
+            llines.push_back(buf);
+        }
+        
+        while (getline(rifs, buf)) {
+            rlines.push_back(buf);
+        }
+        
+        Diff< string, vector< string > > diff_uni(llines, rlines);
+        diff_uni.compose();
+        return diff_uni.getEditDistance();
+    }
+    
+    class Remover {
+    public :
+        void operator()(const case_t& c){
+            remove(c.path_rses.c_str());
+            remove(c.path_rhunks.c_str());
+        }
+    };
     
 };
 
@@ -86,28 +169,9 @@ TEST_F (Strdifftest, diff_test0) {
     
     EXPECT_EQ("ab",       diff_cases[0].lcs_s);
     
-    ASSERT_EQ('a',        diff_cases[0].ses_seq[0].first);
-    ASSERT_EQ('b',        diff_cases[0].ses_seq[1].first);
-    ASSERT_EQ('c',        diff_cases[0].ses_seq[2].first);
-    ASSERT_EQ('d',        diff_cases[0].ses_seq[3].first);
-    ASSERT_EQ(SES_COMMON, diff_cases[0].ses_seq[0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[0].ses_seq[1].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[0].ses_seq[2].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[0].ses_seq[3].second.type);
-    
-    ASSERT_EQ(1,          diff_cases[0].hunk_v[0].a);
-    ASSERT_EQ(3,          diff_cases[0].hunk_v[0].b);
-    ASSERT_EQ(1,          diff_cases[0].hunk_v[0].c);
-    ASSERT_EQ(3,          diff_cases[0].hunk_v[0].d);
-    ASSERT_EQ('a',        diff_cases[0].hunk_v[0].common[0][0].first);
-    ASSERT_EQ('b',        diff_cases[0].hunk_v[0].common[0][1].first);
-    ASSERT_EQ('c',        diff_cases[0].hunk_v[0].change[0].first);
-    ASSERT_EQ('d',        diff_cases[0].hunk_v[0].change[1].first);
-    ASSERT_EQ(SES_COMMON, diff_cases[0].hunk_v[0].common[0][0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[0].hunk_v[0].common[0][1].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[0].hunk_v[0].change[0].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[0].hunk_v[0].change[1].second.type);
-    ASSERT_TRUE(diff_cases[0].hunk_v[0].common[1].empty());
+    ASSERT_EQ(0,          diff_cases[0].editdis_ses);
+
+    ASSERT_EQ(0,          diff_cases[0].editdis_uni);
 }
 
 TEST_F (Strdifftest, diff_test1) {
@@ -115,68 +179,9 @@ TEST_F (Strdifftest, diff_test1) {
     
     EXPECT_EQ("acbdabed", diff_cases[1].lcs_s);
     
-    ASSERT_EQ('a',        diff_cases[1].ses_seq[0].first);
-    ASSERT_EQ('c',        diff_cases[1].ses_seq[1].first);
-    ASSERT_EQ('e',        diff_cases[1].ses_seq[2].first);
-    ASSERT_EQ('b',        diff_cases[1].ses_seq[3].first);
-    ASSERT_EQ('d',        diff_cases[1].ses_seq[4].first);
-    ASSERT_EQ('e',        diff_cases[1].ses_seq[5].first);
-    ASSERT_EQ('a',        diff_cases[1].ses_seq[6].first);
-    ASSERT_EQ('c',        diff_cases[1].ses_seq[7].first);
-    ASSERT_EQ('b',        diff_cases[1].ses_seq[8].first);
-    ASSERT_EQ('b',        diff_cases[1].ses_seq[9].first);
-    ASSERT_EQ('a',        diff_cases[1].ses_seq[10].first);
-    ASSERT_EQ('b',        diff_cases[1].ses_seq[11].first);
-    ASSERT_EQ('e',        diff_cases[1].ses_seq[12].first);
-    ASSERT_EQ('d',        diff_cases[1].ses_seq[13].first);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].ses_seq[0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].ses_seq[1].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[1].ses_seq[2].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].ses_seq[3].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].ses_seq[4].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[1].ses_seq[5].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].ses_seq[6].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[1].ses_seq[7].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].ses_seq[8].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[1].ses_seq[9].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[1].ses_seq[10].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[1].ses_seq[11].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].ses_seq[12].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].ses_seq[13].second.type);
+    ASSERT_EQ(0,          diff_cases[1].editdis_ses);
     
-    ASSERT_EQ(1,          diff_cases[1].hunk_v[0].a);
-    ASSERT_EQ(10,         diff_cases[1].hunk_v[0].b);
-    ASSERT_EQ(1,          diff_cases[1].hunk_v[0].c);
-    ASSERT_EQ(12,         diff_cases[1].hunk_v[0].d);
-    ASSERT_EQ('a',        diff_cases[1].hunk_v[0].common[0][0].first);
-    ASSERT_EQ('c',        diff_cases[1].hunk_v[0].common[0][1].first);
-    ASSERT_EQ('e',        diff_cases[1].hunk_v[0].change[0].first);
-    ASSERT_EQ('b',        diff_cases[1].hunk_v[0].change[1].first);
-    ASSERT_EQ('d',        diff_cases[1].hunk_v[0].change[2].first);
-    ASSERT_EQ('e',        diff_cases[1].hunk_v[0].change[3].first);
-    ASSERT_EQ('a',        diff_cases[1].hunk_v[0].change[4].first);
-    ASSERT_EQ('c',        diff_cases[1].hunk_v[0].change[5].first);
-    ASSERT_EQ('b',        diff_cases[1].hunk_v[0].change[6].first);
-    ASSERT_EQ('b',        diff_cases[1].hunk_v[0].change[7].first);
-    ASSERT_EQ('a',        diff_cases[1].hunk_v[0].change[8].first);
-    ASSERT_EQ('b',        diff_cases[1].hunk_v[0].change[9].first);
-    ASSERT_EQ('e',        diff_cases[1].hunk_v[0].change[10].first);
-    ASSERT_EQ('d',        diff_cases[1].hunk_v[0].change[11].first);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].hunk_v[0].common[0][0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].hunk_v[0].common[0][1].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[1].hunk_v[0].change[0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].hunk_v[0].change[1].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].hunk_v[0].change[2].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[1].hunk_v[0].change[3].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].hunk_v[0].change[4].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[1].hunk_v[0].change[5].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].hunk_v[0].change[6].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[1].hunk_v[0].change[7].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[1].hunk_v[0].change[8].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[1].hunk_v[0].change[9].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].hunk_v[0].change[10].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[1].hunk_v[0].change[11].second.type);
-    ASSERT_TRUE(diff_cases[1].hunk_v[0].common[1].empty());
+    ASSERT_EQ(0,          diff_cases[1].editdis_uni);
 }
 
 TEST_F (Strdifftest, diff_test2) {
@@ -184,50 +189,9 @@ TEST_F (Strdifftest, diff_test2) {
     
     EXPECT_EQ("acf",      diff_cases[2].lcs_s);
     
-    ASSERT_EQ('d',        diff_cases[2].ses_seq[0].first);
-    ASSERT_EQ('a',        diff_cases[2].ses_seq[1].first);
-    ASSERT_EQ('b',        diff_cases[2].ses_seq[2].first);
-    ASSERT_EQ('c',        diff_cases[2].ses_seq[3].first);
-    ASSERT_EQ('d',        diff_cases[2].ses_seq[4].first);
-    ASSERT_EQ('e',        diff_cases[2].ses_seq[5].first);
-    ASSERT_EQ('f',        diff_cases[2].ses_seq[6].first);
-    ASSERT_EQ('e',        diff_cases[2].ses_seq[7].first);
-    ASSERT_EQ('a',        diff_cases[2].ses_seq[8].first);
-    ASSERT_EQ(SES_ADD,    diff_cases[2].ses_seq[0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[2].ses_seq[1].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[2].ses_seq[2].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[2].ses_seq[3].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[2].ses_seq[4].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[2].ses_seq[5].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[2].ses_seq[6].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[2].ses_seq[7].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[2].ses_seq[8].second.type);
+    ASSERT_EQ(0,          diff_cases[2].editdis_ses);
     
-    ASSERT_EQ(1,          diff_cases[2].hunk_v[0].a);
-    ASSERT_EQ(6,          diff_cases[2].hunk_v[0].b);
-    ASSERT_EQ(1,          diff_cases[2].hunk_v[0].c);
-    ASSERT_EQ(6,          diff_cases[2].hunk_v[0].d);
-    ASSERT_EQ('d',        diff_cases[2].hunk_v[0].change[0].first);
-    ASSERT_EQ('a',        diff_cases[2].hunk_v[0].change[1].first);
-    ASSERT_EQ('b',        diff_cases[2].hunk_v[0].change[2].first);
-    ASSERT_EQ('c',        diff_cases[2].hunk_v[0].change[3].first);
-    ASSERT_EQ('d',        diff_cases[2].hunk_v[0].change[4].first);
-    ASSERT_EQ('e',        diff_cases[2].hunk_v[0].change[5].first);
-    ASSERT_EQ('f',        diff_cases[2].hunk_v[0].change[6].first);
-    ASSERT_EQ('e',        diff_cases[2].hunk_v[0].change[7].first);
-    ASSERT_EQ('a',        diff_cases[2].hunk_v[0].change[8].first);
-    ASSERT_TRUE(diff_cases[2].hunk_v[0].common[0].empty());
-    ASSERT_EQ(SES_ADD,    diff_cases[2].hunk_v[0].change[0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[2].hunk_v[0].change[1].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[2].hunk_v[0].change[2].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[2].hunk_v[0].change[3].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[2].hunk_v[0].change[4].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[2].hunk_v[0].change[5].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[2].hunk_v[0].change[6].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[2].hunk_v[0].change[7].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[2].hunk_v[0].change[8].second.type);
-    ASSERT_TRUE(diff_cases[2].hunk_v[0].common[1].empty());
-    
+    ASSERT_EQ(0,          diff_cases[2].editdis_uni);
 }
 
 TEST_F (Strdifftest, diff_test3) {
@@ -235,45 +199,9 @@ TEST_F (Strdifftest, diff_test3) {
     
     EXPECT_EQ("bcba",     diff_cases[3].lcs_s);
     
-    ASSERT_EQ('a',        diff_cases[3].ses_seq[0].first);
-    ASSERT_EQ('b',        diff_cases[3].ses_seq[1].first);
-    ASSERT_EQ('d',        diff_cases[3].ses_seq[2].first);
-    ASSERT_EQ('c',        diff_cases[3].ses_seq[3].first);
-    ASSERT_EQ('a',        diff_cases[3].ses_seq[4].first);
-    ASSERT_EQ('b',        diff_cases[3].ses_seq[5].first);
-    ASSERT_EQ('d',        diff_cases[3].ses_seq[6].first);
-    ASSERT_EQ('a',        diff_cases[3].ses_seq[7].first);
-    ASSERT_EQ(SES_DELETE, diff_cases[3].ses_seq[0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[3].ses_seq[1].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[3].ses_seq[2].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[3].ses_seq[3].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[3].ses_seq[4].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[3].ses_seq[5].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[3].ses_seq[6].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[3].ses_seq[7].second.type);
+    ASSERT_EQ(0,          diff_cases[3].editdis_ses);
     
-    ASSERT_EQ(1,          diff_cases[3].hunk_v[0].a);
-    ASSERT_EQ(6,          diff_cases[3].hunk_v[0].b);
-    ASSERT_EQ(1,          diff_cases[3].hunk_v[0].c);
-    ASSERT_EQ(6,          diff_cases[3].hunk_v[0].d);
-    ASSERT_TRUE(diff_cases[3].hunk_v[0].common[0].empty());
-    ASSERT_EQ('a',        diff_cases[3].hunk_v[0].change[0].first);
-    ASSERT_EQ('b',        diff_cases[3].hunk_v[0].change[1].first);
-    ASSERT_EQ('d',        diff_cases[3].hunk_v[0].change[2].first);
-    ASSERT_EQ('c',        diff_cases[3].hunk_v[0].change[3].first);
-    ASSERT_EQ('a',        diff_cases[3].hunk_v[0].change[4].first);
-    ASSERT_EQ('b',        diff_cases[3].hunk_v[0].change[5].first);
-    ASSERT_EQ('d',        diff_cases[3].hunk_v[0].change[6].first);
-    ASSERT_EQ('a',        diff_cases[3].hunk_v[0].change[7].first);
-    ASSERT_EQ(SES_DELETE, diff_cases[3].hunk_v[0].change[0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[3].hunk_v[0].change[1].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[3].hunk_v[0].change[2].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[3].hunk_v[0].change[3].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[3].hunk_v[0].change[4].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[3].hunk_v[0].change[5].second.type);
-    ASSERT_EQ(SES_DELETE, diff_cases[3].hunk_v[0].change[6].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[3].hunk_v[0].change[7].second.type);
-    ASSERT_TRUE(diff_cases[3].hunk_v[0].common[1].empty());
+    ASSERT_EQ(0,          diff_cases[3].editdis_uni);
 }
 
 TEST_F (Strdifftest, diff_test4) {
@@ -281,34 +209,9 @@ TEST_F (Strdifftest, diff_test4) {
     
     EXPECT_EQ("bokko",    diff_cases[4].lcs_s);
     
-    ASSERT_EQ('b',        diff_cases[4].ses_seq[0].first);
-    ASSERT_EQ('o',        diff_cases[4].ses_seq[1].first);
-    ASSERT_EQ('k',        diff_cases[4].ses_seq[2].first);
-    ASSERT_EQ('k',        diff_cases[4].ses_seq[3].first);
-    ASSERT_EQ('k',        diff_cases[4].ses_seq[4].first);
-    ASSERT_EQ('o',        diff_cases[4].ses_seq[5].first);
-    ASSERT_EQ(SES_COMMON, diff_cases[4].ses_seq[0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[4].ses_seq[1].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[4].ses_seq[2].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[4].ses_seq[3].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[4].ses_seq[4].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[4].ses_seq[5].second.type);
+    ASSERT_EQ(0,          diff_cases[4].editdis_ses);
     
-    ASSERT_EQ(2,          diff_cases[4].hunk_v[0].a);
-    ASSERT_EQ(4,          diff_cases[4].hunk_v[0].b);
-    ASSERT_EQ(2,          diff_cases[4].hunk_v[0].c);
-    ASSERT_EQ(5,          diff_cases[4].hunk_v[0].d);
-    ASSERT_EQ('o',        diff_cases[4].hunk_v[0].common[0][0].first);
-    ASSERT_EQ('k',        diff_cases[4].hunk_v[0].common[0][1].first);
-    ASSERT_EQ('k',        diff_cases[4].hunk_v[0].common[0][2].first);
-    ASSERT_EQ('k',        diff_cases[4].hunk_v[0].change[0].first);
-    ASSERT_EQ('o',        diff_cases[4].hunk_v[0].change[1].first);
-    ASSERT_EQ(SES_COMMON, diff_cases[4].hunk_v[0].common[0][0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[4].hunk_v[0].common[0][1].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[4].hunk_v[0].common[0][2].second.type);
-    ASSERT_EQ(SES_ADD,    diff_cases[4].hunk_v[0].change[0].second.type);
-    ASSERT_EQ(SES_COMMON, diff_cases[4].hunk_v[0].change[1].second.type);
-    ASSERT_TRUE(diff_cases[4].hunk_v[0].common[1].empty());
+    ASSERT_EQ(0,          diff_cases[4].editdis_uni);
 }
 
 TEST_F (Strdifftest, diff_test5) {
@@ -316,9 +219,9 @@ TEST_F (Strdifftest, diff_test5) {
     
     EXPECT_EQ("", diff_cases[5].lcs_s);
     
-    ASSERT_TRUE(diff_cases[5].ses_seq.empty());
+    ASSERT_EQ(0,  diff_cases[5].editdis_ses);
     
-    ASSERT_TRUE(diff_cases[5].hunk_v.empty());
+    ASSERT_EQ(0,  diff_cases[5].editdis_uni);
 }
 
 TEST_F (Strdifftest, diff_test6) {
@@ -326,17 +229,9 @@ TEST_F (Strdifftest, diff_test6) {
     
     EXPECT_EQ("",         diff_cases[6].lcs_s);
     
-    ASSERT_EQ('a',        diff_cases[6].ses_seq[0].first);
-    ASSERT_EQ(SES_DELETE, diff_cases[6].ses_seq[0].second.type);
+    ASSERT_EQ(0,          diff_cases[6].editdis_ses);
     
-    ASSERT_EQ(1,          diff_cases[6].hunk_v[0].a);
-    ASSERT_EQ(1,          diff_cases[6].hunk_v[0].b);
-    ASSERT_EQ(1,          diff_cases[6].hunk_v[0].c);
-    ASSERT_EQ(0,          diff_cases[6].hunk_v[0].d);
-    ASSERT_TRUE(diff_cases[6].hunk_v[0].common[0].empty());
-    ASSERT_EQ('a',        diff_cases[6].hunk_v[0].change[0].first);
-    ASSERT_EQ(SES_DELETE, diff_cases[6].hunk_v[0].change[0].second.type);
-    ASSERT_TRUE(diff_cases[6].hunk_v[0].common[1].empty());
+    ASSERT_EQ(0,          diff_cases[6].editdis_uni);
 }
 
 TEST_F (Strdifftest, diff_test7) {
@@ -344,17 +239,9 @@ TEST_F (Strdifftest, diff_test7) {
     
     EXPECT_EQ("",      diff_cases[7].lcs_s);
     
-    ASSERT_EQ('b',     diff_cases[7].ses_seq[0].first);
-    ASSERT_EQ(SES_ADD, diff_cases[7].ses_seq[0].second.type);
+    ASSERT_EQ(0,       diff_cases[7].editdis_ses);
     
-    ASSERT_EQ(1,       diff_cases[7].hunk_v[0].a);
-    ASSERT_EQ(0,       diff_cases[7].hunk_v[0].b);
-    ASSERT_EQ(1,       diff_cases[7].hunk_v[0].c);
-    ASSERT_EQ(1,       diff_cases[7].hunk_v[0].d);
-    ASSERT_TRUE(diff_cases[7].hunk_v[0].common[0].empty());
-    ASSERT_EQ('b',     diff_cases[7].hunk_v[0].change[0].first);
-    ASSERT_EQ(SES_ADD, diff_cases[7].hunk_v[0].change[0].second.type);
-    ASSERT_TRUE(diff_cases[7].hunk_v[0].common[1].empty());
+    ASSERT_EQ(0,       diff_cases[7].editdis_uni);
 }
 
 TEST_F (Strdifftest, diff_test8) {
@@ -362,98 +249,9 @@ TEST_F (Strdifftest, diff_test8) {
     
     EXPECT_EQ("acbdaqqqqqqqbed", diff_cases[8].lcs_s);
     
-    ASSERT_EQ('a',               diff_cases[8].ses_seq[0].first);
-    ASSERT_EQ('c',               diff_cases[8].ses_seq[1].first);
-    ASSERT_EQ('e',               diff_cases[8].ses_seq[2].first);
-    ASSERT_EQ('b',               diff_cases[8].ses_seq[3].first);
-    ASSERT_EQ('d',               diff_cases[8].ses_seq[4].first);
-    ASSERT_EQ('e',               diff_cases[8].ses_seq[5].first);
-    ASSERT_EQ('a',               diff_cases[8].ses_seq[6].first);
-    ASSERT_EQ('b',               diff_cases[8].ses_seq[7].first);
-    ASSERT_EQ('b',               diff_cases[8].ses_seq[8].first);
-    ASSERT_EQ('q',               diff_cases[8].ses_seq[9].first);
-    ASSERT_EQ('q',               diff_cases[8].ses_seq[10].first);
-    ASSERT_EQ('q',               diff_cases[8].ses_seq[11].first);
-    ASSERT_EQ('q',               diff_cases[8].ses_seq[12].first);
-    ASSERT_EQ('q',               diff_cases[8].ses_seq[13].first);
-    ASSERT_EQ('q',               diff_cases[8].ses_seq[14].first);
-    ASSERT_EQ('q',               diff_cases[8].ses_seq[15].first);
-    ASSERT_EQ('a',               diff_cases[8].ses_seq[16].first);
-    ASSERT_EQ('c',               diff_cases[8].ses_seq[17].first);
-    ASSERT_EQ('b',               diff_cases[8].ses_seq[18].first);
-    ASSERT_EQ('e',               diff_cases[8].ses_seq[19].first);
-    ASSERT_EQ('d',               diff_cases[8].ses_seq[20].first);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[0].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[1].second.type);
-    ASSERT_EQ(SES_ADD,           diff_cases[8].ses_seq[2].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[3].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[4].second.type);
-    ASSERT_EQ(SES_DELETE,        diff_cases[8].ses_seq[5].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[6].second.type);
-    ASSERT_EQ(SES_ADD,           diff_cases[8].ses_seq[7].second.type);
-    ASSERT_EQ(SES_ADD,           diff_cases[8].ses_seq[8].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[9].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[10].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[11].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[12].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[13].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[14].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[15].second.type);
-    ASSERT_EQ(SES_ADD,           diff_cases[8].ses_seq[16].second.type);
-    ASSERT_EQ(SES_DELETE,        diff_cases[8].ses_seq[17].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[18].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[19].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].ses_seq[20].second.type);
-    
-    ASSERT_EQ(1,                 diff_cases[8].hunk_v[0].a);
-    ASSERT_EQ(9,                 diff_cases[8].hunk_v[0].b);
-    ASSERT_EQ(1,                 diff_cases[8].hunk_v[0].c);
-    ASSERT_EQ(11,                diff_cases[8].hunk_v[0].d);
-    ASSERT_EQ(11,                diff_cases[8].hunk_v[1].a);
-    ASSERT_EQ(7,                 diff_cases[8].hunk_v[1].b);
-    ASSERT_EQ(13,                diff_cases[8].hunk_v[1].c);
-    ASSERT_EQ(7,                 diff_cases[8].hunk_v[1].d);
-    
-    ASSERT_EQ('a',               diff_cases[8].hunk_v[0].common[0][0].first);
-    ASSERT_EQ('c',               diff_cases[8].hunk_v[0].common[0][1].first);
-    ASSERT_EQ('e',               diff_cases[8].hunk_v[0].change[0].first);
-    ASSERT_EQ('b',               diff_cases[8].hunk_v[0].change[1].first);
-    ASSERT_EQ('d',               diff_cases[8].hunk_v[0].change[2].first);
-    ASSERT_EQ('e',               diff_cases[8].hunk_v[0].change[3].first);
-    ASSERT_EQ('a',               diff_cases[8].hunk_v[0].change[4].first);
-    ASSERT_EQ('b',               diff_cases[8].hunk_v[0].change[5].first);
-    ASSERT_EQ('b',               diff_cases[8].hunk_v[0].change[6].first);
-    ASSERT_EQ('q',               diff_cases[8].hunk_v[0].change[7].first);
-    ASSERT_EQ('q',               diff_cases[8].hunk_v[0].change[8].first);
-    ASSERT_EQ('q',               diff_cases[8].hunk_v[0].change[9].first);
-    ASSERT_EQ('q',               diff_cases[8].hunk_v[1].common[0][0].first);
-    ASSERT_EQ('q',               diff_cases[8].hunk_v[1].common[0][1].first);
-    ASSERT_EQ('q',               diff_cases[8].hunk_v[1].common[0][2].first);
-    ASSERT_EQ('c',               diff_cases[8].hunk_v[1].change[0].first);
-    ASSERT_EQ('a',               diff_cases[8].hunk_v[1].change[1].first);
-    ASSERT_EQ('b',               diff_cases[8].hunk_v[1].change[2].first);
-    ASSERT_EQ('e',               diff_cases[8].hunk_v[1].change[3].first);
-    ASSERT_EQ('d',               diff_cases[8].hunk_v[1].change[4].first);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[0].common[0][0].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[0].common[0][1].second.type);
-    ASSERT_EQ(SES_ADD,           diff_cases[8].hunk_v[0].change[0].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[0].change[1].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[0].change[2].second.type);
-    ASSERT_EQ(SES_DELETE,        diff_cases[8].hunk_v[0].change[3].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[0].change[4].second.type);
-    ASSERT_EQ(SES_ADD,           diff_cases[8].hunk_v[0].change[5].second.type);
-    ASSERT_EQ(SES_ADD,           diff_cases[8].hunk_v[0].change[6].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[0].change[7].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[0].change[8].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[0].change[9].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[1].common[0][0].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[1].common[0][1].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[1].common[0][2].second.type);
-    ASSERT_EQ(SES_DELETE,        diff_cases[8].hunk_v[1].change[0].second.type);
-    ASSERT_EQ(SES_ADD,           diff_cases[8].hunk_v[1].change[1].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[1].change[2].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[1].change[3].second.type);
-    ASSERT_EQ(SES_COMMON,        diff_cases[8].hunk_v[1].change[4].second.type);
+    ASSERT_EQ(0,                 diff_cases[8].editdis_ses);
+
+    ASSERT_EQ(0,                 diff_cases[8].editdis_uni);
 }
 
 TEST_F (Strdifftest, only_editdis_test0) {

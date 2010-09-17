@@ -3,14 +3,19 @@
 #define DTL_TEST_COMMON
 
 #include <gtest/gtest.h>
+#include <cstdio>
 #include <string>
 #include <vector>
 #include <utility>
+#include <iostream>
+#include <fstream>
 #include <dtl/dtl.hpp>
 
 using std::string;
 using std::vector;
 using std::pair;
+using std::ifstream;
+using std::ofstream;
 
 using dtl::Diff;
 using dtl::Diff3;
