@@ -20,8 +20,6 @@ protected :
     } case_t;
     typedef vector< case_t > caseVec;
     
-    enum type_diff { TYPE_DIFF_SES, TYPE_DIFF_UNI };
-    
     caseVec diff_cases;
     caseVec only_editdis_cases;
     caseVec custom_cases;
@@ -30,6 +28,7 @@ protected :
     case_t createCase (const sequence a, const sequence b, string test_name, bool onlyEditdis = false) {
         case_t  c;
         elemVec lcs_v;
+        string  diff_name("strdiff");
 
         Diff< elem, sequence, comparator > diff(a, b);
         if (onlyEditdis) {
@@ -39,15 +38,15 @@ protected :
         diff.compose();
         diff.composeUnifiedHunks();
         lcs_v = diff.getLcsVec();
-
+        
         if (test_name != "") {
-            string path_lses   = create_path(test_name, TYPE_DIFF_SES);
-            string path_rses   = create_path(test_name, TYPE_DIFF_SES, true);
-            string path_lhunks = create_path(test_name, TYPE_DIFF_UNI);
-            string path_rhunks = create_path(test_name, TYPE_DIFF_UNI, true);
+            string path_lses   = create_path(test_name, diff_name, TYPE_DIFF_SES);
+            string path_rses   = create_path(test_name, diff_name, TYPE_DIFF_SES, true);
+            string path_lhunks = create_path(test_name, diff_name, TYPE_DIFF_UNI);
+            string path_rhunks = create_path(test_name, diff_name, TYPE_DIFF_UNI, true);
             
-            create_file< comparator >(path_rses,   diff, TYPE_DIFF_SES);
-            create_file< comparator >(path_rhunks, diff, TYPE_DIFF_UNI);
+            create_file< elem, sequence, comparator >(path_rses,   diff, TYPE_DIFF_SES);
+            create_file< elem, sequence, comparator >(path_rhunks, diff, TYPE_DIFF_UNI);
             
             c.editdis_ses = cal_diff_uni(path_lses,   path_rses);
             c.editdis_uni = cal_diff_uni(path_lhunks, path_rhunks);
@@ -90,66 +89,8 @@ protected :
     }
     
     void TearDown () {
-        for_each(diff_cases.begin(), diff_cases.end(), Remover());
+        for_each(diff_cases.begin(), diff_cases.end(), Remover< case_t >());
     }
-private :
-
-    string create_path (const string& test_name, enum type_diff t, bool is_use_suffix = false) {
-        string ret;
-        switch (t) {
-        case TYPE_DIFF_SES:
-            ret = (string("ses")   + string("/") + string("strdiff") + string("/") + test_name);
-            break;
-        case TYPE_DIFF_UNI:
-            ret = (string("hunks") + string("/") + string("strdiff") + string("/") + test_name);
-            break;
-        }
-        ret += is_use_suffix ? "_" : "";
-        return ret;
-    }
-    
-    template < typename comparator >
-    void create_file (const string& path, Diff< elem, sequence, comparator >& diff, enum type_diff t) {
-        ofstream ofs;
-        ofs.open(path.c_str());
-        switch (t) {
-        case TYPE_DIFF_SES:
-            diff.printSES(ofs);
-            break;
-        case TYPE_DIFF_UNI:
-            diff.printUnifiedFormat(ofs);
-            break;
-        }
-        ofs.close();
-    }
-
-    size_t cal_diff_uni (const string& path_l, const string& path_r) {
-        string   buf;
-        ifstream lifs(path_l.c_str());
-        ifstream rifs(path_r.c_str());
-        vector< string > llines;
-        vector< string > rlines;
-        while (getline(lifs, buf)) {
-            llines.push_back(buf);
-        }
-        
-        while (getline(rifs, buf)) {
-            rlines.push_back(buf);
-        }
-        
-        Diff< string, vector< string > > diff_uni(llines, rlines);
-        diff_uni.compose();
-        return diff_uni.getEditDistance();
-    }
-    
-    class Remover {
-    public :
-        void operator()(const case_t& c){
-            remove(c.path_rses.c_str());
-            remove(c.path_rhunks.c_str());
-        }
-    };
-    
 };
 
 

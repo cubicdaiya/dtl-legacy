@@ -33,6 +33,37 @@ using dtl::uniHunk;
     typedef vector< elem >               elemVec;                   \
     typedef vector< sesElem >            sesElemVec;                \
     typedef vector< uniHunk< sesElem > > uniHunkVec;
-    
+
+enum type_diff { TYPE_DIFF_SES, TYPE_DIFF_UNI };
+
+string create_path (const string& test_name, string diff_name, enum type_diff t, bool is_use_suffix = false);
+size_t cal_diff_uni (const string& path_l, const string& path_r);
+
+template <typename T>
+class Remover {
+public :
+    void operator()(const T& v){
+        remove(v.path_rses.c_str());
+        remove(v.path_rhunks.c_str());
+    }
+};
+
+template < typename elem, typename sequence,  typename comparator >
+void create_file (const string& path, Diff< elem, sequence, comparator >& diff, enum type_diff t) {
+    ofstream ofs;
+    ofs.open(path.c_str());
+    switch (t) {
+    case TYPE_DIFF_SES:
+        diff.printSES(ofs);
+        break;
+    case TYPE_DIFF_UNI:
+        diff.printUnifiedFormat(ofs);
+        break;
+    }
+    ofs.close();
+}
+
+
+
 
 #endif // DTL_TEST_COMMON
