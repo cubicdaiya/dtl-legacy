@@ -75,17 +75,17 @@ protected :
         diff_cases.push_back(createCase< Compare< elem > >("",                  "b",                   "diff_test7"));
         diff_cases.push_back(createCase< Compare< elem > >("acbdeaqqqqqqqcbed", "acebdabbqqqqqqqabed", "diff_test8"));
         
-        only_editdis_cases.push_back(createCase< Compare< elem > >("abc",                "abd",                 "", true));
-        only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeacbed",         "acebdabbabed",        "", true));
-        only_editdis_cases.push_back(createCase< Compare< elem > >("abcdef",             "dacfea",              "", true));
-        only_editdis_cases.push_back(createCase< Compare< elem > >("abcbda",             "bdcaba",              "", true));
-        only_editdis_cases.push_back(createCase< Compare< elem > >("bokko",              "bokkko",              "", true));
-        only_editdis_cases.push_back(createCase< Compare< elem > >("",                   "",                    "", true));
-        only_editdis_cases.push_back(createCase< Compare< elem > >("a",                  "",                    "", true));
-        only_editdis_cases.push_back(createCase< Compare< elem > >("",                   "b",                   "", true));
-        only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeaqqqqqqqcbed",  "acebdabbqqqqqqqabed", "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("abc",               "abd",                 "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeacbed",        "acebdabbabed",        "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("abcdef",            "dacfea",              "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("abcbda",            "bdcaba",              "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("bokko",             "bokkko",              "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("",                  "",                    "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("a",                 "",                    "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("",                  "b",                   "", true));
+        only_editdis_cases.push_back(createCase< Compare< elem > >("acbdeaqqqqqqqcbed", "acebdabbqqqqqqqabed", "", true));
         
-        custom_cases.push_back(createCase< CaseInsensitive >("abc", "Abc", ""));
+        custom_cases.push_back(createCase< CaseInsensitive >("abc", "Abc", "custom_test0"));
     }
     
     void TearDown () {
@@ -290,9 +290,7 @@ TEST_F (Strdifftest, custom_comparator_test0) {
     
     EXPECT_EQ("Abc", custom_cases[0].lcs_s);
 
-    ASSERT_EQ('A',   custom_cases[0].ses_seq[0].first);
-    ASSERT_EQ('b',   custom_cases[0].ses_seq[1].first);
-    ASSERT_EQ('c',   custom_cases[0].ses_seq[2].first);
+    ASSERT_EQ(0,     custom_cases[0].editdis_ses);
     
     ASSERT_TRUE(custom_cases[0].hunk_v.empty());
 }
