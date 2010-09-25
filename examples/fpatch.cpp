@@ -37,12 +37,12 @@ int main(int argc, char *argv[]){
     }
     
     typedef string elem;
-    typedef vector<elem> sequence;
+    typedef vector< elem > sequence;
 
     ifstream      Aifs(A.c_str());
     ifstream      Bifs(B.c_str());
     elem          buf;
-    sequence      ALines, BLines;
+    sequence      ALines,  BLines;
     ostringstream ossLine, ossInfo;
     
     while(getline(Aifs, buf)){
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
         BLines.push_back(buf);
     }
     
-    Diff<elem, sequence > d(ALines, BLines);
+    Diff< elem > d(ALines, BLines);
     d.compose();
     
     sequence s1 = ALines;

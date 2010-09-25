@@ -27,7 +27,7 @@ int main(int, char**){
 
     sequence A(&a[0], &a[asiz]);
     sequence B(&b[0], &b[bsiz]);
-    Diff< elem, sequence > d(A, B);
+    Diff< elem > d(A, B);
     d.compose();
 
     // editDistance

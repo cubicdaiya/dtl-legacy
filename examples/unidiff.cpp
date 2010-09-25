@@ -64,7 +64,7 @@ static void unifiedDiff (string fp1, string fp2)
         BLines.push_back(buf);
     }
     
-    Diff< elem, sequence > diff(ALines, BLines);
+    Diff< elem > diff(ALines, BLines);
     diff.onHuge();
     //diff.onUnserious();
     diff.compose();

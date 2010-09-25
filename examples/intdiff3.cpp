@@ -37,7 +37,7 @@ int main(int, char**) {
     sequence B(&b[0], &b[10]);
     sequence C(&c[0], &c[10]);
     sequence Answer(&answer[0], &answer[10]);
-    Diff3<elem, sequence> diff3(A, B, C);
+    Diff3< elem > diff3(A, B, C);
     diff3.compose();
     if (!diff3.merge()) {
         cerr << "conflict." << endl;
