@@ -90,6 +90,7 @@ protected :
     
     void TearDown () {
         for_each(diff_cases.begin(), diff_cases.end(), Remover< case_t >());
+        for_each(custom_cases.begin(), custom_cases.end(), Remover< case_t >());
     }
 };
 
