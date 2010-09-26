@@ -32,7 +32,7 @@ int main(int, char**) {
     cout << endl;
     
     typedef int elem;
-    typedef vector<int> sequence;
+    typedef vector< int > sequence;
     sequence A(&a[0], &a[10]);
     sequence B(&b[0], &b[10]);
     sequence C(&c[0], &c[10]);

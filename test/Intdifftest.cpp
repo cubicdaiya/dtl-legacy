@@ -23,7 +23,7 @@ protected :
     case_t createCase (const sequence a, const sequence b, string test_name) {
         case_t c;
         string diff_name("intdiff");
-        Diff< elem, sequence > diff(a, b);
+        Diff< elem > diff(a, b);
         diff.compose();
         diff.composeUnifiedHunks();
         
