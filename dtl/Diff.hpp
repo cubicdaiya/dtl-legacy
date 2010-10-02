@@ -224,16 +224,16 @@ namespace dtl {
         ONP:
             do {
                 ++p;
-                for (long long k=-p;k<=(long long)delta-1;++k) {
+                for (long long k=-p;k<=static_cast<long long>(delta)-1;++k) {
                     fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
                 }
-                for (long long k=(long long)delta+p;k>=(long long)delta+1;--k) {
+                for (long long k=static_cast<long long>(delta)+p;k>=static_cast<long long>(delta)+1;--k) {
                     fp[k+offset] = snake(k, fp[k-1+offset]+1, fp[k+1+offset]);
                 }
-                fp[delta+offset] = snake((long long)delta, fp[delta-1+offset]+1, fp[delta+1+offset]);
-            } while (fp[delta+offset] != (long long)N && pathCordinates.size() < MAX_CORDINATES_SIZE);
+                fp[delta+offset] = snake(static_cast<long long>(delta), fp[delta-1+offset]+1, fp[delta+1+offset]);
+            } while (fp[delta+offset] != static_cast<long long>(N) && pathCordinates.size() < MAX_CORDINATES_SIZE);
             
-            editDistance += (long long)delta + 2 * p;
+            editDistance += static_cast<long long>(delta) + 2 * p;
             long long r = path[delta+offset];
             P cordinate;
             editPathCordinates epc(0);
@@ -344,7 +344,7 @@ namespace dtl {
                 case SES_COMMON :
                     ++b;++d;
                     if (common[1].empty() && adds.empty() && deletes.empty() && change.empty()) {
-                        if ((long long)common[0].size() < DTL_CONTEXT_SIZE) {
+                        if (static_cast<long long>(common[0].size()) < DTL_CONTEXT_SIZE) {
                             if (a == 0 && c == 0) {
                                 a = einfo.beforeIdx;
                                 c = einfo.afterIdx;
@@ -388,8 +388,8 @@ namespace dtl {
                         isAfter = false;
                         continue;
                     }
-                    if ((long long)common[0].size() >= DTL_SEPARATE_SIZE) {
-                        long long c0size = (long long)common[0].size();
+                    if (static_cast<long long>(common[0].size()) >= DTL_SEPARATE_SIZE) {
+                        long long c0size = static_cast<long long>(common[0].size());
                         rotate(common[0].begin(), 
                                common[0].begin() + (size_t)c0size - DTL_SEPARATE_SIZE, 
                                common[0].end());
@@ -453,7 +453,7 @@ namespace dtl {
                 ++x;++y;
             }
             
-            path[(size_t)k+offset] = (long long)pathCordinates.size();
+            path[(size_t)k+offset] = static_cast<long long>(pathCordinates.size());
             if (!onlyEditDistance) {
                 P p;
                 p.x = x;p.y = y;p.k = r;
@@ -507,7 +507,7 @@ namespace dtl {
                 if (i == 0) complete = true;
             }
             
-            if (x_idx > (long long)M && y_idx > (long long)N) {
+            if (x_idx > static_cast<long long>(M) && y_idx > static_cast<long long>(N)) {
                 // all recording success
             } else {
                 // unserious difference
