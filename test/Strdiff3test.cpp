@@ -14,7 +14,6 @@ protected :
     
     caseVec merge_cases;
     caseVec detect_cases;
-    caseVec specify_cases;
     caseVec custom_cases;
     
     template < typename comparator >
@@ -23,7 +22,6 @@ protected :
         case_t ct;
 
         diff3.compose();
-        diff3.setConflictSeparators('<', '|', '>');
 
         ct.S                = s;
         ct.is_merge_success = diff3.merge();
@@ -62,22 +60,6 @@ protected :
         detect_cases.push_back(createCase< Compare < elem > >("adc",           "abc",          "aec",          ""));                 // 0
         detect_cases.push_back(createCase< Compare < elem > >("abqdcf",        "abcdef",       "abqqef",       ""));                 // 1
         
-        // specify confliction test
-        specify_cases.push_back(createCase< Compare < elem > >("adc",          "abc",          "aec",          "a<d|e>c"));          // 0
-        specify_cases.push_back(createCase< Compare < elem > >("abqdcf",       "abcdef",       "abqqef",       "ab<qdc|qqe>f"));     // 1
-        specify_cases.push_back(createCase< Compare < elem > >("abqdcfzzzadc", "abcdefzzzabc", "abqqefzzzaec",
-                                           "ab<qdc|qqe>fzzza<d|e>c"));                                                               // 2
-        specify_cases.push_back(createCase< Compare < elem > >("abqdcfadc", "abcdefzzzabc",    "abqqefzezzaec",
-                                           "ab<qdc|qqe>f<adc|zezzaec>"));                                                            // 3
-        specify_cases.push_back(createCase< Compare < elem > >("adc",          "abc",          "aeczqq",       "a<d|e>czqq"));       // 4
-        specify_cases.push_back(createCase< Compare < elem > >("pbc",          "abc",          "qbc",          "<p|q>bc"));          // 5
-        specify_cases.push_back(createCase< Compare < elem > >("pdc",          "abc",          "qbc",          "<pd|qb>c"));         // 6
-        specify_cases.push_back(createCase< Compare < elem > >("abcdef",       "abcdefg",      "abcdefhe",     "abcdefhe"));         // 7
-        specify_cases.push_back(createCase< Compare < elem > >("abcdefqqqq",   "abcdefgzzzzzzzzzzz", "abcdefggggg", 
-                                                               "abcdef<qqqq|ggggg>"));                                               // 8
-        specify_cases.push_back(createCase< Compare < elem > >("abd",          "abc",          "ebz",          "eb<d|z>"));          // 9
-        specify_cases.push_back(createCase< Compare < elem > >("abd",          "ebc",          "ebz",          "ab<d|z>"));          // 10
-
         // use custom comparator
         custom_cases.push_back(createCase< CaseInsensitive >("abc", "abc", "abC", "abc"));
     }
@@ -218,61 +200,6 @@ TEST_F (Strdiff3test, detect_confliction_test0) {
 
 TEST_F (Strdiff3test, detect_confliction_test1) {
     ASSERT_FALSE(detect_cases[1].is_merge_success);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test0) {
-    ASSERT_FALSE(specify_cases[0].is_merge_success);
-    ASSERT_EQ(specify_cases[0].S, specify_cases[0].merged_seq);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test1) {
-    ASSERT_FALSE(specify_cases[1].is_merge_success);
-    ASSERT_EQ(specify_cases[1].S, specify_cases[1].merged_seq);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test2) {
-    ASSERT_FALSE(specify_cases[2].is_merge_success);
-    ASSERT_EQ(specify_cases[2].S, specify_cases[2].merged_seq);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test3) {
-    ASSERT_FALSE(specify_cases[3].is_merge_success);
-    ASSERT_EQ(specify_cases[3].S, specify_cases[3].merged_seq);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test4) {
-    ASSERT_FALSE(specify_cases[4].is_merge_success);
-    ASSERT_EQ(specify_cases[4].S, specify_cases[4].merged_seq);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test5) {
-    ASSERT_FALSE(specify_cases[5].is_merge_success);
-    ASSERT_EQ(specify_cases[5].S, specify_cases[5].merged_seq);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test6) {
-    ASSERT_FALSE(specify_cases[6].is_merge_success);
-    ASSERT_EQ(specify_cases[6].S, specify_cases[6].merged_seq);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test7) {
-    ASSERT_FALSE(specify_cases[7].is_merge_success);
-    ASSERT_EQ(specify_cases[7].S, specify_cases[7].merged_seq);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test8) {
-    ASSERT_FALSE(specify_cases[8].is_merge_success);
-    ASSERT_EQ(specify_cases[8].S, specify_cases[8].merged_seq);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test9) {
-    ASSERT_FALSE(specify_cases[9].is_merge_success);
-    ASSERT_EQ(specify_cases[9].S, specify_cases[9].merged_seq);
-}
-
-TEST_F (Strdiff3test, specify_confliction_test10) {
-    ASSERT_FALSE(specify_cases[10].is_merge_success);
-    ASSERT_EQ(specify_cases[10].S, specify_cases[10].merged_seq);
 }
 
 TEST_F (Strdiff3test, custom_comparator_test0) {

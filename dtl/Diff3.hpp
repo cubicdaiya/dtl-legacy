@@ -73,12 +73,6 @@ namespace dtl {
             return conflict;
         }
         
-        void setConflictSeparators (const elem begin, const elem sepa,const elem end) {
-            csepabegin = begin;
-            csepa      = sepa;
-            csepaend   = end;
-        }
-        
         sequence getMergedSequence () const {
             return S;
         }
@@ -101,7 +95,6 @@ namespace dtl {
                 } else {                              // A != B != C
                     S = merge_();
                     if (isConflict()) {               // conflict occured
-                        specifyConfliction();
                         return false;
                     }
                 }
@@ -210,138 +203,6 @@ namespace dtl {
         }
         
         /**
-         * specify the confliction points
-         */
-        void specifyConfliction () {
-            sequence_iter a_it  = A.begin();
-            sequence_iter b_it  = B.begin();
-            sequence_iter c_it  = C.begin();
-            sequence_iter a_end = A.end();
-            sequence_iter b_end = B.end();
-            sequence_iter c_end = C.end();
-            elemVec       elem_common;
-            elemVec       elem_conf1;
-            elemVec       elem_conf2;
-            elemVec       seq_vec;
-            bool          is_common;
-            bool          is_while_sepa;
-            elemVec       elem_common_end_vec;
-            
-            is_common     = false;
-            is_while_sepa = false;
-        SPECIFY :
-            elem_common.clear();
-            elem_common_end_vec.clear();
-            elem_conf1.clear();
-            elem_conf2.clear();
-            while (!isEnd(a_end, a_it) ||
-                   !isEnd(b_end, b_it) ||
-                   !isEnd(c_end, c_it)) {
-                if (*b_it == *a_it && *b_it == *c_it) {
-                    if (!is_common && b_it != B.begin()) {
-                        if (a_it != A.end()) elem_common_end_vec.push_back(*a_it);
-                        forwardUntilEnd(a_end, a_it);
-                        forwardUntilEnd(b_end, b_it);
-                        forwardUntilEnd(c_end, c_it);
-                        break;
-                    }
-                    if (!isEnd(a_end, a_it)) elem_common.push_back(*a_it);
-                    is_common = true;
-                } else if (*b_it == *a_it && *b_it != *c_it) {
-                    if (is_common) {
-                        elem_conf1.push_back(csepabegin);
-                        elem_conf2.push_back(csepa);
-                        is_while_sepa = true;
-                    }
-                    if (!isEnd(b_end, b_it) && b_it != B.begin()) elem_conf1.push_back(*b_it);
-                    if (!isEnd(c_end, c_it)) elem_conf2.push_back(*c_it);
-                    is_common = false;
-                } else if (*b_it == *c_it && *b_it != *a_it) {
-                    if (is_common) {
-                        elem_conf1.push_back(csepabegin);
-                        elem_conf2.push_back(csepa);
-                        is_while_sepa = true;
-                    }
-                    if (!isEnd(a_end, a_it)) elem_conf1.push_back(*a_it);
-                    if (!isEnd(c_end, c_it) && c_it != C.begin()) elem_conf2.push_back(*c_it);
-                    is_common = false;
-                    if (isEnd(a_end, a_it) && isEnd(c_end, c_it)) break;
-                } else if (*b_it != *a_it && *b_it != *c_it) {
-                    if (is_common || b_it == B.begin()) {
-                        elem_conf1.push_back(csepabegin);
-                        elem_conf2.push_back(csepa);
-                        is_while_sepa = true;
-                    }
-                    if (!isEnd(a_end, a_it)) elem_conf1.push_back(*a_it);
-                    if (!isEnd(c_end, c_it)) elem_conf2.push_back(*c_it);
-                    is_common = false;
-                    if (isEnd(a_end, a_it) && isEnd(c_end, c_it)) break;
-                }
-                forwardUntilEnd(a_end, a_it);
-                forwardUntilEnd(b_end, b_it);
-                forwardUntilEnd(c_end, c_it);
-            }
-            
-            joinElemVec(seq_vec, elem_common);
-            if (!elem_conf1.empty() && elem_conf1[0] == csepabegin && elem_conf1.size() == 1) {
-                elem_conf1.clear();
-                elem_conf2 = elemVec(elem_conf2.begin() + 1, elem_conf2.end());
-            }
-            joinElemVec(seq_vec, elem_conf1);
-            joinElemVec(seq_vec, elem_conf2);
-
-            if ((!elem_conf1.empty() && !elem_conf2.empty())) {
-                if (is_while_sepa) {
-                    seq_vec.push_back(csepaend);
-                    is_while_sepa = false;
-                }
-            }
-
-            joinElemVec(seq_vec, elem_common_end_vec);
-            
-            if (isEnd(a_end, a_it) &&
-                isEnd(b_end, b_it) &&
-                isEnd(c_end, c_it)) {
-                // do nothing
-            } else if (!isEnd(a_end, a_it) &&
-                       isEnd(b_end,  b_it) &&
-                       isEnd(c_end,  c_it)) {
-                addSpecifiedSequence(a_end, a_it, seq_vec, b_it, b_end, false);
-                is_common = true;
-                goto SPECIFY;
-            } else if (isEnd(a_end,  a_it) &&
-                       !isEnd(b_end, b_it) &&
-                       isEnd(c_end,  c_it)) {
-                // do nothing
-            } else if (isEnd(a_end,  a_it) &&
-                       isEnd(b_end,  b_it) &&
-                       !isEnd(c_end, c_it)) {
-                addSpecifiedSequence(c_end, c_it, seq_vec, b_it, b_end, false);
-            } else if (isEnd(a_end,  a_it) &&
-                       !isEnd(b_end, b_it) &&
-                       !isEnd(c_end, c_it)) {
-                addSpecifiedSequence(c_end, c_it, seq_vec, b_it, b_end, true);
-                addSpecifiedSequence(b_end, b_it, seq_vec, b_it, b_end, false);
-            } else if (!isEnd(a_end, a_it) &&
-                       isEnd(b_end,  b_it) &&
-                       !isEnd(c_end, c_it)) {
-                is_common = true;
-                goto SPECIFY;
-            } else if (!isEnd(a_end, a_it) &&
-                       !isEnd(b_end, b_it) &&
-                       isEnd(c_end,  c_it)) {
-                addSpecifiedSequence(a_end, a_it, seq_vec, b_it, b_end, true);
-                addSpecifiedSequence(b_end, b_it, seq_vec, b_it, b_end, false);
-            } else {
-                is_common = true;
-                goto SPECIFY;
-            }
-            
-            sequence mergedSeq(seq_vec.begin(), seq_vec.end());
-            S = mergedSeq;
-        }
-        
-        /**
          * join elem vectors
          */
         void inline joinElemVec (elemVec& s1, elemVec& s2) const {
@@ -376,18 +237,6 @@ namespace dtl {
                 if (it->second.type == SES_ADD) seq.push_back(it->first);
                 ++it;
             }      
-        }
-        
-        /**
-         * add confliction specified sequence
-         */
-        void inline addSpecifiedSequence(const sequence_iter& end, sequence_iter& it, elemVec& seq, 
-                                         sequence_iter& b_it, const sequence_iter& b_end, const bool is_forward_b) const {
-            while (!isEnd(end, it)) {
-                seq.push_back(*it);
-                ++it;
-                if (is_forward_b) forwardUntilEnd(b_end, b_it);
-            }
         }
         
     };
