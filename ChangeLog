@@ -1,4 +1,12 @@
 
+2010-11-21 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* use static_cast instead of C-style cast
+
+	* remove specifyConfliction
+
+	* 1.10 released
+
 2010-09-20 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* fix specifyConfliction's bug
