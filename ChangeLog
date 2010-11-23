@@ -1,5 +1,5 @@
 
-2010-11-21 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+2010-11-23 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* use static_cast instead of C-style cast
 
