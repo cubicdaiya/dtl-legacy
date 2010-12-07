@@ -63,7 +63,4 @@ void create_file (const string& path, Diff< elem, sequence, comparator >& diff, 
     ofs.close();
 }
 
-
-
-
 #endif // DTL_TEST_COMMON

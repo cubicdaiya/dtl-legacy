@@ -35,4 +35,3 @@ size_t cal_diff_uni (const string& path_l, const string& path_r) {
     diff_uni.compose();
     return diff_uni.getEditDistance();
 }
-

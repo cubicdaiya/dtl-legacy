@@ -214,7 +214,9 @@ namespace dtl {
          */
         void compose() {
             
-            if (isHuge()) pathCordinates.reserve(MAX_CORDINATES_SIZE + 50000);
+            if (isHuge()) {
+                pathCordinates.reserve(MAX_CORDINATES_SIZE);
+            }
             
             long long p = -1;
             fp = new long long[M + N + 3];
@@ -244,7 +246,7 @@ namespace dtl {
                 return;
             }
             
-            while(r != -1){
+            while(r != -1) {
                 cordinate.x = pathCordinates[(size_t)r].x;
                 cordinate.y = pathCordinates[(size_t)r].y;
                 epc.push_back(cordinate);
