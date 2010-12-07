@@ -295,4 +295,3 @@ TEST_F (Strdifftest, custom_comparator_test0) {
     
     ASSERT_TRUE(custom_cases[0].hunk_v.empty());
 }
-
