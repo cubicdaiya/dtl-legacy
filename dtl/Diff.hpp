@@ -266,31 +266,51 @@ namespace dtl {
         /**
          * print difference between A and B with SES
          */
-        void printSES (ostream& out = cout) const {
+        template < typename stream >
+        void printSES (stream& out) const {
             sesElemVec ses_v = ses.getSequence();
-            for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >(out));
+            for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem, stream >(out));
+        }
+        
+        void printSES (ostream& out = cout) const {
+            printSES< ostream >(out);
         }
         
         /**
          * print difference with given SES
          */
-        static void printSES (const Ses< elem >& s, ostream& out = cout) {
+        template < typename stream >
+        static void printSES (const Ses< elem >& s, stream& out) {
             sesElemVec ses_v = s.getSequence();
-            for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem >(out));
+            for_each(ses_v.begin(), ses_v.end(), ChangePrinter< sesElem, stream >(out));
+        }
+        
+        static void printSES (const Ses< elem >& s, ostream& out = cout) {
+            printSES< ostream >(s, out);
         }
         
         /**
          * print difference between A and B with the format such as Unified Format
          */
+        template < typename stream >
+        void printUnifiedFormat (stream& out) const {
+            for_each(uniHunks.begin(), uniHunks.end(), UniHunkPrinter< sesElem, stream >(out));
+        }
+        
         void printUnifiedFormat (ostream& out = cout) const {
-            for_each(uniHunks.begin(), uniHunks.end(), UniHunkPrinter< sesElem >(out));
+            printUnifiedFormat< ostream >(out);
         }
         
         /**
          * print unified format difference with given unified format hunks
          */
-        static void printUnifiedFormat (const uniHunkVec& hunks, ostream& out = cout) {
+        template < typename stream >
+        static void printUnifiedFormat (const uniHunkVec& hunks, stream& out) {
             for_each(hunks.begin(), hunks.end(), UniHunkPrinter< sesElem >(out));
+        }
+
+        static void printUnifiedFormat (const uniHunkVec& hunks, ostream& out = cout) {
+            printUnifiedFormat< ostream >(hunks, out);
         }
 
         /**

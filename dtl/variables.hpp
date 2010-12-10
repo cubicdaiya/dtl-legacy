@@ -71,10 +71,10 @@ namespace dtl {
     /**
      * mark of SES
      */
-    const string SES_MARK_DELETE = "-";
-    const string SES_MARK_COMMON = " ";
-    const string SES_MARK_ADD    = "+";
-    
+#define SES_MARK_DELETE "-"
+#define SES_MARK_COMMON " "
+#define SES_MARK_ADD    "+"
+
     /**
      * info for Unified Format
      */
