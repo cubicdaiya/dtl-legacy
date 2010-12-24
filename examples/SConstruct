@@ -15,7 +15,8 @@ targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'],
             'strdiff3'   : ['strdiff3.cpp',   'common.cpp'],
             'intdiff3'   : ['intdiff3.cpp'],
             'patch'      : ['patch.cpp',      'common.cpp'],
-            'fpatch'     : ['fpatch.cpp',     'common.cpp']
+            'fpatch'     : ['fpatch.cpp',     'common.cpp'],
+            'st2ses'     : ['st2ses.cpp',     'common.cpp'],
             }
 
 [ env.Program(target, targets[target]) for target in targets ]

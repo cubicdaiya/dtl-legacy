@@ -262,7 +262,7 @@ namespace dtl {
             }
             delete[] this->fp;
         }
-        
+
         /**
          * print difference between A and B with SES
          */
@@ -441,6 +441,33 @@ namespace dtl {
                 }
             }
         }
+        
+        /**
+         * compose ses from stream
+         */
+        template <typename stream>
+        static Ses< elem > composeSesFromStream (stream& st)
+        {
+            elem buf;
+            Ses< elem > ret;
+            long long x_idx, y_idx;
+            x_idx = y_idx = 1;
+            while (getline(st, buf)) {
+                elem mark(buf.begin(), buf.begin() + 1);
+                elem e(buf.begin() + 1, buf.end());
+                if (mark == SES_MARK_DELETE) {
+                    ret.addSequence(e, 0, 0, SES_DELETE);
+                } else if (mark == SES_MARK_ADD) {
+                    ret.addSequence(e, 0, 0, SES_COMMON);
+                } else if (mark == SES_MARK_COMMON) {
+                    ret.addSequence(e, x_idx, y_idx, SES_ADD);
+                    x_idx++;
+                    y_idx++;
+                }
+            }
+            return ret;
+        }
+
     private :
         /**
          * initialize
