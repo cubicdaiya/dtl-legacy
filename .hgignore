@@ -9,6 +9,7 @@ intdiff3
 strdiff3_test
 patch
 fpatch
+st2ses
 *.o
 *.orig
 *~
