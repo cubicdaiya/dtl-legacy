@@ -1,7 +1,7 @@
 
 # SConstrunct for dtl test
 
-env  = Environment(CPPFLAGS=['-Wall', '-O2'], LIBS='gtest', CPPPATH='..')
+env  = Environment(CPPFLAGS=['-Wall', '-O2'], LIBS=['gtest', 'pthread'], CPPPATH='..')
 test = env.Program('dtl_test', Glob('*.cpp'))
 
 test_alias = env.Alias('check', test, test[0].abspath)
