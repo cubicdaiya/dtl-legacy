@@ -456,13 +456,15 @@ namespace dtl {
                 elem mark(buf.begin(), buf.begin() + 1);
                 elem e(buf.begin() + 1, buf.end());
                 if (mark == SES_MARK_DELETE) {
-                    ret.addSequence(e, 0, 0, SES_DELETE);
+                    ret.addSequence(e, x_idx, 0, SES_DELETE);
+                    ++x_idx;
                 } else if (mark == SES_MARK_ADD) {
-                    ret.addSequence(e, 0, 0, SES_COMMON);
+                    ret.addSequence(e, y_idx, 0, SES_ADD);
+                    ++y_idx;
                 } else if (mark == SES_MARK_COMMON) {
-                    ret.addSequence(e, x_idx, y_idx, SES_ADD);
-                    x_idx++;
-                    y_idx++;
+                    ret.addSequence(e, x_idx, y_idx, SES_COMMON);
+                    ++x_idx;
+                    ++y_idx;
                 }
             }
             return ret;
