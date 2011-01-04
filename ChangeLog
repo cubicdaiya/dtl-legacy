@@ -17,7 +17,7 @@
 
 2010-09-20 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
-	* fix specifyConfliction's bug
+	* fix bug of specifyConfliction
 
 	* add parameter for Diff3's comparator
 
@@ -47,7 +47,7 @@
 
 	* add scons
 
-	* fix specifyConfliction's bug
+	* fix bug of specifyConfliction
 
 	* fix memory leak when onlyEditDistance is true
 
