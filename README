@@ -21,7 +21,7 @@ Please read the COPYING or following URL about the license of dtl.
 http://code.google.com/p/dtl-cpp/source/browse/COPYING
 
 ==================
-How to
+How to use dtl
 ==================
 
 If you use this library, you may include dtl.hpp only.
