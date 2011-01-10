@@ -111,9 +111,9 @@ namespace dtl {
                  << " +"  << hunk.c << "," << hunk.d
                  << " @@" << endl;
             
-            for_each(hunk.common[0].begin(), hunk.common[0].end(), CommonPrinter< sesElem, ostream >(out_));
-            for_each(hunk.change.begin(),    hunk.change.end(),    ChangePrinter< sesElem, ostream >(out_));
-            for_each(hunk.common[1].begin(), hunk.common[1].end(), CommonPrinter< sesElem, ostream >(out_));
+            for_each(hunk.common[0].begin(), hunk.common[0].end(), CommonPrinter< sesElem, stream >(out_));
+            for_each(hunk.change.begin(),    hunk.change.end(),    ChangePrinter< sesElem, stream >(out_));
+            for_each(hunk.common[1].begin(), hunk.common[1].end(), CommonPrinter< sesElem, stream >(out_));
         }
     private :
         stream& out_;

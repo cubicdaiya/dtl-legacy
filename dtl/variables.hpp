@@ -114,6 +114,13 @@ namespace dtl {
         vector< sesElem > change;    // changes
         long long inc_dec_count;     // count of increace and decrease
     };
+
+    const int PHASE_HEADER = 1;
+    const int PHASE_HUNK   = 2;
+
+    const int ER_INVALID_HEADER = -1;
+    const int ER_VALID_HEADER   = 0;
+
     
 #define dtl_typedefs(elem, sequence)                                    \
     typedef pair< elem, elemInfo >            sesElem;                  \

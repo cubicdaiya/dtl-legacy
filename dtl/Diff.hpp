@@ -317,20 +317,20 @@ namespace dtl {
          * compose Unified Format Hunks from Shortest Edit Script
          */
         void composeUnifiedHunks () {
-            sesElemVec       common[2];
-            sesElemVec       change;
-            sesElemVec       ses_v  = ses.getSequence();
-            long long        l_cnt  = 1;
-            long long        length = distance(ses_v.begin(), ses_v.end());
-            long long        middle = 0;
-            bool             isMiddle, isAfter;
-            elem             e;
-            elemInfo         einfo;
-            long long        a, b, c, d;        // @@ -a,b +c,d @@
-            long long        inc_dec_count = 0;
-            uniHunk<sesElem> hunk;
-            sesElemVec       adds;
-            sesElemVec       deletes;
+            sesElemVec         common[2];
+            sesElemVec         change;
+            sesElemVec         ses_v  = ses.getSequence();
+            long long          l_cnt  = 1;
+            long long          length = distance(ses_v.begin(), ses_v.end());
+            long long          middle = 0;
+            bool               isMiddle, isAfter;
+            elem               e;
+            elemInfo           einfo;
+            long long          a, b, c, d;        // @@ -a,b +c,d @@
+            long long          inc_dec_count = 0;
+            uniHunk< sesElem > hunk;
+            sesElemVec         adds;
+            sesElemVec         deletes;
             
             isMiddle = isAfter = false;
             a = b = c = d = 0;
@@ -448,13 +448,13 @@ namespace dtl {
         template <typename stream>
         static Ses< elem > composeSesFromStream (stream& st)
         {
-            elem buf;
+            elem        line;
             Ses< elem > ret;
-            long long x_idx, y_idx;
+            long long   x_idx, y_idx;
             x_idx = y_idx = 1;
-            while (getline(st, buf)) {
-                elem mark(buf.begin(), buf.begin() + 1);
-                elem e(buf.begin() + 1, buf.end());
+            while (getline(st, line)) {
+                elem mark(line.begin(), line.begin() + 1);
+                elem e(line.begin() + 1, line.end());
                 if (mark == SES_MARK_DELETE) {
                     ret.addSequence(e, x_idx, 0, SES_DELETE);
                     ++x_idx;
@@ -467,6 +467,45 @@ namespace dtl {
                     ++y_idx;
                 }
             }
+            return ret;
+        }
+
+        /**
+         * compose uniHunks from stream
+         */
+        template <typename stream>
+        static uniHunkVec composeUnihunksFromStream (stream& st)
+        {
+            uniHunk< sesElem > hunk;
+            uniHunkVec         ret;
+            elem               line;
+            int                phase;
+ 
+            getline(st, line);
+
+            if (line == "" || line[0] != '@') {
+                cout << "@@ -a,b +c,d @@" << endl;
+                return ret;
+            }
+            
+            while (getline(st, line)) {
+                for (string::iterator it=line.begin();it!=line.end();++it) {
+                    if (line[0] == '@') {
+                        phase = PHASE_HEADER;
+                    } else {
+                        phase = PHASE_HUNK;
+                    }
+                    switch (phase) {
+                    case PHASE_HEADER :
+                        analyze_header(line, hunk);
+                        break;
+                    case PHASE_HUNK :
+                        analyze_hunk(line, hunk);
+                        break;
+                    }
+                }
+            }            
+            
             return ret;
         }
 
@@ -621,6 +660,70 @@ namespace dtl {
          */
         bool inline isReverse () const {
             return reverse;
+        }
+
+        bool inline is_include_term (string::const_iterator it) {
+            for (int i=0;i<2;++i) {
+                if (*it++ != '@') {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        void inline analyze_header (string line, uniHunk< sesElem >& hunk) {
+            //@@ -a,b +c,d @@
+            long long a, b, c, d;
+            string::const_iterator it = line.begin();
+            if (!is_include_term(line.begin())) {
+                return ER_INVALID_HEADER;
+            }
+
+            if (*it++ != ' ') {
+                return ER_INVALID_HEADER;
+            }
+            
+            if (*it++ != '-') {
+                return ER_INVALID_HEADER;
+            }
+            
+            hunk.a = atoi(*it++);
+
+            if (*it++ != ',') {
+                return ER_INVALID_HEADER;
+            }
+            
+            hunk.b = atoi(*it++);
+
+            if (*it++ != ' ') {
+                return ER_INVALID_HEADER;
+            }
+            
+            if (*it++ != '+') {
+                return ER_INVALID_HEADER;
+            }
+
+            hunk.c = atoi(*it++);
+            
+            if (*it++ != ',') {
+                return ER_INVALID_HEADER;
+            }
+            
+            hunk.d = atoi(*it++);
+            
+            if (*it++ != ' ') {
+                return ER_INVALID_HEADER;
+            }
+            
+            if (!is_include_term(line.begin())) {
+                return ER_INVALID_HEADER;
+            }
+
+            return ER_VALID_HEADER;
+        }
+        
+        void inline analyze_hunk (string line, uniHunk< pair< string, elemInfo > >& hunk) {
+            
         }
     };
 }
