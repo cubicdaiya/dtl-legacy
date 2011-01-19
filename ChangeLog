@@ -1,4 +1,10 @@
 
+2011-01-23 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* forget to add template parameter of stream for print methods of printUnifiedFormat
+
+	* 1.12 released
+
 2011-01-01 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* add template parameter of stream for print methods
