@@ -470,45 +470,6 @@ namespace dtl {
             return ret;
         }
 
-        /**
-         * compose uniHunks from stream
-         */
-        template <typename stream>
-        static uniHunkVec composeUnihunksFromStream (stream& st)
-        {
-            uniHunk< sesElem > hunk;
-            uniHunkVec         ret;
-            elem               line;
-            int                phase;
- 
-            getline(st, line);
-
-            if (line == "" || line[0] != '@') {
-                cout << "@@ -a,b +c,d @@" << endl;
-                return ret;
-            }
-            
-            while (getline(st, line)) {
-                for (string::iterator it=line.begin();it!=line.end();++it) {
-                    if (line[0] == '@') {
-                        phase = PHASE_HEADER;
-                    } else {
-                        phase = PHASE_HUNK;
-                    }
-                    switch (phase) {
-                    case PHASE_HEADER :
-                        analyze_header(line, hunk);
-                        break;
-                    case PHASE_HUNK :
-                        analyze_hunk(line, hunk);
-                        break;
-                    }
-                }
-            }            
-            
-            return ret;
-        }
-
     private :
         /**
          * initialize
@@ -662,69 +623,6 @@ namespace dtl {
             return reverse;
         }
 
-        bool inline is_include_term (string::const_iterator it) {
-            for (int i=0;i<2;++i) {
-                if (*it++ != '@') {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        void inline analyze_header (string line, uniHunk< sesElem >& hunk) {
-            //@@ -a,b +c,d @@
-            long long a, b, c, d;
-            string::const_iterator it = line.begin();
-            if (!is_include_term(line.begin())) {
-                return ER_INVALID_HEADER;
-            }
-
-            if (*it++ != ' ') {
-                return ER_INVALID_HEADER;
-            }
-            
-            if (*it++ != '-') {
-                return ER_INVALID_HEADER;
-            }
-            
-            hunk.a = atoi(*it++);
-
-            if (*it++ != ',') {
-                return ER_INVALID_HEADER;
-            }
-            
-            hunk.b = atoi(*it++);
-
-            if (*it++ != ' ') {
-                return ER_INVALID_HEADER;
-            }
-            
-            if (*it++ != '+') {
-                return ER_INVALID_HEADER;
-            }
-
-            hunk.c = atoi(*it++);
-            
-            if (*it++ != ',') {
-                return ER_INVALID_HEADER;
-            }
-            
-            hunk.d = atoi(*it++);
-            
-            if (*it++ != ' ') {
-                return ER_INVALID_HEADER;
-            }
-            
-            if (!is_include_term(line.begin())) {
-                return ER_INVALID_HEADER;
-            }
-
-            return ER_VALID_HEADER;
-        }
-        
-        void inline analyze_hunk (string line, uniHunk< pair< string, elemInfo > >& hunk) {
-            
-        }
     };
 }
 
