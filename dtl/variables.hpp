@@ -1,5 +1,5 @@
 /**
-   dtl-1.11 -- Diff Template Library
+   dtl-1.12 -- Diff Template Library
    
    In short, Diff Template Library is distributed under so called "BSD license",
    
