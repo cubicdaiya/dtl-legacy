@@ -4,7 +4,7 @@ unistrdiff
 strdiff
 strdiff3
 intdiff
-uintdiff
+bdiff
 intdiff3
 strdiff3_test
 patch
