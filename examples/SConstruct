@@ -8,15 +8,16 @@ if debug == 'y' or debug == 'yes':
 else:
     env.Append(CPPFLAGS = '-Wall -O2')
 
-targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'],
-            'intdiff'    : ['intdiff.cpp'],
-            'unidiff'    : ['unidiff.cpp',    'common.cpp'],
-            'unistrdiff' : ['unistrdiff.cpp', 'common.cpp'],
-            'strdiff3'   : ['strdiff3.cpp',   'common.cpp'],
-            'intdiff3'   : ['intdiff3.cpp'],
-            'patch'      : ['patch.cpp',      'common.cpp'],
-            'fpatch'     : ['fpatch.cpp',     'common.cpp'],
-            'st2ses'     : ['st2ses.cpp',     'common.cpp'],
+targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'], # diff between two string sequences
+            'intdiff'    : ['intdiff.cpp'],                  # diff between two integer sequences
+            'unidiff'    : ['unidiff.cpp',    'common.cpp'], # unified diff between two files
+            'unistrdiff' : ['unistrdiff.cpp', 'common.cpp'], # unified diff between two strings
+            'bdiff'      : ['bdiff.cpp',      'common.cpp'], # diff between two byte sequence
+            'strdiff3'   : ['strdiff3.cpp',   'common.cpp'], # string diff3 program with dtl
+            'intdiff3'   : ['intdiff3.cpp'],                 # integer diff3 program with dtl
+            'patch'      : ['patch.cpp',      'common.cpp'], # string patch program with dtl
+            'fpatch'     : ['fpatch.cpp',     'common.cpp'], # file patch program with dtl
+            'st2ses'     : ['st2ses.cpp',     'common.cpp'], # convert SES format file to SES instance
             }
 
 [ env.Program(target, targets[target]) for target in targets ]
