@@ -15,6 +15,7 @@ st2ses
 *~
 .semantic.cache
 .DS_Store
+*.swp
 GPATH
 GRTAGS
 GSYMS
@@ -22,6 +23,8 @@ GTAGS
 TAGS
 dtl_test
 .sconsign.dblite
+.sconf_temp
+config.log
 syntax: regexp
 
 ^\#
