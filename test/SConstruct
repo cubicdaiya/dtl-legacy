@@ -1,8 +1,24 @@
 
 # SConstrunct for dtl test
 
-env  = Environment(CPPFLAGS=['-Wall', '-O2'], LIBS=['gtest', 'pthread'], CPPPATH='..')
-test = env.Program('dtl_test', Glob('*.cpp'))
+flags    = ['-Wall', '-O2']
+libs     = ['gtest', 'pthread']
+includes = ['..']
+target   = 'dtl_test'
 
-test_alias = env.Alias('check', test, test[0].abspath)
+env  = Environment(CPPFLAGS=flags,
+                   LIBS=libs,
+                   CPPPATH=includes,
+                   )
+
+conf = Configure(env);
+[ conf.CheckLib(lib) for lib in libs ]
+
+test = env.Program(target,
+                   Glob('*.cpp'))
+
+test_alias = env.Alias('check',
+                       test,
+                       test[0].abspath)
+
 env.AlwaysBuild(test_alias)
