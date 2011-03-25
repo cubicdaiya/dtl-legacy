@@ -15,7 +15,10 @@ if not conf.CheckCXX():
     Exit(1)
 
 libs = ['stdc++']
-[ conf.CheckLib(lib) for lib in libs ]
+for lib in libs:
+    if not conf.CheckLib(lib):
+        print "library " + lib + " not installed!"
+        Exit(1)
 
 conf.Finish()
 

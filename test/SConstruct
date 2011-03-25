@@ -16,7 +16,10 @@ if not conf.CheckCXX():
     print "c++ compiler is not installed!"
     Exit(1)
 
-[ conf.CheckLib(lib) for lib in libs ]
+for lib in libs:
+    if not conf.CheckLib(lib):
+        print "library " + lib + " not installed!"
+        Exit(1)
 
 conf.Finish()
 
