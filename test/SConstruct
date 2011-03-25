@@ -2,17 +2,23 @@
 # SConstrunct for dtl test
 
 flags    = ['-Wall', '-O2']
-libs     = ['gtest', 'pthread']
+libs     = ['stdc++', 'pthread', 'gtest']
 includes = ['..']
 target   = 'dtl_test'
 
 env  = Environment(CPPFLAGS=flags,
-                   LIBS=libs,
                    CPPPATH=includes,
                    )
 
 conf = Configure(env);
+
+if not conf.CheckCXX():
+    print("c++ compiler is not installed!")
+    Exit(1)
+
 [ conf.CheckLib(lib) for lib in libs ]
+
+conf.Finish()
 
 test = env.Program(target,
                    Glob('*.cpp'))
