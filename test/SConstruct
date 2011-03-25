@@ -13,7 +13,7 @@ env  = Environment(CPPFLAGS=flags,
 conf = Configure(env);
 
 if not conf.CheckCXX():
-    print("c++ compiler is not installed!")
+    print "c++ compiler is not installed!"
     Exit(1)
 
 [ conf.CheckLib(lib) for lib in libs ]
