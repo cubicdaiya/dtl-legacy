@@ -1,4 +1,14 @@
 
+2011-04-10 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* add check for libraries with SCons
+
+	* add installer with SCons
+
+	* add sample of diff(bdiff)
+
+	* 1.13 released
+
 2011-01-23 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* forget to add template parameter of stream for print methods of printUnifiedFormat
