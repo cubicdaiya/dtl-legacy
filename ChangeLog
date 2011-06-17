@@ -1,4 +1,10 @@
 
+2011-06-18 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* fix Issue #7 (isOnlyOneOperation returns incorrect value)
+
+	* 1.14 released
+
 2011-04-10 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* add check for libraries with SCons
