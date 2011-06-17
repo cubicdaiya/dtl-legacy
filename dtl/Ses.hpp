@@ -67,7 +67,7 @@ namespace dtl {
         }
         
         bool isOnlyOneOperation () const {
-            return isOnlyAdd() || isOnlyAdd() || isOnlyCopy();
+            return isOnlyAdd() || isOnlyDelete() || isOnlyCopy();
         }
         
         bool isChange () const {
