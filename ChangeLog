@@ -1,4 +1,11 @@
 
+2011-11-10 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* remove unused variable
+
+	* 1.15 released
+
+
 2011-06-18 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* fix Issue #7 (isOnlyOneOperation returns incorrect value)
