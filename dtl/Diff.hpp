@@ -168,7 +168,7 @@ namespace dtl {
                         }
                         break;
                     default :
-                        // no through
+                        // no fall-through
                         break;
                     }
                     ++vsesIt;
@@ -290,7 +290,7 @@ namespace dtl {
         }
         
         /**
-         * print difference between A and B with the format such as Unified Format
+         * print difference between A and B in the Unified Format
          */
         template < typename stream >
         void printUnifiedFormat (stream& out) const {
@@ -560,9 +560,9 @@ namespace dtl {
             }
             
             if (x_idx > static_cast<long long>(M) && y_idx > static_cast<long long>(N)) {
-                // all recording success
+                // all recording succeeded
             } else {
-                // unserious difference
+                // trivial difference
                 if (isUnserious()) {
                     if (!isReverse()) {
                         recordOddSequence(x_idx, M, x, SES_DELETE);
@@ -574,7 +574,7 @@ namespace dtl {
                     return true;
                 }
                 
-                // decent difference
+                // nontrivial difference
                 sequence A_(A.begin() + (size_t)x_idx - 1, A.end());
                 sequence B_(B.begin() + (size_t)y_idx - 1, B.end());
                 A        = A_;
@@ -618,7 +618,7 @@ namespace dtl {
         }
         
         /**
-         * check sequence is replaced each other
+         * check if the sequences have been swapped
          */
         bool inline isReverse () const {
             return reverse;

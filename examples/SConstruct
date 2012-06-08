@@ -26,11 +26,11 @@ targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'], # diff between two 
             'intdiff'    : ['intdiff.cpp'],                  # diff between two integer sequences
             'unidiff'    : ['unidiff.cpp',    'common.cpp'], # unified diff between two files
             'unistrdiff' : ['unistrdiff.cpp', 'common.cpp'], # unified diff between two strings
-            'bdiff'      : ['bdiff.cpp',      'common.cpp'], # diff between two byte sequence
-            'strdiff3'   : ['strdiff3.cpp',   'common.cpp'], # string diff3 program with dtl
-            'intdiff3'   : ['intdiff3.cpp'],                 # integer diff3 program with dtl
-            'patch'      : ['patch.cpp',      'common.cpp'], # string patch program with dtl
-            'fpatch'     : ['fpatch.cpp',     'common.cpp'], # file patch program with dtl
+            'bdiff'      : ['bdiff.cpp',      'common.cpp'], # diff between two byte sequences
+            'strdiff3'   : ['strdiff3.cpp',   'common.cpp'], # three-way string diff program using dtl
+            'intdiff3'   : ['intdiff3.cpp'],                 # three-way integer diff program using dtl
+            'patch'      : ['patch.cpp',      'common.cpp'], # string patch program using dtl
+            'fpatch'     : ['fpatch.cpp',     'common.cpp'], # file patch program using dtl
             'st2ses'     : ['st2ses.cpp',     'common.cpp'], # convert SES format file to SES instance
             }
 
