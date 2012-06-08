@@ -24,7 +24,7 @@ static int create_byte_seq(const char *fs, sequence& seq)
     int  siz;
     elem buf[BUFSIZ];
     if ((fd = open(fs, O_RDONLY)) == -1) {
-        cout << "open failure1" << endl;
+        cout << "Opening failed." << endl;
         return -1;
     }
     while ((siz = read(fd, buf, sizeof(buf))) > 0) {
@@ -34,7 +34,7 @@ static int create_byte_seq(const char *fs, sequence& seq)
     }
     if (siz < 0) {
         close(fd);
-        cout << "read failure" << endl;
+        cout << "Read error." << endl;
         return -1;
     }
     close(fd);
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 {
     
     if (isFewArgs(argc)) {
-        cerr << "few argument" << endl;
+        cerr << "Too few arguments." << endl;
         return -1;
     }
     

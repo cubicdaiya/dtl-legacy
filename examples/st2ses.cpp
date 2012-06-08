@@ -13,7 +13,7 @@ using namespace dtl;
 int main(int argc, char *argv[]){
     
     if (isFewArgs(argc, 2)) {
-        cerr << "few argument" << endl;
+        cerr << "Too few arguments." << endl;
         return -1;
     }
 
