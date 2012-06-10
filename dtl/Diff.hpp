@@ -264,7 +264,7 @@ namespace dtl {
         }
 
         /**
-         * print difference between A and B with SES
+         * print difference between A and B as an SES
          */
         template < typename stream >
         void printSES (stream& out) const {
@@ -277,7 +277,7 @@ namespace dtl {
         }
         
         /**
-         * print difference with given SES
+         * print differences given an SES
          */
         template < typename stream >
         static void printSES (const Ses< elem >& s, stream& out) {
