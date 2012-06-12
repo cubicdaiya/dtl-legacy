@@ -11,7 +11,7 @@ using dtl::Diff;
 int main(int argc, char *argv[]){
     
     if (isFewArgs(argc)) {
-        cerr << "few argument" << endl;
+        cerr << "Too few arguments." << endl;
         return -1;
     }
     

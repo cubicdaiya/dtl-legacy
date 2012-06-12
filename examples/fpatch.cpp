@@ -14,7 +14,7 @@ using dtl::Diff;
 int main(int argc, char *argv[]){
     
     if (isFewArgs(argc)) {
-        cerr << "few arguments" << endl;
+        cerr << "Too few arguments." << endl;
         return -1;
     }
     
@@ -60,14 +60,14 @@ int main(int argc, char *argv[]){
     
     // fpatch 
     assert(BLines == s2);
-    cout << "fpatch successed" << endl;
+    cout << "fpatch succeeded" << endl;
     
     d.composeUnifiedHunks();
     sequence s3 = d.uniPatch(s1);
     
     // unipatch 
     assert(BLines == s3);
-    cout << "unipatch successed" << endl;
+    cout << "unipatch succeeded" << endl;
     
     return 0;
 }

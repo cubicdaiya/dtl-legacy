@@ -96,7 +96,7 @@ namespace dtl {
     };
     
     /**
-     * unfiend format element printer class template
+     * unified format element printer class template
      */
     template <typename sesElem, typename stream = ostream >
     class UniHunkPrinter
