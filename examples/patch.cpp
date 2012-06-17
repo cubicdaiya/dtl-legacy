@@ -12,7 +12,7 @@ using dtl::Diff;
 int main(int argc, char *argv[]) {
     
     if (isFewArgs(argc)) {
-        cerr << "few arguments" << endl;
+        cerr << "Too few arguments." << endl;
         return -1;
     }
     
@@ -33,12 +33,12 @@ int main(int argc, char *argv[]) {
     cout << "before:" << s1 << endl;
     cout << "after :" << s2 << endl;
     assert(B == s2);
-    cout << "patch successed" << endl;
+    cout << "patch succeeded" << endl;
     
     cout << "before:" << s1 << endl;
     cout << "after :" << s3 << endl;
     assert(B == s3);
-    cout << "unipatch successed" << endl;
+    cout << "unipatch succeeded" << endl;
     
     return 0;
 }

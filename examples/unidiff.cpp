@@ -84,7 +84,7 @@ static void unifiedDiff (string fp1, string fp2)
 int main(int argc, char *argv[])
 {
     if (isFewArgs(argc)) {
-        cerr << "few argument." << endl;
+        cerr << "Too few arguments." << endl;
         return -1;
     }
     

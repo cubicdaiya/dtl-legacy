@@ -12,7 +12,7 @@ using dtl::Diff3;
 int main(int argc, char *argv[]){
     
     if (isFewArgs(argc, 4)) {
-        cerr << "few argument." << endl;
+        cerr << "Too few arguments." << endl;
         return -1;
     }
     
