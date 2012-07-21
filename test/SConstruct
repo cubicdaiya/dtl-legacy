@@ -1,13 +1,32 @@
-
+# -*- coding: utf-8 -*-
 # SConstrunct for dtl test
 
+import os
+
+def path_chomp(path):
+    if path[-1] == '/':
+        return path[:-1]
+    return path
+
+if not 'GTEST_ROOT' in os.environ:
+    print "set environment variable 'GTEST_ROOT'"
+    Exit(1)
+
+gtest_root = path_chomp(os.environ['GTEST_ROOT'])
+if gtest_root[-1] == '/':
+    gtest_root     = gtest_root[:-1]
+
+gtest_includes = gtest_root + '/include'
+gtest_libs     = gtest_root + '/lib/.libs'
+
 flags    = ['-Wall', '-O2']
-libs     = ['stdc++', 'pthread', 'gtest']
-includes = ['..']
+libs     = ['stdc++', 'pthread']
+includes = ['..', gtest_includes]
 target   = 'dtl_test'
 
 env  = Environment(CPPFLAGS=flags,
                    CPPPATH=includes,
+                   LIBPATH=[gtest_libs],
                    )
 
 conf = Configure(env);
@@ -24,7 +43,8 @@ for lib in libs:
 conf.Finish()
 
 test = env.Program(target,
-                   Glob('*.cpp'))
+                   [Glob('*.cpp'), gtest_libs + '/libgtest.a']
+                   )
 
 test_alias = env.Alias('check',
                        test,
