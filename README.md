@@ -1,33 +1,34 @@
+DTL
+===
 
-==================
-Summary
-==================
+What is dtl?
+------------
 
 dtl is a diff template library written in C++.
 
-Copyright(C) 2008-2011  Tatsuhiko Kubo <cubicdaiya@gmail.com>
+Copyright(C) 2008-2011  Tatsuhiko Kubo <<cubicdaiya@gmail.com>>
 
-dtl can compare two sequences with arbitrary type, however sequence must support the random access iterator.
+dtl can compare two sequences with arbitrary type, however the sequences must support the random access iterator.
 Please read the document at the following URL for details:
 
-http://code.google.com/p/dtl-cpp/
+<http://code.google.com/p/dtl-cpp/>
 
-==================
+
 License
-==================
+-------
 
 Please read the file COPYING or the document at the following URL concerning the license for dtl:
 
-http://code.google.com/p/dtl-cpp/source/browse/COPYING
+<http://code.google.com/p/dtl-cpp/source/browse/COPYING>
 
-==================
+
 How to use dtl
-==================
+--------------
 
-To use this library, all you need to do is include dtl.hpp.
+To start using this library, all you need to do is include dtl.hpp.
 
-#include "dtl/dtl.hpp"
+    #include "dtl/dtl.hpp"
 
-If you are interested in details, please visit the following URL:
+If you are interested in the details, please visit the following URL:
 
-http://code.google.com/p/dtl-cpp/wiki/Tutorial
+<http://code.google.com/p/dtl-cpp/wiki/Tutorial>
