@@ -529,7 +529,7 @@ namespace dtl {
                 while(px_idx < v[i].x || py_idx < v[i].y) {
                     if (v[i].y - v[i].x > py_idx - px_idx) {
                         if (!isReverse()) {
-                            ses.addSequence(*y, y_idx, 0, SES_ADD);
+                            ses.addSequence(*y, 0, y_idx, SES_ADD);
                         } else {
                             ses.addSequence(*y, y_idx, 0, SES_DELETE);
                         }
@@ -540,7 +540,7 @@ namespace dtl {
                         if (!isReverse()) {
                             ses.addSequence(*x, x_idx, 0, SES_DELETE);
                         } else {
-                            ses.addSequence(*x, x_idx, 0, SES_ADD);
+                            ses.addSequence(*x, 0, x_idx, SES_ADD);
                         }
                         ++x;
                         ++x_idx;
