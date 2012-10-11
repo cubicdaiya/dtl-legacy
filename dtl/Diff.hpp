@@ -470,6 +470,13 @@ namespace dtl {
             }
             return ret;
         }
+        
+        /**
+         * check if the sequences have been swapped
+         */
+        bool sequencesWereSwapped () const {
+            return reverse;
+        }
 
     private :
         /**
@@ -501,7 +508,7 @@ namespace dtl {
             long long r = above > below ? path[(size_t)k-1+offset] : path[(size_t)k+1+offset];
             long long y = max(above, below);
             long long x = y - k;
-            while ((size_t)x < M && (size_t)y < N && cmp.impl(A[(size_t)x], B[(size_t)y])) {
+            while ((size_t)x < M && (size_t)y < N && (reverse ? cmp.impl(B[(size_t)y], A[(size_t)x]) : cmp.impl(A[(size_t)x], B[(size_t)y]))) {
                 ++x;++y;
             }
             
