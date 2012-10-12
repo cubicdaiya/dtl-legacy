@@ -61,7 +61,7 @@ namespace dtl {
         Ses< elem >        ses;
         editPath           path;
         editPathCordinates pathCordinates;
-        bool               reverse;
+        bool               swapped;
         bool               huge;
         bool               unserious;
         bool               onlyEditDistance;
@@ -421,7 +421,7 @@ namespace dtl {
                     }
                     if (a == 0) ++a;
                     if (c == 0) ++c;
-                    if (isReverse()) swap(a, c);
+                    if (wasSwapped()) swap(a, c);
                     hunk.a = a;
                     hunk.b = b;
                     hunk.c = c;
@@ -475,7 +475,7 @@ namespace dtl {
          * check if the sequences have been swapped
          */
         bool sequencesWereSwapped () const {
-            return reverse;
+            return swapped;
         }
 
     private :
@@ -486,11 +486,11 @@ namespace dtl {
             M = distance(A.begin(), A.end());
             N = distance(B.begin(), B.end());
             if (M < N) {
-                reverse = false;
+                swapped = false;
             } else {
                 swap(A, B);
                 swap(M, N);
-                reverse = true;
+                swapped = true;
             }
             editDistance     = 0;
             delta            = N - M;
@@ -508,7 +508,7 @@ namespace dtl {
             long long r = above > below ? path[(size_t)k-1+offset] : path[(size_t)k+1+offset];
             long long y = max(above, below);
             long long x = y - k;
-            while ((size_t)x < M && (size_t)y < N && (reverse ? cmp.impl(B[(size_t)y], A[(size_t)x]) : cmp.impl(A[(size_t)x], B[(size_t)y]))) {
+            while ((size_t)x < M && (size_t)y < N && (swapped ? cmp.impl(B[(size_t)y], A[(size_t)x]) : cmp.impl(A[(size_t)x], B[(size_t)y]))) {
                 ++x;++y;
             }
             
@@ -535,7 +535,7 @@ namespace dtl {
             for (size_t i=v.size()-1;!complete;--i) {
                 while(px_idx < v[i].x || py_idx < v[i].y) {
                     if (v[i].y - v[i].x > py_idx - px_idx) {
-                        if (!isReverse()) {
+                        if (!wasSwapped()) {
                             ses.addSequence(*y, 0, y_idx, SES_ADD);
                         } else {
                             ses.addSequence(*y, y_idx, 0, SES_DELETE);
@@ -544,7 +544,7 @@ namespace dtl {
                         ++y_idx;
                         ++py_idx;
                     } else if (v[i].y - v[i].x < py_idx - px_idx) {
-                        if (!isReverse()) {
+                        if (!wasSwapped()) {
                             ses.addSequence(*x, x_idx, 0, SES_DELETE);
                         } else {
                             ses.addSequence(*x, 0, x_idx, SES_ADD);
@@ -571,7 +571,7 @@ namespace dtl {
             } else {
                 // trivial difference
                 if (isUnserious()) {
-                    if (!isReverse()) {
+                    if (!wasSwapped()) {
                         recordOddSequence(x_idx, M, x, SES_DELETE);
                         recordOddSequence(y_idx, N, y, SES_ADD);
                     } else {
@@ -627,8 +627,8 @@ namespace dtl {
         /**
          * check if the sequences have been swapped
          */
-        bool inline isReverse () const {
-            return reverse;
+        bool inline wasSwapped () const {
+            return swapped;
         }
 
     };
