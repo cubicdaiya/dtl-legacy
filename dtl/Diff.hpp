@@ -133,6 +133,18 @@ namespace dtl {
         }
         
         /* These are the replacements for the above */
+        bool hugeEnabled () const {
+            return huge;
+        }
+        
+        void enableHuge () {
+            this->huge = true;
+        }
+        
+        void disableHuge () {
+            this->huge = false;
+        }
+        
         bool trivialEnabled () const {
             return trivial;
         }
