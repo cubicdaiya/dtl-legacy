@@ -103,6 +103,7 @@ namespace dtl {
             return uniHunks;
         }
         
+        /* These should be deprecated */
         bool isHuge () const {
             return huge;
         }
@@ -115,7 +116,6 @@ namespace dtl {
             this->huge = false;
         }
         
-        /* These should be deprecated */
         bool isUnserious () const {
             return trivial;
         }
@@ -211,7 +211,7 @@ namespace dtl {
         }
         
         /**
-         * patching with Shortest Edit Script
+         * patching with Shortest Edit Script (SES)
          */
         sequence patch (const sequence& seq) const {
             sesElemVec    sesSeq = ses.getSequence();
@@ -270,7 +270,7 @@ namespace dtl {
             P cordinate;
             editPathCordinates epc(0);
             
-            // only recoding editdistance
+            // recording edit distance only
             if (editDistanceOnly) {
                 delete[] this->fp;
                 return;
@@ -630,7 +630,7 @@ namespace dtl {
         }
         
         /**
-         * record odd sequence to ses
+         * record odd sequence in SES
          */
         void inline recordOddSequence (long long idx, long long length, sequence_const_iter it, const edit_t et) {
             while(idx < length){
@@ -644,7 +644,7 @@ namespace dtl {
         }
         
         /**
-         * join ses vectors
+         * join SES vectors
          */
         void inline joinSesVec (sesElemVec& s1, sesElemVec& s2) const {
             if (!s2.empty()) {
