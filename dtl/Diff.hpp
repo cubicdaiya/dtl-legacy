@@ -63,8 +63,8 @@ namespace dtl {
         editPathCordinates pathCordinates;
         bool               swapped;
         bool               huge;
-        bool               unserious;
-        bool               onlyEditDistance;
+        bool               trivial;
+        bool               editDistanceOnly;
         uniHunkVec         uniHunks;
         comparator         cmp;
     public :
@@ -115,20 +115,38 @@ namespace dtl {
             this->huge = false;
         }
         
+        /* These should be deprecated */
         bool isUnserious () const {
-            return unserious;
+            return trivial;
         }
         
         void onUnserious () {
-            this->unserious = true;
+            this->trivial = true;
         }
         
         void offUnserious () {
-            this->unserious = false;
+            this->trivial = false;
         }
         
         void onOnlyEditDistance () {
-            this->onlyEditDistance = true;
+            this->editDistanceOnly = true;
+        }
+        
+        /* These are the replacements for the above */
+        bool trivialEnabled () const {
+            return trivial;
+        }
+        
+        bool enableTrivial () const {
+            this->trivial = true;
+        }
+        
+        void disableTrivial () {
+            this->trivial = false;
+        }
+        
+        void editDistanceOnlyEnabled () {
+            this->editDistanceOnly = true;
         }
         
         /**
@@ -241,7 +259,7 @@ namespace dtl {
             editPathCordinates epc(0);
             
             // only recoding editdistance
-            if (onlyEditDistance) {
+            if (editDistanceOnly) {
                 delete[] this->fp;
                 return;
             }
@@ -496,8 +514,8 @@ namespace dtl {
             delta            = N - M;
             offset           = M + 1;
             huge             = false;
-            unserious        = false;
-            onlyEditDistance = false;
+            trivial          = false;
+            editDistanceOnly = false;
             fp               = NULL;
         }
         
@@ -513,7 +531,7 @@ namespace dtl {
             }
             
             path[(size_t)k+offset] = static_cast<long long>(pathCordinates.size());
-            if (!onlyEditDistance) {
+            if (!editDistanceOnly) {
                 P p;
                 p.x = x;p.y = y;p.k = r;
                 pathCordinates.push_back(p);      
@@ -570,7 +588,7 @@ namespace dtl {
                 // all recording succeeded
             } else {
                 // trivial difference
-                if (isUnserious()) {
+                if (trivialEnabled()) {
                     if (!wasSwapped()) {
                         recordOddSequence(x_idx, M, x, SES_DELETE);
                         recordOddSequence(y_idx, N, y, SES_ADD);
