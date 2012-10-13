@@ -49,9 +49,13 @@ namespace dtl {
     private :
         typedef pair< elem, elemInfo > sesElem;
         typedef vector< sesElem >      sesElemVec;
+        const bool deletesFirst;
+        size_t nextDeleteIdx;
     public :
         
-        Ses () : onlyAdd(true), onlyDelete(true), onlyCopy(true) { }
+        Ses (bool moveDel) : onlyAdd(true), onlyDelete(true), onlyCopy(true), deletesFirst(moveDel) {
+            nextDeleteIdx = 0;
+        }
         ~Ses () {}
         
         bool isOnlyAdd () const {
@@ -81,19 +85,32 @@ namespace dtl {
             info.afterIdx  = afterIdx;
             info.type      = type;
             sesElem pe(e, info);
-            sequence.push_back(pe);
+            if (!deletesFirst) {
+                sequence.push_back(pe);
+            }
             switch (type) {
             case SES_DELETE:
                 onlyCopy   = false;
                 onlyAdd    = false;
+                if (deletesFirst) {
+                    sequence.insert(sequence.begin() + nextDeleteIdx, pe);
+                    nextDeleteIdx++;
+                }
                 break;
             case SES_COMMON:
                 onlyAdd    = false;
                 onlyDelete = false;
+                if (deletesFirst) {
+                    sequence.push_back(pe);
+                    nextDeleteIdx = sequence.end() - sequence.begin();
+                }
                 break;
             case SES_ADD:
                 onlyDelete = false;
                 onlyCopy   = false;
+                if (deletesFirst) {
+                    sequence.push_back(pe);
+                }
                 break;
             }
         }

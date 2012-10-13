@@ -75,9 +75,22 @@ namespace dtl {
             init();
         }
         
-        Diff (const sequence& a, 
+        Diff (const sequence& a,
+              const sequence& b,
+              bool deletesFirst) : A(a), B(b), ses(deletesFirst) {
+            init();
+        }
+        
+        Diff (const sequence& a,
               const sequence& b, 
               const comparator& comp) : A(a), B(b), cmp(comp) {
+            init();
+        }
+        
+        Diff (const sequence& a, 
+              const sequence& b, 
+              bool deleteFirst,
+              const comparator& comp) : A(a), B(b), ses(deleteFirst), cmp(comp) {
             init();
         }
         
