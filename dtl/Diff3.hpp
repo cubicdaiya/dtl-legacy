@@ -78,7 +78,7 @@ namespace dtl {
         }
         
         /**
-         * merge changes B and C to A
+         * merge changes B and C into A
          */
         bool merge () {
             if (diff_ba.getEditDistance() == 0) {     // A == B
@@ -214,7 +214,7 @@ namespace dtl {
         }
         
         /**
-         * check sequence is end
+         * check if sequence is at end
          */
         template <typename T_iter>
         bool inline isEnd (const T_iter& end, const T_iter& it) const {
@@ -222,7 +222,7 @@ namespace dtl {
         }
         
         /**
-         * increment iterator until iterator is end
+         * increment iterator until iterator is at end
          */
         template <typename T_iter>
         void inline forwardUntilEnd (const T_iter& end, T_iter& it) const {
@@ -230,7 +230,7 @@ namespace dtl {
         }
         
         /**
-         * add elements which SES's type is ADD
+         * add elements whose SES's type is ADD
          */
         void inline addDecentSequence (const sesElemVec_iter& end, sesElemVec_iter& it, elemVec& seq) const {
             while (!isEnd(end, it)) {
