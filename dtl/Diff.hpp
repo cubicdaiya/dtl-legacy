@@ -514,13 +514,6 @@ namespace dtl {
             return ret;
         }
         
-        /**
-         * check if the sequences have been swapped
-         */
-        bool sequencesWereSwapped () const {
-            return swapped;
-        }
-
     private :
         /**
          * initialize
