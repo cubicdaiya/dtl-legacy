@@ -597,7 +597,11 @@ namespace dtl {
                         ++px_idx;
                     } else {
                         lcs.addSequence(*x);
-                        ses.addSequence(*x, x_idx, y_idx, SES_COMMON);
+                        if (!wasSwapped()) {
+                            ses.addSequence(*x, x_idx, y_idx, SES_COMMON);
+                        } else {
+                            ses.addSequence(*y, y_idx, x_idx, SES_COMMON);
+                        }
                         ++x;
                         ++y;
                         ++x_idx;
