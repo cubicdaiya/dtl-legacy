@@ -53,7 +53,7 @@ namespace dtl {
         size_t nextDeleteIdx;
     public :
         
-        Ses (bool moveDel) : onlyAdd(true), onlyDelete(true), onlyCopy(true), deletesFirst(moveDel) {
+        Ses (bool moveDel) : deletesFirst(moveDel), onlyAdd(true), onlyDelete(true), onlyCopy(true) {
             nextDeleteIdx = 0;
         }
         ~Ses () {}
