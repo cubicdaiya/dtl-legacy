@@ -71,7 +71,7 @@ namespace dtl {
         Diff () {}
         
         Diff (const sequence& a, 
-              const sequence& b) : A(a), B(b) {
+              const sequence& b) : A(a), B(b), ses(false) {
             init();
         }
         
@@ -83,7 +83,7 @@ namespace dtl {
         
         Diff (const sequence& a,
               const sequence& b, 
-              const comparator& comp) : A(a), B(b), cmp(comp) {
+              const comparator& comp) : A(a), B(b), ses(false), cmp(comp) {
             init();
         }
         
