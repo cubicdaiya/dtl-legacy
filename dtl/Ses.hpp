@@ -102,7 +102,7 @@ namespace dtl {
                 onlyDelete = false;
                 if (deletesFirst) {
                     sequence.push_back(pe);
-                    nextDeleteIdx = sequence.end() - sequence.begin();
+                    nextDeleteIdx = sequence.size();
                 }
                 break;
             case SES_ADD:
