@@ -162,7 +162,7 @@ namespace dtl {
             return trivial;
         }
         
-        bool enableTrivial () const {
+        void enableTrivial () const {
             this->trivial = true;
         }
         
