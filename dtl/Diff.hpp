@@ -409,8 +409,13 @@ namespace dtl {
                     if (common[1].empty() && adds.empty() && deletes.empty() && change.empty()) {
                         if (static_cast<long long>(common[0].size()) < DTL_CONTEXT_SIZE) {
                             if (a == 0 && c == 0) {
-                                a = einfo.beforeIdx;
-                                c = einfo.afterIdx;
+                                if (!wasSwapped()) {
+                                    a = einfo.beforeIdx;
+                                    c = einfo.afterIdx;
+                                } else {
+                                    a = einfo.afterIdx;
+                                    c = einfo.beforeIdx;
+                                }
                             }
                             common[0].push_back(*it);
                         } else {
