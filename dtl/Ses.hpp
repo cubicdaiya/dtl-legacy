@@ -49,7 +49,7 @@ namespace dtl {
     private :
         typedef pair< elem, elemInfo > sesElem;
         typedef vector< sesElem >      sesElemVec;
-        const bool deletesFirst;
+        bool deletesFirst;
         size_t nextDeleteIdx;
     public :
         
