@@ -49,8 +49,6 @@ namespace dtl {
     private :
         typedef pair< elem, elemInfo > sesElem;
         typedef vector< sesElem >      sesElemVec;
-        bool deletesFirst;
-        size_t nextDeleteIdx;
     public :
         
         Ses () : deletesFirst(false), onlyAdd(true), onlyDelete(true), onlyCopy(true) {
@@ -126,6 +124,8 @@ namespace dtl {
         bool       onlyAdd;
         bool       onlyDelete;
         bool       onlyCopy;
+        bool       deletesFirst;
+        size_t     nextDeleteIdx;
     };
 }
 
