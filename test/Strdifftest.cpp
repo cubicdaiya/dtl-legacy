@@ -289,7 +289,7 @@ TEST_F (Strdifftest, only_editdis_test8) {
 TEST_F (Strdifftest, custom_comparator_test0) {
     EXPECT_EQ(0,     custom_cases[0].editdis);
     
-    EXPECT_EQ("Abc", custom_cases[0].lcs_s);
+    EXPECT_EQ("abc", custom_cases[0].lcs_s);
 
     ASSERT_EQ(0,     custom_cases[0].editdis_ses);
     
