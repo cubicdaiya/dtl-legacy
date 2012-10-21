@@ -8,4 +8,17 @@ public:
     }
 };
 
+class StringCaseInsensitive: public dtl::Compare<string> {
+public:
+    virtual bool impl(string& a, string& b) const {
+        if (a.length() == b.length()) {
+            bool equal = (strncasecmp(a.c_str(), b.c_str(), a.length()) == 0);
+            return equal;
+        }
+        else {
+            return false;
+        }
+    }
+};
+
 #endif // DTL_COMPARATORS

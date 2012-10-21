@@ -82,6 +82,9 @@ namespace dtl {
         long long beforeIdx;           // index of prev sequence
         long long afterIdx;            // index of after sequence
         edit_t    type;                // type of edit(Add, Delete, Common)
+        bool operator==(const eleminfo& other) const{
+            return (this->beforeIdx == other.beforeIdx && this->afterIdx == other.afterIdx && this->type == other.type);
+        }
     } elemInfo;
     
     const long long DTL_SEPARATE_SIZE = 3;

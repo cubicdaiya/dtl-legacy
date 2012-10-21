@@ -61,23 +61,36 @@ namespace dtl {
         Ses< elem >        ses;
         editPath           path;
         editPathCordinates pathCordinates;
-        bool               reverse;
+        bool               swapped;
         bool               huge;
-        bool               unserious;
-        bool               onlyEditDistance;
+        bool               trivial;
+        bool               editDistanceOnly;
         uniHunkVec         uniHunks;
         comparator         cmp;
     public :
         Diff () {}
         
         Diff (const sequence& a, 
-              const sequence& b) : A(a), B(b) {
+              const sequence& b) : A(a), B(b), ses(false) {
+            init();
+        }
+        
+        Diff (const sequence& a,
+              const sequence& b,
+              bool deletesFirst) : A(a), B(b), ses(deletesFirst) {
+            init();
+        }
+        
+        Diff (const sequence& a,
+              const sequence& b, 
+              const comparator& comp) : A(a), B(b), ses(false), cmp(comp) {
             init();
         }
         
         Diff (const sequence& a, 
               const sequence& b, 
-              const comparator& comp) : A(a), B(b), cmp(comp) {
+              bool deleteFirst,
+              const comparator& comp) : A(a), B(b), ses(deleteFirst), cmp(comp) {
             init();
         }
         
@@ -103,6 +116,7 @@ namespace dtl {
             return uniHunks;
         }
         
+        /* These should be deprecated */
         bool isHuge () const {
             return huge;
         }
@@ -116,19 +130,48 @@ namespace dtl {
         }
         
         bool isUnserious () const {
-            return unserious;
+            return trivial;
         }
         
         void onUnserious () {
-            this->unserious = true;
+            this->trivial = true;
         }
         
         void offUnserious () {
-            this->unserious = false;
+            this->trivial = false;
         }
         
         void onOnlyEditDistance () {
-            this->onlyEditDistance = true;
+            this->editDistanceOnly = true;
+        }
+        
+        /* These are the replacements for the above */
+        bool hugeEnabled () const {
+            return huge;
+        }
+        
+        void enableHuge () {
+            this->huge = true;
+        }
+        
+        void disableHuge () {
+            this->huge = false;
+        }
+        
+        bool trivialEnabled () const {
+            return trivial;
+        }
+        
+        void enableTrivial () const {
+            this->trivial = true;
+        }
+        
+        void disableTrivial () {
+            this->trivial = false;
+        }
+        
+        void editDistanceOnlyEnabled () {
+            this->editDistanceOnly = true;
         }
         
         /**
@@ -181,7 +224,7 @@ namespace dtl {
         }
         
         /**
-         * patching with Shortest Edit Script
+         * patching with Shortest Edit Script (SES)
          */
         sequence patch (const sequence& seq) const {
             sesElemVec    sesSeq = ses.getSequence();
@@ -240,8 +283,8 @@ namespace dtl {
             P cordinate;
             editPathCordinates epc(0);
             
-            // only recoding editdistance
-            if (onlyEditDistance) {
+            // recording edit distance only
+            if (editDistanceOnly) {
                 delete[] this->fp;
                 return;
             }
@@ -366,8 +409,13 @@ namespace dtl {
                     if (common[1].empty() && adds.empty() && deletes.empty() && change.empty()) {
                         if (static_cast<long long>(common[0].size()) < DTL_CONTEXT_SIZE) {
                             if (a == 0 && c == 0) {
-                                a = einfo.beforeIdx;
-                                c = einfo.afterIdx;
+                                if (!wasSwapped()) {
+                                    a = einfo.beforeIdx;
+                                    c = einfo.afterIdx;
+                                } else {
+                                    a = einfo.afterIdx;
+                                    c = einfo.beforeIdx;
+                                }
                             }
                             common[0].push_back(*it);
                         } else {
@@ -421,7 +469,7 @@ namespace dtl {
                     }
                     if (a == 0) ++a;
                     if (c == 0) ++c;
-                    if (isReverse()) swap(a, c);
+                    if (wasSwapped()) swap(a, c);
                     hunk.a = a;
                     hunk.b = b;
                     hunk.c = c;
@@ -470,7 +518,7 @@ namespace dtl {
             }
             return ret;
         }
-
+        
     private :
         /**
          * initialize
@@ -479,18 +527,18 @@ namespace dtl {
             M = distance(A.begin(), A.end());
             N = distance(B.begin(), B.end());
             if (M < N) {
-                reverse = false;
+                swapped = false;
             } else {
                 swap(A, B);
                 swap(M, N);
-                reverse = true;
+                swapped = true;
             }
             editDistance     = 0;
             delta            = N - M;
             offset           = M + 1;
             huge             = false;
-            unserious        = false;
-            onlyEditDistance = false;
+            trivial          = false;
+            editDistanceOnly = false;
             fp               = NULL;
         }
         
@@ -501,12 +549,12 @@ namespace dtl {
             long long r = above > below ? path[(size_t)k-1+offset] : path[(size_t)k+1+offset];
             long long y = max(above, below);
             long long x = y - k;
-            while ((size_t)x < M && (size_t)y < N && cmp.impl(A[(size_t)x], B[(size_t)y])) {
+            while ((size_t)x < M && (size_t)y < N && (swapped ? cmp.impl(B[(size_t)y], A[(size_t)x]) : cmp.impl(A[(size_t)x], B[(size_t)y]))) {
                 ++x;++y;
             }
             
             path[(size_t)k+offset] = static_cast<long long>(pathCordinates.size());
-            if (!onlyEditDistance) {
+            if (!editDistanceOnly) {
                 P p;
                 p.x = x;p.y = y;p.k = r;
                 pathCordinates.push_back(p);      
@@ -528,7 +576,7 @@ namespace dtl {
             for (size_t i=v.size()-1;!complete;--i) {
                 while(px_idx < v[i].x || py_idx < v[i].y) {
                     if (v[i].y - v[i].x > py_idx - px_idx) {
-                        if (!isReverse()) {
+                        if (!wasSwapped()) {
                             ses.addSequence(*y, 0, y_idx, SES_ADD);
                         } else {
                             ses.addSequence(*y, y_idx, 0, SES_DELETE);
@@ -537,7 +585,7 @@ namespace dtl {
                         ++y_idx;
                         ++py_idx;
                     } else if (v[i].y - v[i].x < py_idx - px_idx) {
-                        if (!isReverse()) {
+                        if (!wasSwapped()) {
                             ses.addSequence(*x, x_idx, 0, SES_DELETE);
                         } else {
                             ses.addSequence(*x, 0, x_idx, SES_ADD);
@@ -546,8 +594,13 @@ namespace dtl {
                         ++x_idx;
                         ++px_idx;
                     } else {
-                        lcs.addSequence(*x);
-                        ses.addSequence(*x, x_idx, y_idx, SES_COMMON);
+                        if (!wasSwapped()) {
+                            lcs.addSequence(*x);
+                            ses.addSequence(*x, x_idx, y_idx, SES_COMMON);
+                        } else {
+                            lcs.addSequence(*y);
+                            ses.addSequence(*y, y_idx, x_idx, SES_COMMON);
+                        }
                         ++x;
                         ++y;
                         ++x_idx;
@@ -563,8 +616,8 @@ namespace dtl {
                 // all recording succeeded
             } else {
                 // trivial difference
-                if (isUnserious()) {
-                    if (!isReverse()) {
+                if (trivialEnabled()) {
+                    if (!wasSwapped()) {
                         recordOddSequence(x_idx, M, x, SES_DELETE);
                         recordOddSequence(y_idx, N, y, SES_ADD);
                     } else {
@@ -593,7 +646,7 @@ namespace dtl {
         }
         
         /**
-         * record odd sequence to ses
+         * record odd sequence in SES
          */
         void inline recordOddSequence (long long idx, long long length, sequence_const_iter it, const edit_t et) {
             while(idx < length){
@@ -607,7 +660,7 @@ namespace dtl {
         }
         
         /**
-         * join ses vectors
+         * join SES vectors
          */
         void inline joinSesVec (sesElemVec& s1, sesElemVec& s2) const {
             if (!s2.empty()) {
@@ -620,8 +673,8 @@ namespace dtl {
         /**
          * check if the sequences have been swapped
          */
-        bool inline isReverse () const {
-            return reverse;
+        bool inline wasSwapped () const {
+            return swapped;
         }
 
     };
