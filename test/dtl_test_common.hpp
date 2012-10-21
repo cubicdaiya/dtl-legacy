@@ -11,6 +11,8 @@
 #include <fstream>
 #include <dtl/dtl.hpp>
 
+using std::cerr;
+using std::endl;
 using std::string;
 using std::vector;
 using std::pair;
@@ -38,6 +40,8 @@ enum type_diff { TYPE_DIFF_SES, TYPE_DIFF_UNI };
 
 string create_path (const string& test_name, string diff_name, enum type_diff t, bool is_use_suffix = false);
 size_t cal_diff_uni (const string& path_l, const string& path_r);
+bool is_file_exist (string& fs);
+void diff_resultset_exist_check (string &fs);
 
 template <typename T>
 class Remover {

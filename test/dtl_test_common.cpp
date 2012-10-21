@@ -5,10 +5,10 @@ string create_path (const string& test_name, string diff_name, enum type_diff t,
     string ret;
     switch (t) {
     case TYPE_DIFF_SES:
-        ret = (string("ses")   + string("/") + diff_name + string("/") + test_name);
+        ret = (get_current_dir_name() + string("/") + string("ses")   + string("/") + diff_name + string("/") + test_name);
         break;
     case TYPE_DIFF_UNI:
-        ret = (string("hunks") + string("/") + diff_name + string("/") + test_name);
+        ret = (get_current_dir_name() + string("/") + string("hunks") + string("/") + diff_name + string("/") + test_name);
         break;
     }
     ret += is_use_suffix ? "_" : "";
@@ -34,4 +34,23 @@ size_t cal_diff_uni (const string& path_l, const string& path_r) {
     Diff< string, vector< string > > diff_uni(llines, rlines);
     diff_uni.compose();
     return diff_uni.getEditDistance();
+}
+
+bool is_file_exist (string& fs) {
+    FILE *fp;
+    if ((fp = fopen(fs.c_str(), "r")) == NULL) {
+        return false;
+    }
+    fclose(fp);
+    return true;
+}
+
+void diff_resultset_exist_check (string &fs) {
+    if (!is_file_exist(fs)) {
+        cerr << "======================================================Error!!!======================================================" << endl;
+        cerr << "diff result set:" << fs << " is not found." << endl;
+        cerr << "======================================================Error!!!======================================================" << endl;
+        cerr << "excute dtl_test in dtl/test!" << endl;
+        exit(EXIT_FAILURE);
+    }
 }
