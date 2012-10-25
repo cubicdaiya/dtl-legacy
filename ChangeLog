@@ -1,10 +1,28 @@
+2012-10-26 Tatsuhiko Kubo <cubicdaiya@gmail.com>, Jan Weiß <jan@geheimwerk.de>
+
+	* Improving comments
+
+	* rewrite README with markdown-styel
+
+	* support gtest1.6
+
+	* allow clients to handle if DTL swaps the arrays it is passed
+
+	* fix incorrect results for SES_COMMON when swapped
+
+	* add explicit initialization of ses
+
+	* implement option to force the order of sesElem objects in the ses
+
+	* fix problem -> issues/4(test succeeds when result-file does not exist)
+
+	* 1.16 released
 
 2011-11-10 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* remove unused variable
 
 	* 1.15 released
-
 
 2011-06-18 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
