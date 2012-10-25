@@ -6,7 +6,7 @@ What is dtl?
 
 dtl is a diff template library written in C++.
 
-Copyright(C) 2008-2011  Tatsuhiko Kubo <<cubicdaiya@gmail.com>>
+Copyright(C) 2012 Tatsuhiko Kubo <<cubicdaiya@gmail.com>>
 
 dtl can compare two sequences with arbitrary type, however the sequences must support the random access iterator.
 Please read the document at the following URL for details:
