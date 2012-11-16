@@ -5,10 +5,10 @@ string create_path (const string& test_name, string diff_name, enum type_diff t,
     string ret;
     switch (t) {
     case TYPE_DIFF_SES:
-        ret = (get_current_dir_name() + string("/") + string("ses")   + string("/") + diff_name + string("/") + test_name);
+        ret = (getcwd(NULL, 0) + string("/") + string("ses")   + string("/") + diff_name + string("/") + test_name);
         break;
     case TYPE_DIFF_UNI:
-        ret = (get_current_dir_name() + string("/") + string("hunks") + string("/") + diff_name + string("/") + test_name);
+        ret = (getcwd(NULL, 0) + string("/") + string("hunks") + string("/") + diff_name + string("/") + test_name);
         break;
     }
     ret += is_use_suffix ? "_" : "";
