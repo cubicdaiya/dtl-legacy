@@ -51,10 +51,10 @@ namespace dtl {
         typedef vector< sesElem >      sesElemVec;
     public :
         
-        Ses () : deletesFirst(false), onlyAdd(true), onlyDelete(true), onlyCopy(true) {
+        Ses () : onlyAdd(true), onlyDelete(true), onlyCopy(true), deletesFirst(false) {
             nextDeleteIdx = 0;
         }
-        Ses (bool moveDel) : deletesFirst(moveDel), onlyAdd(true), onlyDelete(true), onlyCopy(true) {
+        Ses (bool moveDel) : onlyAdd(true), onlyDelete(true), onlyCopy(true), deletesFirst(moveDel) {
             nextDeleteIdx = 0;
         }
         ~Ses () {}
