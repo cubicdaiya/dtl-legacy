@@ -61,6 +61,11 @@ namespace dtl {
     using std::max;
 
     /**
+     * version string
+     */
+    const string version = "1.17";
+
+    /**
      * type of edit for SES
      */
     typedef int edit_t;
