@@ -1,5 +1,5 @@
 /**
-   dtl-1.16 -- Diff Template Library
+   dtl -- Diff Template Library
    
    In short, Diff Template Library is distributed under so called "BSD license",
    
@@ -59,7 +59,7 @@ namespace dtl {
     using std::rotate;
     using std::swap;
     using std::max;
-    
+
     /**
      * type of edit for SES
      */
