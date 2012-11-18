@@ -2,7 +2,7 @@
 
 	* add version-string variable
 
-	* replace get_current_dir_name to getcwd(get_current_dir_name is not in Moutain Lion)
+	* replace get_current_dir_name to getcwd(get_current_dir_name is not in Mountain Lion)
 
 	* fix small typo
 
