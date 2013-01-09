@@ -331,6 +331,15 @@ namespace dtl {
         static void printSES (const Ses< elem >& s, ostream& out = cout) {
             printSES< ostream >(s, out);
         }
+
+        /**
+         * print difference between A and B as an SES with custom printer
+         */
+        template < typename stream, template < typename SEET, typename STRT > class PT >
+        void printSES (stream& out) const {
+            sesElemVec ses_v = ses.getSequence ();
+            for_each (ses_v.begin (), ses_v.end(), PT < sesElem, stream > (out));
+        }
         
         /**
          * print difference between A and B in the Unified Format
