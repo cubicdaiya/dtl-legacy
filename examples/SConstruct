@@ -32,6 +32,7 @@ targets = { 'strdiff'    : ['strdiff.cpp',    'common.cpp'], # diff between two 
             'patch'      : ['patch.cpp',      'common.cpp'], # string patch program using dtl
             'fpatch'     : ['fpatch.cpp',     'common.cpp'], # file patch program using dtl
             'st2ses'     : ['st2ses.cpp',     'common.cpp'], # convert SES format file to SES instance
+            'strdiff_cp' : ['strdiff_cp.cpp', 'common.cpp'], # diff between two string sequences with custom printer
             }
 
 [ env.Program(target, targets[target]) for target in targets ]

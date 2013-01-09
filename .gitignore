@@ -1,6 +1,7 @@
 examples/unidiff
 examples/unistrdiff
 examples/strdiff
+examples/strdiff_cp
 examples/strdiff3
 examples/intdiff
 examples/bdiff
