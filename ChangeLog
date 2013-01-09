@@ -1,3 +1,11 @@
+2013-01-10 Tatsuhiko Kubo <cubicdaiya@gmail.com>
+
+	* add printSES function for custom Printer Thanks to Hu Shubin
+
+	* remove files related mercurial
+
+	* 1.18 released
+
 2012-11-18 Tatsuhiko Kubo <cubicdaiya@gmail.com>
 
 	* add version-string variable
