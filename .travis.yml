@@ -1,0 +1,14 @@
+language: cpp
+compiler:
+  - gcc
+  - clang
+before_script:
+  - wget http://googletest.googlecode.com/files/gtest-1.6.0.zip
+  - unzip -q gtest-1.6.0.zip
+  - cd gtest-1.6.0
+  - ./configure
+  - make
+  - cd ..
+script:
+  - cd test
+  - GTEST_ROOT=$PWD/../gtest-1.6.0 scons -j 4 check 

@@ -1,6 +1,8 @@
 DTL
 ===
 
+[![Build Status](https://travis-ci.org/cubicdaiya/dtl.png?branch=master)](https://travis-ci.org/cubicdaiya/dtl)
+
 What is dtl?
 ------------
 
