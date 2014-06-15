@@ -1,3 +1,4 @@
+import os
 
 # SConstruct for dtl examples
 
@@ -7,6 +8,9 @@ if debug == 'y' or debug == 'yes':
     env.Append(CPPFLAGS = ['-Wall', '-g'])
 else:
     env.Append(CPPFLAGS = ['-Wall', '-O2'])
+
+if os.sys.platform != "win32":
+    env.Append(CPPDEFINES = ['HAVE_UNISTD_H'])
 
 conf = Configure(env);
 
