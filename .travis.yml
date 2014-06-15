@@ -10,5 +10,7 @@ before_script:
   - make
   - cd ..
 script:
-  - cd test
+  - cd examples
+  - scons
+  - cd ../test
   - GTEST_ROOT=$PWD/../gtest-1.7.0 scons check 
