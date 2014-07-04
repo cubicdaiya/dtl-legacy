@@ -13,4 +13,4 @@ script:
   - cd examples
   - scons
   - cd ../test
-  - GTEST_ROOT=$PWD/../gtest-1.7.0 scons check 
+  - GTEST_ROOT=$PWD/../gtest-1.7.0 scons check
