@@ -20,6 +20,10 @@ To start using this library, all you need to do is include dtl.hpp.
 
 If you are interested in the details, please visit the [Tutorial](https://github.com/cubicdaiya/dtl/wiki/Tutorial).
 
+## Documents
+
+If you are interested in the details moreover, please visit the [Documents](https://github.com/cubicdaiya/dtl/wiki#documents)
+
 ## License
 
 Please read the file [COPYING](https://github.com/cubicdaiya/dtl/blob/master/COPYING).
