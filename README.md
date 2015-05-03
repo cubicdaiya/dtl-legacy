@@ -22,7 +22,7 @@ If you are interested in the details, please visit the [Tutorial](https://github
 
 ## Documents
 
-If you are interested in the details moreover, please visit the [Documents](https://github.com/cubicdaiya/dtl/wiki#documents)
+If you are interested in the details moreover, please visit the [Documents](https://github.com/cubicdaiya/dtl/wiki#documents).
 
 ## License
 
