@@ -18,11 +18,8 @@ To start using this library, all you need to do is include dtl.hpp.
 #include "dtl/dtl.hpp"
 ```
 
-If you are interested in the details, please visit the page [Tutorial](wiki/Tutorial)
+If you are interested in the details, please visit the [Tutorial](https://github.com/cubicdaiya/dtl/wiki/Tutorial).
 
 ## License
 
-Please read the file COPYING or the document at the following URL concerning the license for dtl:
-
-https://github.com/cubicdaiya/dtl/blob/master/COPYING
-
+Please read the file [COPYING](https://github.com/cubicdaiya/dtl/blob/master/COPYING).
