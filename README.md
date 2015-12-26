@@ -647,7 +647,7 @@ unipatch successed
 $
 ```
 
-# Runnging tests
+# Running tests
 
 `dtl` uses [googletest](http://code.google.com/p/googletest/) and [SCons](http://www.scons.org/) with testing dtl-self.
 
