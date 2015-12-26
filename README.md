@@ -36,7 +36,7 @@
 
 # Features
 
-`dtl` provides the functions for comparing two sequences have arbitrary type. But sequences must support random access iterator.
+`dtl` provides the functions for comparing two sequences have arbitrary type. But sequences must support random access\_iterator.
 
 # Getting started
 
