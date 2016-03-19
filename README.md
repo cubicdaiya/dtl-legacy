@@ -1,6 +1,8 @@
-# dtl
+# Caution
 
-[![Build Status](https://travis-ci.org/cubicdaiya/dtl.png?branch=master)](https://travis-ci.org/cubicdaiya/dtl)
+**This repository is broken. Please move to [cubicdaiya/dtl](https://github.com/cubicdaiya/dtl).**
+
+# dtl
 
 `dtl` is the diff template library written in C++. The name of template is derived C++'s Template.
 
